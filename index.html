@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MS STORE | Online Shopping</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f5f6fa;color:#222}
+header{background:#111827;color:white;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.logo{font-size:25px;font-weight:bold;color:#fff}
+.logo span{color:#f59e0b}
+header button{background:#f59e0b;color:#111;border:0;padding:11px 16px;border-radius:8px;font-weight:bold}
+.hero{background:linear-gradient(120deg,#111827,#374151);color:white;padding:55px 7%;text-align:center}
+.hero h1{font-size:35px;margin-bottom:12px}
+.hero p{color:#ddd;margin-bottom:22px}
+.hero a{background:#f59e0b;color:#111;text-decoration:none;padding:12px 25px;border-radius:7px;font-weight:bold}
+.search{padding:20px 5%;display:flex;gap:10px}
+.search input{width:100%;padding:14px;border:1px solid #ddd;border-radius:9px;font-size:15px}
+.categories{padding:5px 5% 20px}
+.categories h2,.products h2{margin-bottom:16px}
+.cat-list{display:flex;gap:10px;overflow-x:auto}
+.cat-list button{padding:10px 17px;border:1px solid #ddd;border-radius:20px;background:white;white-space:nowrap}
+.cat-list button.active{background:#111827;color:white}
+.products{padding:15px 5% 40px}
+.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px #0000000c}
+.product-img{height:145px;background:#e9edf3;display:flex;align-items:center;justify-content:center;font-size:55px}
+.card-info{padding:12px}
+.card h3{font-size:15px;margin-bottom:8px}
+.price{font-weight:bold;color:#e58b00;margin-bottom:10px}
+.card button{width:100%;padding:10px;background:#111827;color:white;border:0;border-radius:7px}
+.cart-box{margin:15px 5% 35px;background:white;padding:18px;border-radius:12px}
+.cart-box h2{margin-bottom:12px}
+.cart-item{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #eee;font-size:14px}
+.total{font-weight:bold;text-align:right;margin-top:15px}
+footer{background:#111827;color:white;text-align:center;padding:28px 15px}
+footer p{color:#bbb;margin-top:8px;font-size:13px}
+.empty{text-align:center;color:#888;padding:15px}
+@media(min-width:650px){
+.product-grid{grid-template-columns:repeat(4,1fr)}
+.product-img{height:190px}
+.hero h1{font-size:45px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">MS <span>STORE</span></div>
+<button onclick="document.getElementById('cart').scrollIntoView()">🛒 Cart (<span id="count">0</span>)</button>
+</header>
+
+<section class="hero">
+<h1>Welcome to MS STORE</h1>
+<p>আপনার পছন্দের পণ্য কিনুন সহজেই!</p>
+<a href="#products">Shop Now</a>
+</section>
+
+<div class="search">
+<input type="search" id="search" placeholder="পণ্য খুঁজুন..." oninput="renderProducts()">
+</div>
+
+<section class="categories">
+<h2>Categories</h2>
+<div class="cat-list" id="categories"></div>
+</section>
+
+<section class="products" id="products">
+<h2>Our Products</h2>
+<div class="product-grid" id="productGrid"></div>
+</section>
+
+<section class="cart-box" id="cart">
+<h2>🛒 Your Cart</h2>
+<div id="cartItems"><div class="empty">আপনার Cart এখন খালি</div></div>
+<div class="total" id="total">Total: ৳0</div>
+</section>
+
+<footer>
+<h2>MS STORE</h2>
+<p>Your Trusted Online Shopping Store</p>
+<p>© 2026 MS STORE. All Rights Reserved.</p>
+</footer>
+
+<script>
+const products=[
+{id:1,name:"Sample T-Shirt",price:450,category:"Fashion",emoji:"👕"},
+{id:2,name:"Stylish Watch",price:850,category:"Gadgets",emoji:"⌚"},
+{id:3,name:"Wireless Earbuds",price:650,category:"Electronics",emoji:"🎧"},
+{id:4,name:"Fashion Bag",price:550,category:"Fashion",emoji:"👜"},
+{id:5,name:"Smart Bottle",price:300,category:"Lifestyle",emoji:"🧴"},
+{id:6,name:"Sunglasses",price:350,category:"Fashion",emoji:"🕶️"},
+{id:7,name:"Headphones",price:950,category:"Electronics",emoji:"🎧"},
+{id:8,name:"Mobile Stand",price:200,category:"Gadgets",emoji:"📱"}
+];
+
+let selected="All";
+let cart={};
+
+function renderCategories(){
+let cats=["All",...new Set(products.map(p=>p.category))];
+document.getElementById("categories").innerHTML=cats.map(c=>
+`<button class="${selected===c?'active':''}" onclick="selectCategory('${c}')">${c}</button>`
+).join("");
+}
+
+function selectCategory(c){
+selected=c;
+renderCategories();
+renderProducts();
+}
+
+function renderProducts(){
+let q=document.getElementById("search").value.toLowerCase();
+let list=products.filter(p=>
+(selected==="All"||p.category===selected)&&p.name.toLowerCase().includes(q)
+);
+document.getElementById("productGrid").innerHTML=list.length?list.map(p=>`
+<div class="card">
+<div class="product-img">${p.emoji}</div>
+<div class="card-info">
+<h3>${p.name}</h3>
+<div class="price">৳${p.price}</div>
+<button onclick="addCart(${p.id})">Add to Cart</button>
+</div>
+</div>`).join(""):'<p>No products found.</p>';
+}
+
+function addCart(id){
+cart[id]=(cart[id]||0)+1;
+renderCart();
+}
+
+function changeQty(id,amount){
+cart[id]+=amount;
+if(cart[id]<=0)delete cart[id];
+renderCart();
+}
+
+function renderCart(){
+let ids=Object.keys(cart);
+let count=ids.reduce((s,id)=>s+cart[id],0);
+let total=ids.reduce((s,id)=>s+products.find(p=>p.id==id).price*cart[id],0);
+
+document.getElementById("count").innerText=count;
+document.getElementById("total").innerText="Total: ৳"+total;
+
+document.getElementById("cartItems").innerHTML=ids.length?ids.map(id=>{
+let p=products.find(x=>x.id==id);
+return `<div class="cart-item">
+<span>${p.name}<br>৳${p.price} × ${cart[id]}</span>
+<span>
+<button onclick="changeQty(${id},-1)">−</button>
+${cart[id]}
+<button onclick="changeQty(${id},1)">+</button>
+</span>
+</div>`;
+}).join(""):'<div class="empty">আপনার Cart এখন খালি</div>';
+}
+
+renderCategories();
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>
