@@ -1,0 +1,251 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MS STORE Admin</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5fa;font-family:Arial,sans-serif;color:#182033}
+header{background:#172554;color:white;padding:20px}
+main{max-width:950px;margin:auto;padding:18px}
+.card{background:white;padding:18px;border-radius:12px;margin:14px 0;box-shadow:0 2px 10px #00000010}
+input,select,button{width:100%;padding:12px;margin:7px 0;border:1px solid #ddd;border-radius:7px;font-size:15px}
+button{background:#1d4ed8;color:white;border:0;font-weight:bold;cursor:pointer}
+.danger{background:#dc2626}
+.green{background:#15803d}
+.hidden{display:none}
+.item{border-bottom:1px solid #ddd;padding:12px 0}
+small{color:#64748b}
+</style>
+</head>
+<body>
+
+<header>
+<h2>MS STORE | Admin Panel</h2>
+<small style="color:white">Store Management Dashboard</small>
+</header>
+
+<main>
+<section id="login" class="card">
+<h3>Admin Login</h3>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
+<button id="loginBtn">Login</button>
+<p id="loginMsg"></p>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="card">
+<h3>Dashboard</h3>
+<p>Total Products: <b id="productCount">0</b></p>
+<p>Total Orders: <b id="orderCount">0</b></p>
+<p>Total Sales: ৳<b id="sales">0</b></p>
+<button class="danger" id="logoutBtn">Logout</button>
+</div>
+
+<div class="card">
+<h3>Add New Product</h3>
+<input id="pname" placeholder="Product Name">
+<input id="price" type="number" min="0" placeholder="Price (৳)">
+<input id="stock" type="number" min="0" placeholder="Stock">
+<input id="category" placeholder="Category">
+<input id="imageUrl" type="url" placeholder="Image URL (optional)">
+<button id="addBtn">Add Product</button>
+<p id="productMsg"></p>
+</div>
+
+<div class="card">
+<h3>All Products</h3>
+<div id="products">Loading...</div>
+</div>
+
+<div class="card">
+<h3>Customer Orders</h3>
+<div id="orders">Loading...</div>
+</div>
+</section>
+</main>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+
+import {
+getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+import {
+getFirestore, collection, addDoc, getDocs,
+deleteDoc, doc, updateDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+// নিজের Firebase Web App Config এখানে বসাবে
+const firebaseConfig = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE_AUTH_DOMAIN",
+  projectId: "PASTE_PROJECT_ID",
+  appId: "PASTE_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+
+$("loginBtn").onclick = async () => {
+  $("loginMsg").textContent = "Logging in...";
+  try {
+    await signInWithEmailAndPassword(
+      auth, $("email").value.trim(), $("password").value
+    );
+  } catch (e) {
+    $("loginMsg").textContent = "Login failed: " + e.message;
+  }
+};
+
+onAuthStateChanged(auth, async user => {
+  $("login").classList.toggle("hidden", !!user);
+  $("dashboard").classList.toggle("hidden", !user);
+  if (user) await loadData();
+});
+
+$("logoutBtn").onclick = () => signOut(auth);
+
+$("addBtn").onclick = async () => {
+  const name = $("pname").value.trim();
+  const price = Number($("price").value);
+  const stock = Number($("stock").value);
+
+  if (!name || $("price").value === "" || $("stock").value === "" ||
+      !Number.isFinite(price) || !Number.isFinite(stock) ||
+      price < 0 || stock < 0) {
+    $("productMsg").textContent = "সব তথ্য সঠিকভাবে পূরণ করো।";
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "storeProducts"), {
+      name,
+      price,
+      stock,
+      category: $("category").value.trim() || "General",
+      imageUrl: $("imageUrl").value.trim(),
+      active: true
+    });
+
+    $("productMsg").textContent = "Product added!";
+    ["pname","price","stock","category","imageUrl"]
+      .forEach(id => $(id).value = "");
+    await loadData();
+  } catch (e) {
+    $("productMsg").textContent = "Error: " + e.message;
+  }
+};
+
+async function loadData() {
+  const productSnap = await getDocs(collection(db, "storeProducts"));
+  $("productCount").textContent = productSnap.size;
+  $("products").innerHTML = "";
+
+  productSnap.forEach(item => {
+    const p = item.data();
+    const div = document.createElement("div");
+    div.className = "item";
+
+    const info = document.createElement("p");
+    info.textContent = `${p.name || ""} | ৳${p.price ?? 0} | Stock: ${p.stock ?? 0}`;
+
+    const edit = document.createElement("button");
+    edit.textContent = "Edit";
+    edit.onclick = async () => {
+      const name = prompt("Product name", p.name || "");
+      if (name === null) return;
+      const priceText = prompt("Price", p.price ?? 0);
+      if (priceText === null) return;
+      const stockText = prompt("Stock", p.stock ?? 0);
+      if (stockText === null) return;
+      const price = Number(priceText);
+      const stock = Number(stockText);
+      if (!name.trim() || priceText.trim() === "" ||
+          stockText.trim() === "" || !Number.isFinite(price) ||
+          !Number.isFinite(stock) || price < 0 || stock < 0) {
+        alert("তথ্য সঠিক নয়");
+        return;
+      }
+      try {
+        await updateDoc(doc(db, "storeProducts", item.id), {
+          name: name.trim(), price, stock
+        });
+        await loadData();
+      } catch (e) { alert(e.message); }
+    };
+
+    const del = document.createElement("button");
+    del.textContent = "Delete Product";
+    del.className = "danger";
+    del.onclick = async () => {
+      if (confirm("Delete this product?")) {
+        try {
+          await deleteDoc(doc(db, "storeProducts", item.id));
+          await loadData();
+        } catch (e) { alert(e.message); }
+      }
+    };
+
+    div.append(info, edit, del);
+    $("products").append(div);
+  });
+
+  const orderSnap = await getDocs(collection(db, "orders"));
+  $("orderCount").textContent = orderSnap.size;
+  let totalSales = 0;
+  $("orders").innerHTML = "";
+
+  orderSnap.forEach(item => {
+    const o = item.data();
+    if (o.status === "Delivered") totalSales += Number(o.totalPrice) || 0;
+
+    const div = document.createElement("div");
+    div.className = "item";
+
+    const info = document.createElement("p");
+    info.textContent =
+      `${o.customerName || ""} | ${o.phone || ""} | ${o.productName || ""} | ৳${o.totalPrice ?? 0} | ${o.status || ""}`;
+
+    const address = document.createElement("p");
+    address.textContent = "Address: " + (o.address || "");
+
+    const status = document.createElement("select");
+    ["Pending","Confirmed","Shipped","Delivered","Cancelled"]
+      .forEach(s => {
+        const option = document.createElement("option");
+        option.value = s;
+        option.textContent = s;
+        status.append(option);
+      });
+    status.value = o.status || "Pending";
+
+    const save = document.createElement("button");
+    save.textContent = "Update Order Status";
+    save.className = "green";
+    save.onclick = async () => {
+      try {
+        await updateDoc(doc(db, "orders", item.id), {
+          status: status.value
+        });
+        await loadData();
+      } catch (e) { alert(e.message); }
+    };
+
+    div.append(info, address, status, save);
+    $("orders").append(div);
+  });
+
+  $("sales").textContent = totalSales;
+}
+</script>
+</body>
+</html>
