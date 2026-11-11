@@ -109,13 +109,13 @@ import{
  runTransaction,serverTimestamp
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
-const firebaseConfig={
- apiKey:"AIzaSyAXWNG3D4FYzJYOFAksTmzYFYBEsL9-gk",
- authDomain:"ms-store-admin-26416.firebaseapp.com",
- projectId:"ms-store-admin-26416",
- storageBucket:"ms-store-admin-26416.firebasestorage.app",
- messagingSenderId:"968008425065",
- appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
+const firebaseConfig = {
+  apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+  authDomain: "ms-store-admin-26416.firebaseapp.com",
+  projectId: "ms-store-admin-26416",
+  storageBucket: "ms-store-admin-26416.firebasestorage.app",
+  messagingSenderId: "968008425065",
+  appId: "1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
 const app=initializeApp(firebaseConfig);
@@ -400,7 +400,6 @@ $('placeOrder').onclick=async()=>{
 
   const orderId=await runTransaction(db,async tx=>{
 
-   // Transaction-এর সব READ আগে হবে।
    const counterSnap=await tx.get(counterRef);
 
    const freshProducts=[];
@@ -438,7 +437,6 @@ $('placeOrder').onclick=async()=>{
     });
    }
 
-   // Fresh database data দিয়ে মূল্য হিসাব।
    const lines=freshProducts.map(p=>({
     productId:p.id,
     productName:p.name,
@@ -464,7 +462,6 @@ $('placeOrder').onclick=async()=>{
     stockChanges[p.id]=p.quantity;
    });
 
-   // Order ও stock একই Transaction-এ লেখা হচ্ছে।
    tx.set(counterRef,{lastNumber:num});
 
    tx.set(orderRef,{
@@ -507,7 +504,6 @@ $('placeOrder').onclick=async()=>{
     createdAt:serverTimestamp()
    });
 
-   // প্রতিটি পণ্যের স্টক কমানো।
    freshProducts.forEach(p=>{
     tx.update(p.ref,{
      stock:p.oldStock-p.quantity,
@@ -518,7 +514,6 @@ $('placeOrder').onclick=async()=>{
    return newOrderId;
   });
 
-  // অর্ডার সফল হলে Cart খালি।
   cart={};
   localStorage.removeItem('msCart');
   renderCart();
