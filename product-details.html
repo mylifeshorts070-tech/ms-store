@@ -1,0 +1,585 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product Details | MS STORE</title>
+<meta name="description" content="MS STORE product details, photos, descriptions and customer reviews.">
+
+<style>
+:root{--navy:#111827;--orange:#f59e0b;--bg:#f5f6fa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#202536}
+header{background:var(--navy);color:white;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{font-size:23px;font-weight:bold}
+.logo span{color:var(--orange)}
+header a{color:var(--navy);background:var(--orange);padding:10px 13px;border-radius:8px;text-decoration:none;font-weight:bold}
+main{max-width:1050px;margin:22px auto;padding:0 14px}
+.panel{background:white;padding:18px;border-radius:13px;margin-bottom:18px}
+.product-layout{display:grid;grid-template-columns:1fr;gap:22px}
+.main-image{height:320px;background:#eef1f5;border-radius:12px;display:grid;place-items:center;overflow:hidden}
+.main-image img{width:100%;height:100%;object-fit:contain}
+.thumbnails{display:flex;gap:9px;overflow:auto;margin-top:12px;padding-bottom:5px}
+.thumb{width:70px;height:70px;flex:0 0 70px;border:2px solid transparent;border-radius:8px;overflow:hidden;background:#eee;padding:0}
+.thumb.active{border-color:var(--orange)}
+.thumb img{width:100%;height:100%;object-fit:cover}
+h1{font-size:26px;line-height:1.4;margin:0 0 14px;overflow-wrap:anywhere}
+.price{font-size:28px;color:#b45309;font-weight:bold;background:#fff7e6;padding:12px;border-radius:9px;display:block;margin:15px 0}
+.stock{color:#475569;font-weight:bold;margin:12px 0}
+.description{line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+button{cursor:pointer;border:0;border-radius:9px;padding:13px;font-size:15px;font-weight:bold}
+button:disabled{opacity:.5;cursor:not-allowed}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+.add{background:var(--navy);color:white}
+.buy{background:var(--orange);color:#111827}
+.section-title{font-size:21px;margin:0 0 16px}
+.rating-summary{display:flex;align-items:center;gap:15px;margin-bottom:18px}
+.big-rating{font-size:36px;font-weight:bold}
+.stars{color:#f59e0b;font-size:22px;letter-spacing:2px}
+.review-card{border-bottom:1px solid #eee;padding:14px 0}
+.review-name{font-weight:bold}
+.review-date{font-size:12px;color:#64748b}
+.review-comment{line-height:1.6;white-space:pre-wrap;margin-top:8px;overflow-wrap:anywhere}
+.rating-input{display:flex;gap:7px;margin:10px 0 15px}
+.rating-input button{background:#f1f5f9;color:#94a3b8;font-size:27px;padding:3px 7px}
+.rating-input button.selected{color:#f59e0b;background:#fff7e6}
+input,textarea{width:100%;padding:12px;border:1px solid #d5dbe5;border-radius:8px;font-size:15px;margin:6px 0 12px}
+textarea{min-height:100px;resize:vertical}
+.submit{background:var(--orange);color:#111827;width:100%}
+.message{font-size:14px;line-height:1.5;color:#475569}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 3px 12px #00000010;cursor:pointer}
+.card img{width:100%;height:150px;object-fit:cover;background:#eee}
+.card-info{padding:12px}
+.card-info b{display:block;line-height:1.4;overflow-wrap:anywhere}
+.card-price{color:#b45309;font-weight:bold;margin-top:8px}
+.empty{padding:20px;text-align:center;background:#f8fafc;border-radius:9px;color:#64748b}
+footer{text-align:center;background:var(--navy);color:white;padding:22px;margin-top:30px}
+#toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-130px);background:#dcfce7;color:#166534;padding:14px 18px;border-radius:10px;z-index:99;transition:.3s;max-width:90%;font-weight:bold}
+#toast.show{transform:translate(-50%,0)}
+@media(min-width:700px){
+ main{padding:0 22px}
+ .product-layout{grid-template-columns:1fr 1fr;gap:28px}
+ .main-image{height:420px}
+ .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .card img{height:190px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="toast"></div>
+
+<header>
+ <div class="logo">MS <span>STORE</span></div>
+ <div style="display:flex;gap:8px">
+  <a href="index.html">SHOP</a>
+  <a href="my-account.html" style="background:white">My Account</a>
+ </div>
+</header>
+
+<main>
+
+<section class="panel">
+ <div id="productArea" class="empty">পণ্য লোড হচ্ছে...</div>
+</section>
+
+<section class="panel">
+ <h2 class="section-title">Product Description</h2>
+ <div id="description" class="description">পণ্যের বিস্তারিত লোড হচ্ছে...</div>
+</section>
+
+<section class="panel" id="reviews">
+ <h2 class="section-title">Customer Reviews</h2>
+
+ <div class="rating-summary">
+  <div class="big-rating" id="averageRating">0.0</div>
+  <div>
+   <div class="stars" id="averageStars">☆☆☆☆☆</div>
+   <div class="message" id="reviewCount">কোনো Review নেই</div>
+  </div>
+ </div>
+
+ <h3>Write a Review</h3>
+ <p class="message">আপনার কেনাকাটার অভিজ্ঞতা শেয়ার করুন। Review দিতে Verified Gmail দিয়ে Login করতে হবে।</p>
+
+ <div class="rating-input" id="ratingInput">
+  <button type="button" data-rating="1">★</button>
+  <button type="button" data-rating="2">★</button>
+  <button type="button" data-rating="3">★</button>
+  <button type="button" data-rating="4">★</button>
+  <button type="button" data-rating="5">★</button>
+ </div>
+
+ <textarea id="reviewComment" placeholder="আপনার মতামত লিখুন..."></textarea>
+ <button class="submit" id="submitReview">SUBMIT REVIEW</button>
+ <p id="reviewMessage" class="message"></p>
+
+ <h3>All Reviews</h3>
+ <div id="reviewList"><div class="empty">Review লোড হচ্ছে...</div></div>
+</section>
+
+<section class="panel">
+ <h2 class="section-title">Similar Products</h2>
+ <div class="grid" id="similarProducts">
+  <div class="empty">পণ্য লোড হচ্ছে...</div>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ <h2>MS STORE</h2>
+ <p>Your Trusted Online Shopping Store</p>
+ <small>© 2026 MS STORE</small>
+</footer>
+
+<script type="module">
+
+import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+
+import{
+ getFirestore,
+ collection,
+ doc,
+ getDoc,
+ getDocs,
+ addDoc,
+ query,
+ where,
+ serverTimestamp
+}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+import{
+ getAuth,
+ onAuthStateChanged
+}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+
+
+const firebaseConfig={
+ apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+ authDomain:"ms-store-admin-26416.firebaseapp.com",
+ projectId:"ms-store-admin-26416",
+ storageBucket:"ms-store-admin-26416.firebasestorage.app",
+ messagingSenderId:"968008425065",
+ appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
+
+const $=id=>document.getElementById(id);
+
+const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
+
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
+ '&':'&amp;',
+ '<':'&lt;',
+ '>':'&gt;',
+ '"':'&quot;',
+ "'":'&#39;'
+}[c]));
+
+const params=new URLSearchParams(location.search);
+const productId=params.get('id');
+
+let product=null;
+let allProducts=[];
+let currentUser=null;
+let selectedRating=0;
+let selectedImage=0;
+let reviews=[];
+
+function toast(message){
+ $('toast').textContent=message;
+ $('toast').classList.add('show');
+ setTimeout(()=>$('toast').classList.remove('show'),3000);
+}
+
+function getImages(p){
+ let images=[];
+
+ if(Array.isArray(p.images)){
+  images=p.images.map(x=>{
+   if(typeof x==='string')return x;
+   if(x&&typeof x.url==='string')return x.url;
+   return '';
+  }).filter(Boolean);
+ }
+
+ if(p.imageUrl&&!images.includes(p.imageUrl)){
+  images.unshift(p.imageUrl);
+ }
+
+ return [...new Set(images)];
+}
+
+function buyNow(){
+ if(!product)return;
+
+ const stock=Math.max(0,Number(product.stock)||0);
+
+ if(stock<1){
+  toast('এই পণ্যটি স্টকে নেই।');
+  return;
+ }
+
+ try{
+  localStorage.setItem(
+   'msCartBackup',
+   localStorage.getItem('msCart')||'{}'
+  );
+
+  localStorage.setItem(
+   'msCart',
+   JSON.stringify({[productId]:1})
+  );
+
+  localStorage.setItem('msBuyNowMode','1');
+
+  location.href='checkout.html';
+
+ }catch(e){
+  toast('Checkout চালু করা যাচ্ছে না।');
+ }
+}
+
+function addToCart(){
+ if(!product)return;
+
+ const stock=Math.max(0,Number(product.stock)||0);
+
+ let cart={};
+
+ try{
+  cart=JSON.parse(localStorage.getItem('msCart')||'{}');
+ }catch(e){cart={};}
+
+ const qty=Number(cart[productId]||0);
+
+ if(qty>=stock){
+  toast('স্টকে পর্যাপ্ত পণ্য নেই।');
+  return;
+ }
+
+ cart[productId]=qty+1;
+ localStorage.setItem('msCart',JSON.stringify(cart));
+
+ toast('পণ্য Cart-এ যোগ হয়েছে!');
+}
+
+function renderProduct(){
+ if(!product)return;
+
+ const images=getImages(product);
+ const stock=Math.max(0,Number(product.stock)||0);
+
+ document.title=(product.name||'Product')+' | MS STORE';
+
+ $('description').textContent=
+  product.description||'এই পণ্যের বিস্তারিত এখনো যোগ করা হয়নি।';
+
+ $('productArea').innerHTML=`
+  <div class="product-layout">
+
+   <div>
+    <div class="main-image" id="mainImage">
+     ${images.length?
+      `<img src="${esc(images[0])}" alt="${esc(product.name)}">`:
+      '🛍️'}
+    </div>
+
+    <div class="thumbnails" id="thumbnails">
+     ${images.map((img,i)=>`
+      <button class="thumb ${i===0?'active':''}" data-image="${i}">
+       <img src="${esc(img)}" alt="Product image ${i+1}">
+      </button>
+     `).join('')}
+    </div>
+   </div>
+
+   <div>
+    <h1>${esc(product.name||'Product')}</h1>
+
+    <div class="message">
+     Category: ${esc(product.category||'General')}
+    </div>
+
+    <span class="price">${money(product.price)}</span>
+
+    <div class="stock">
+     ${stock>0?'In Stock: '+stock:'Out of Stock'}
+    </div>
+
+    <div class="actions">
+     <button class="add" id="addCart" ${stock<1?'disabled':''}>ADD TO CART</button>
+     <button class="buy" id="buyNow" ${stock<1?'disabled':''}>BUY NOW</button>
+    </div>
+   </div>
+
+  </div>
+ `;
+
+ $('addCart').onclick=addToCart;
+ $('buyNow').onclick=buyNow;
+
+ $('thumbnails').querySelectorAll('[data-image]').forEach(b=>{
+  b.onclick=()=>{
+   selectedImage=Number(b.dataset.image);
+
+   $('mainImage').innerHTML=
+    `<img src="${esc(images[selectedImage])}" alt="${esc(product.name)}">`;
+
+   $('thumbnails').querySelectorAll('.thumb').forEach(x=>
+    x.classList.remove('active')
+   );
+
+   b.classList.add('active');
+  };
+ });
+}
+
+async function loadProduct(){
+ if(!productId){
+  $('productArea').textContent='Product ID পাওয়া যায়নি।';
+  return;
+ }
+
+ try{
+  const snap=await getDoc(doc(db,'storeProducts',productId));
+
+  if(!snap.exists()){
+   $('productArea').textContent='এই পণ্যটি পাওয়া যায়নি।';
+   $('description').textContent='';
+   return;
+  }
+
+  product={id:snap.id,...snap.data()};
+
+  if(product.active===false){
+   $('productArea').textContent='এই পণ্যটি বর্তমানে পাওয়া যাচ্ছে না।';
+   return;
+  }
+
+  renderProduct();
+
+  await loadReviews();
+  await loadSimilar();
+
+ }catch(e){
+  console.error(e);
+  $('productArea').textContent='পণ্য লোড হয়নি: '+e.message;
+ }
+}
+
+async function loadSimilar(){
+ try{
+  const snap=await getDocs(collection(db,'storeProducts'));
+
+  allProducts=snap.docs
+   .map(d=>({id:d.id,...d.data()}))
+   .filter(p=>
+    p.id!==productId&&
+    p.active!==false
+   );
+
+  const sameCategory=allProducts.filter(p=>
+   (p.category||'General')===(product.category||'General')
+  );
+
+  const list=(sameCategory.length?sameCategory:allProducts).slice(0,8);
+
+  $('similarProducts').innerHTML=list.length?
+   list.map(p=>`
+    <div class="card" data-product="${esc(p.id)}">
+     ${p.imageUrl?
+      `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy">`:
+      '<div style="height:150px;display:grid;place-items:center">🛍️</div>'}
+     <div class="card-info">
+      <b>${esc(p.name||'Product')}</b>
+      <div class="card-price">${money(p.price)}</div>
+     </div>
+    </div>
+   `).join(''):
+   '<div class="empty">এখনো Similar Products নেই।</div>';
+
+  $('similarProducts').querySelectorAll('[data-product]').forEach(b=>{
+   b.onclick=()=>{
+    location.href='product-details.html?id='+encodeURIComponent(b.dataset.product);
+   };
+  });
+
+ }catch(e){
+  console.error(e);
+  $('similarProducts').innerHTML='<div class="empty">Similar Products লোড হয়নি।</div>';
+ }
+}
+
+function drawStars(n){
+ return '★'.repeat(n)+'☆'.repeat(5-n);
+}
+
+function renderReviews(){
+ const count=reviews.length;
+
+ const average=count?
+  reviews.reduce((s,r)=>s+Number(r.rating||0),0)/count:0;
+
+ $('averageRating').textContent=average.toFixed(1);
+ $('averageStars').textContent=drawStars(Math.round(average));
+ $('reviewCount').textContent=count+'টি Customer Review';
+
+ $('reviewList').innerHTML=count?
+  reviews.map(r=>`
+   <div class="review-card">
+    <div class="review-name">${esc(r.name||'Customer')}</div>
+    <div class="stars">${drawStars(Number(r.rating)||0)}</div>
+    <div class="review-date">
+     ${r.createdAt?.toDate?
+      r.createdAt.toDate().toLocaleDateString('bn-BD'):
+      'Customer Review'}
+    </div>
+    <div class="review-comment">${esc(r.comment||'')}</div>
+   </div>
+  `).join(''):
+  '<div class="empty">এখনো কোনো Review দেওয়া হয়নি। প্রথম Review দিন!</div>';
+}
+
+async function loadReviews(){
+ try{
+  const snap=await getDocs(
+   collection(db,'storeProducts',productId,'reviews')
+  );
+
+  reviews=snap.docs.map(d=>({id:d.id,...d.data()}));
+
+  reviews.sort((a,b)=>{
+   const ta=a.createdAt?.toMillis?a.createdAt.toMillis():0;
+   const tb=b.createdAt?.toMillis?b.createdAt.toMillis():0;
+   return tb-ta;
+  });
+
+  renderReviews();
+
+ }catch(e){
+  console.error('Review load error:',e);
+  $('reviewList').innerHTML=
+   '<div class="empty">Review লোড করা যাচ্ছে না। Firestore Rules পরীক্ষা প্রয়োজন।</div>';
+ }
+}
+
+$('ratingInput').querySelectorAll('[data-rating]').forEach(b=>{
+ b.onclick=()=>{
+  selectedRating=Number(b.dataset.rating);
+
+  $('ratingInput').querySelectorAll('[data-rating]').forEach(x=>{
+   x.classList.toggle(
+    'selected',
+    Number(x.dataset.rating)<=selectedRating
+   );
+  });
+ };
+});
+
+$('submitReview').onclick=async()=>{
+ $('reviewMessage').textContent='';
+
+ if(!currentUser){
+  $('reviewMessage').textContent=
+   'Review দিতে আগে Login করুন।';
+
+  location.href='my-account.html';
+  return;
+ }
+
+ if(!currentUser.emailVerified){
+  $('reviewMessage').textContent=
+   'Review দিতে Gmail Verification সম্পন্ন করুন।';
+  return;
+ }
+
+ if(!selectedRating){
+  $('reviewMessage').textContent='১ থেকে ৫ Star নির্বাচন করুন।';
+  return;
+ }
+
+ const comment=$('reviewComment').value.trim();
+
+ if(comment.length<3){
+  $('reviewMessage').textContent=
+   'কমপক্ষে ৩ অক্ষরের Review লিখুন।';
+  return;
+ }
+
+ if(comment.length>1000){
+  $('reviewMessage').textContent=
+   'Review সর্বোচ্চ ১০০০ অক্ষরের হতে পারবে।';
+  return;
+ }
+
+ $('submitReview').disabled=true;
+ $('submitReview').textContent='SUBMITTING...';
+
+ try{
+  // একই Customer-এর দ্বিতীয় Review আটকানোর চেষ্টা
+  const existing=reviews.find(r=>r.uid===currentUser.uid);
+
+  if(existing){
+   throw Error('আপনি এই পণ্যে ইতিমধ্যে Review দিয়েছেন।');
+  }
+
+  const profileSnap=await getDoc(
+   doc(db,'customerProfiles',currentUser.uid)
+  );
+
+  const customerName=profileSnap.exists()?
+   profileSnap.data().name||'Customer':
+   'Customer';
+
+  await addDoc(
+   collection(db,'storeProducts',productId,'reviews'),
+   {
+    uid:currentUser.uid,
+    name:customerName,
+    rating:selectedRating,
+    comment,
+    createdAt:serverTimestamp()
+   }
+  );
+
+  $('reviewComment').value='';
+  selectedRating=0;
+
+  $('ratingInput').querySelectorAll('button').forEach(b=>
+   b.classList.remove('selected')
+  );
+
+  $('reviewMessage').textContent=
+   'আপনার Review সফলভাবে জমা হয়েছে।';
+
+  toast('Review জমা হয়েছে!');
+
+  await loadReviews();
+
+ }catch(e){
+  console.error(e);
+  $('reviewMessage').textContent=
+   'Review জমা হয়নি: '+e.message;
+ }finally{
+  $('submitReview').disabled=false;
+  $('submitReview').textContent='SUBMIT REVIEW';
+ }
+};
+
+onAuthStateChanged(auth,user=>{
+ currentUser=user;
+});
+
+loadProduct();
+
+</script>
+</body>
+</html>
