@@ -1,81 +1,97 @@
+
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MS STORE | Admin Panel</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MS STORE Admin Panel</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f3f5fa;color:#182033;font-family:Arial,sans-serif}
-header{background:#172554;color:#fff;padding:20px}
-header h2{margin:0 0 5px;font-size:22px}
-main{max-width:900px;margin:auto;padding:16px}
-.card{background:#fff;padding:18px;border-radius:14px;margin:16px 0;box-shadow:0 2px 12px #00000010}
-h3{margin:0 0 14px}
-input,select,button{width:100%;padding:12px;margin:6px 0;border:1px solid #d7dce5;border-radius:8px;font-size:15px}
-button{background:#1d4ed8;color:#fff;border:0;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.55}
-.danger{background:#dc2626}.green{background:#15803d}
-.hidden{display:none}
-.item{border-bottom:1px solid #e5e7eb;padding:14px 0}
-.productline{display:flex;gap:12px;align-items:center}
-.productline img{width:76px;height:76px;object-fit:cover;border-radius:9px;background:#eee}
-.productinfo{flex:1;min-width:0;overflow-wrap:anywhere}
-.actions{display:flex;gap:8px;margin-top:9px}
-.actions button{flex:1}
-small{color:#64748b}
-#preview{display:none;width:110px;height:110px;object-fit:cover;border-radius:9px;margin-top:8px}
-label{display:block;margin-top:10px;font-weight:bold;font-size:14px}
-.order{background:#f8fafc;padding:12px;border-radius:9px;margin:10px 0;overflow-wrap:anywhere}
+body{margin:0;background:#f1f5f9;font-family:Arial,sans-serif;color:#1e293b}
+header{background:#111827;color:white;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header h2{margin:0;color:#f59e0b}
+main{max-width:950px;margin:20px auto;padding:12px}
+.card{background:white;padding:18px;border-radius:12px;margin-bottom:18px;box-shadow:0 3px 12px #0000000b}
+h3{margin-top:0}
+input,select,textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:15px}
+textarea{min-height:70px}
+button{padding:11px 15px;border:0;border-radius:7px;background:#111827;color:white;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+.orange{background:#f59e0b;color:#111827}
+.red{background:#dc2626}
+.green{background:#15803d}
+.hidden{display:none!important}
+.msg{font-size:14px;line-height:1.5;margin:8px 0}
+.product,.order{border:1px solid #e2e8f0;border-radius:9px;padding:13px;margin:10px 0;overflow-wrap:anywhere}
+.product img{width:75px;height:75px;object-fit:cover;border-radius:7px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.order select{margin-top:8px}
+.small{font-size:12px;color:#64748b}
+#logout{background:#dc2626}
+@media(max-width:500px){.row{grid-template-columns:1fr}main{padding:9px}}
 </style>
 </head>
 <body>
+
 <header>
-<h2>MS STORE | Admin Panel</h2>
-<small style="color:#dbeafe">Store Management Dashboard</small>
+<h2>MS STORE ADMIN</h2>
+<button id="logout" class="hidden">Logout</button>
 </header>
+
 <main>
-<section id="login" class="card">
+<section id="loginSection" class="card">
 <h3>Admin Login</h3>
 <input id="email" type="email" placeholder="Admin Email">
 <input id="password" type="password" placeholder="Password">
-<button id="loginBtn">Login</button>
-<p id="loginMsg"></p>
+<button id="loginBtn">LOGIN</button>
+<p id="loginMsg" class="msg"></p>
 </section>
-<section id="dashboard" class="hidden">
-<div class="card">
-<h3>Dashboard</h3>
-<p>Total Products: <b id="productCount">0</b></p>
-<p>Total Orders: <b id="orderCount">0</b></p>
-<button id="logoutBtn" class="danger">Logout</button>
+
+<div id="adminArea" class="hidden">
+
+<section class="card">
+<h3 id="formTitle">Add New Product</h3>
+<input id="productName" placeholder="Product Name">
+<div class="row">
+<input id="productPrice" type="number" min="0" placeholder="Price">
+<input id="productStock" type="number" min="0" placeholder="Stock">
 </div>
-<div class="card">
-<h3>Add New Product</h3>
-<input id="pname" placeholder="Product Name">
-<input id="price" type="number" min="0" placeholder="Price (৳)">
-<input id="stock" type="number" min="0" placeholder="Stock">
-<input id="category" placeholder="Category">
-<label for="imageFile">Product Photo — Gallery থেকে ছবি বাছাই করুন</label>
-<input id="imageFile" type="file" accept="image/*">
-<img id="preview" alt="Image preview">
-<button id="addBtn">Add Product</button>
-<p id="productMsg"></p>
-<small>ছবি ছোট করে সংরক্ষণ করা হবে।</small>
+<input id="productCategory" placeholder="Category">
+<input id="productImage" type="url" placeholder="Image URL (optional)">
+<p class="small">ছবির সরাসরি URL দিতে হবে। Firebase Storage আপলোড এখানে ব্যবহার করা হচ্ছে না।</p>
+<div class="actions">
+<button id="saveProduct" class="orange">SAVE PRODUCT</button>
+<button id="cancelEdit" class="hidden">CANCEL</button>
 </div>
-<div class="card">
+<p id="productMsg" class="msg"></p>
+</section>
+
+<section class="card">
 <h3>All Products</h3>
-<div id="products">Loading...</div>
-</div>
-<div class="card">
-<h3>Customer Orders</h3>
-<div id="orders">Loading...</div>
-</div>
+<div id="productList">Loading...</div>
 </section>
+
+<section class="card">
+<h3>Customer Orders</h3>
+<button id="refreshOrders" class="orange">REFRESH ORDERS</button>
+<div id="orderList">Loading...</div>
+</section>
+
+</div>
 </main>
+
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+
+import {
+ getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+import {
+ getFirestore,collection,addDoc,getDocs,doc,updateDoc,
+ deleteDoc,setDoc,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
@@ -90,194 +106,229 @@ const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
 const $=id=>document.getElementById(id);
-let selectedImage="";
 
-function setMessage(message){
-$("productMsg").textContent=message;
+let editingId=null;
+
+function safe(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
 
-async function compressImage(file){
-if(!file)return "";
-if(!file.type.startsWith("image/"))throw Error("একটি ছবি নির্বাচন করুন");
-const bitmap=await createImageBitmap(file);
-const maxSide=480;
-const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));
-const canvas=document.createElement("canvas");
-canvas.width=Math.max(1,Math.round(bitmap.width*scale));
-canvas.height=Math.max(1,Math.round(bitmap.height*scale));
-canvas.getContext("2d").drawImage(bitmap,0,0,canvas.width,canvas.height);
-bitmap.close();
-const data=canvas.toDataURL("image/jpeg",0.45);
-if(data.length>600000)throw Error("ছবিটি অনেক বড়। আরও ছোট ছবি নির্বাচন করুন।");
-return data;
-}
-
-$("imageFile").addEventListener("change",async()=>{
-const file=$("imageFile").files[0];
-selectedImage="";
-$("preview").style.display="none";
-if(!file)return;
-try{
-selectedImage=await compressImage(file);
-$("preview").src=selectedImage;
-$("preview").style.display="block";
-}catch(error){
-setMessage(error.message);
-$("imageFile").value="";
-}
-});
-
-$("loginBtn").addEventListener("click",async()=>{
-$("loginBtn").disabled=true;
-$("loginMsg").textContent="Logging in...";
-try{
-await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);
-$("loginMsg").textContent="";
-}catch(error){
-$("loginMsg").textContent="Login failed: "+error.message;
-}finally{
-$("loginBtn").disabled=false;
-}
-});
-
-$("logoutBtn").addEventListener("click",()=>signOut(auth));
-
-onAuthStateChanged(auth,async user=>{
-$("login").classList.toggle("hidden",!!user);
-$("dashboard").classList.toggle("hidden",!user);
-if(user)await loadData();
-});
-
-$("addBtn").addEventListener("click",async()=>{
-const name=$("pname").value.trim();
-const price=Number($("price").value);
-const stock=Number($("stock").value);
-if(!name||$("price").value===""||$("stock").value===""||
-!Number.isFinite(price)||!Number.isFinite(stock)||price<0||stock<0){
-setMessage("পণ্যের নাম, সঠিক দাম ও স্টক লিখুন।");
-return;
-}
-$("addBtn").disabled=true;
-try{
-setMessage("পণ্য যোগ হচ্ছে...");
-await addDoc(collection(db,"storeProducts"),{
-name,price,stock,
-category:$("category").value.trim()||"General",
-imageUrl:selectedImage,
-active:true
-});
-["pname","price","stock","category","imageFile"].forEach(id=>$(id).value="");
-$("preview").style.display="none";
-selectedImage="";
-setMessage("পণ্য সফলভাবে যোগ হয়েছে।");
-await loadData();
-}catch(error){
-setMessage("পণ্য যোগ হয়নি: "+error.message);
-}finally{
-$("addBtn").disabled=false;
-}
-});
-
-async function loadData(){
-try{
-const productSnap=await getDocs(collection(db,"storeProducts"));
-$("productCount").textContent=productSnap.size;
-$("products").innerHTML="";
-productSnap.forEach(productDoc=>{
-const p=productDoc.data();
-const item=document.createElement("div");
-item.className="item";
-const line=document.createElement("div");
-line.className="productline";
-if(p.imageUrl){
-const img=document.createElement("img");
-img.src=p.imageUrl;
-img.alt=p.name||"Product";
-line.append(img);
-}
-const info=document.createElement("div");
-info.className="productinfo";
-const title=document.createElement("b");
-title.textContent=p.name||"Unnamed product";
-const details=document.createElement("div");
-details.textContent="৳"+(p.price??0)+" | Stock: "+(p.stock??0)+" | "+(p.category||"General");
-info.append(title,details);
-line.append(info);
-item.append(line);
-
-const actions=document.createElement("div");
-actions.className="actions";
-const edit=document.createElement("button");
-edit.className="green";
-edit.textContent="Edit";
-edit.onclick=async()=>{
-const name=prompt("Product name:",p.name||"");
-if(name===null)return;
-const priceText=prompt("Price:",String(p.price??0));
-if(priceText===null)return;
-const stockText=prompt("Stock:",String(p.stock??0));
-if(stockText===null)return;
-const price=Number(priceText),stock=Number(stockText);
-if(!name.trim()||priceText.trim()===""||stockText.trim()===""||
-!Number.isFinite(price)||!Number.isFinite(stock)||price<0||stock<0){
-alert("সঠিক তথ্য দিন।");return;
-}
-try{
-await updateDoc(doc(db,"storeProducts",productDoc.id),{name:name.trim(),price,stock});
-await loadData();
-}catch(error){alert("Edit হয়নি: "+error.message);}
+$("loginBtn").onclick=async()=>{
+ $("loginMsg").textContent="Logging in...";
+ $("loginBtn").disabled=true;
+ try{
+  await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);
+  $("loginMsg").textContent="";
+ }catch(e){
+  $("loginMsg").textContent="Login failed: "+e.message;
+ }finally{
+  $("loginBtn").disabled=false;
+ }
 };
-const remove=document.createElement("button");
-remove.className="danger";
-remove.textContent="Delete";
-remove.onclick=async()=>{
-if(!confirm("এই পণ্যটি মুছে ফেলবেন?"))return;
-try{
-await deleteDoc(doc(db,"storeProducts",productDoc.id));
-await loadData();
-}catch(error){alert("Delete হয়নি: "+error.message);}
-};
-actions.append(edit,remove);
-item.append(actions);
-$("products").append(item);
-});
-if(productSnap.empty)$("products").textContent="এখনো কোনো পণ্য যোগ করা হয়নি।";
 
-const orderSnap=await getDocs(collection(db,"orders"));
-$("orderCount").textContent=orderSnap.size;
-$("orders").innerHTML="";
-orderSnap.forEach(orderDoc=>{
-const o=orderDoc.data();
-const box=document.createElement("div");
-box.className="order";
-const details=document.createElement("p");
-details.textContent=(o.customerName||"Customer")+" | "+(o.phone||"")+" | "+(o.productName||"")+" | Total ৳"+(o.totalPrice??0)+" | Payment: "+(o.paymentMethod||"")+" | TrxID: "+(o.trxId||"");
-const address=document.createElement("small");
-address.textContent="Address: "+(o.address||"");
-const status=document.createElement("select");
-["Pending","Confirmed","Shipped","Delivered","Cancelled"].forEach(value=>{
-const option=document.createElement("option");
-option.value=value;option.textContent=value;status.append(option);
+$("logout").onclick=()=>signOut(auth);
+
+onAuthStateChanged(auth,user=>{
+ if(user){
+  $("loginSection").classList.add("hidden");
+  $("adminArea").classList.remove("hidden");
+  $("logout").classList.remove("hidden");
+  loadProducts();
+  loadOrders();
+ }else{
+  $("loginSection").classList.remove("hidden");
+  $("adminArea").classList.add("hidden");
+  $("logout").classList.add("hidden");
+ }
 });
-status.value=o.status||"Pending";
-const save=document.createElement("button");
-save.className="green";
-save.textContent="Update Order Status";
-save.onclick=async()=>{
-try{
-await updateDoc(doc(db,"orders",orderDoc.id),{status:status.value});
-alert("Order status updated.");
-}catch(error){alert("Update হয়নি: "+error.message);}
+
+function clearForm(){
+ editingId=null;
+ $("productName").value="";
+ $("productPrice").value="";
+ $("productStock").value="";
+ $("productCategory").value="";
+ $("productImage").value="";
+ $("formTitle").textContent="Add New Product";
+ $("saveProduct").textContent="SAVE PRODUCT";
+ $("cancelEdit").classList.add("hidden");
+}
+
+$("cancelEdit").onclick=clearForm;
+
+$("saveProduct").onclick=async()=>{
+ const name=$("productName").value.trim();
+ const price=Number($("productPrice").value);
+ const stock=Number($("productStock").value);
+ const category=$("productCategory").value.trim()||"General";
+ const imageUrl=$("productImage").value.trim();
+
+ if(!name||$("productPrice").value===""||$("productStock").value===""||
+    !Number.isFinite(price)||price<0||!Number.isInteger(stock)||stock<0){
+  $("productMsg").textContent="সঠিক Product Name, Price ও Stock দিন।";
+  return;
+ }
+
+ $("saveProduct").disabled=true;
+ $("productMsg").textContent="Saving...";
+
+ const data={name,price,stock,category,active:true,imageUrl};
+
+ try{
+  if(editingId){
+   await updateDoc(doc(db,"storeProducts",editingId),data);
+   $("productMsg").textContent="Product updated successfully.";
+  }else{
+   await addDoc(collection(db,"storeProducts"),{
+    ...data,createdAt:serverTimestamp()
+   });
+   $("productMsg").textContent="Product added successfully.";
+  }
+  clearForm();
+  await loadProducts();
+ }catch(e){
+  console.error(e);
+  $("productMsg").textContent="Save failed: "+e.message;
+ }finally{
+  $("saveProduct").disabled=false;
+ }
 };
-box.append(details,address,status,save);
-$("orders").append(box);
-});
-if(orderSnap.empty)$("orders").textContent="এখনো কোনো অর্ডার নেই।";
-}catch(error){
-$("products").textContent="ডেটা লোড হয়নি: "+error.message;
-$("orders").textContent="Firestore Rules বা Firebase সংযোগ পরীক্ষা করুন।";
+
+async function loadProducts(){
+ $("productList").textContent="Loading...";
+ try{
+  const snap=await getDocs(collection(db,"storeProducts"));
+  if(snap.empty){
+   $("productList").textContent="No products found.";
+   return;
+  }
+
+  $("productList").innerHTML=snap.docs.map(d=>{
+   const p=d.data();
+   return `<div class="product">
+    <div class="row">
+     <div>
+      <b>${safe(p.name)}</b><br>
+      Price: ৳${safe(p.price)}<br>
+      Stock: ${safe(p.stock)}<br>
+      Category: ${safe(p.category)}
+     </div>
+     <div>${p.imageUrl?`<img src="${safe(p.imageUrl)}" alt="Product">`:""}</div>
+    </div>
+    <div class="actions">
+     <button class="orange" data-edit="${safe(d.id)}">EDIT</button>
+     <button class="red" data-delete="${safe(d.id)}">DELETE</button>
+    </div>
+   </div>`;
+  }).join("");
+
+  $("productList").querySelectorAll("[data-edit]").forEach(b=>{
+   b.onclick=()=>{
+    const d=snap.docs.find(x=>x.id===b.dataset.edit);
+    const p=d.data();
+    editingId=d.id;
+    $("productName").value=p.name||"";
+    $("productPrice").value=p.price??"";
+    $("productStock").value=p.stock??"";
+    $("productCategory").value=p.category||"";
+    $("productImage").value=p.imageUrl||"";
+    $("formTitle").textContent="Edit Product";
+    $("saveProduct").textContent="UPDATE PRODUCT";
+    $("cancelEdit").classList.remove("hidden");
+    window.scrollTo({top:0,behavior:"smooth"});
+   };
+  });
+
+  $("productList").querySelectorAll("[data-delete]").forEach(b=>{
+   b.onclick=async()=>{
+    if(!confirm("এই Product Delete করতে চাও?"))return;
+    try{
+     await deleteDoc(doc(db,"storeProducts",b.dataset.delete));
+     await loadProducts();
+    }catch(e){alert("Delete failed: "+e.message);}
+   };
+  });
+ }catch(e){
+  console.error(e);
+  $("productList").textContent="Products load failed: "+e.message;
+ }
 }
+
+const statuses=["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled"];
+
+async function loadOrders(){
+ $("orderList").textContent="Loading...";
+ try{
+  const snap=await getDocs(collection(db,"orders"));
+  if(snap.empty){
+   $("orderList").textContent="No orders yet.";
+   return;
+  }
+
+  const orders=snap.docs.map(d=>({id:d.id,...d.data()}));
+  orders.sort((a,b)=>{
+   const ta=a.createdAt?.toMillis?.()||0;
+   const tb=b.createdAt?.toMillis?.()||0;
+   return tb-ta;
+  });
+
+  $("orderList").innerHTML=orders.map(o=>{
+   const id=o.orderId||o.id;
+   const items=Array.isArray(o.products)
+    ?o.products.map(p=>`${safe(p.productName)} × ${safe(p.quantity)}`).join("<br>")
+    :safe(o.productName||"");
+   const status=o.status||"Pending";
+
+   return `<div class="order">
+    <b>Order ID: ${safe(id)}</b><br>
+    Customer: ${safe(o.customerName)}<br>
+    Phone: ${safe(o.phone)}<br>
+    Address: ${safe(o.address)}<br>
+    Products: ${items}<br>
+    Total: <b>৳${safe(o.totalPrice)}</b><br>
+    Payment: ${safe(o.paymentMethod)}<br>
+    Payment status: ${safe(o.paymentStatus||"Pending")}<br>
+    Current status: <b>${safe(status)}</b>
+
+    <label>Update Order Status</label>
+    <select data-status="${safe(o.id)}">
+     ${statuses.map(s=>`<option value="${s}" ${s===status?"selected":""}>${s}</option>`).join("")}
+    </select>
+    <button class="green" data-update="${safe(o.id)}" data-orderid="${safe(id)}">UPDATE STATUS</button>
+   </div>`;
+  }).join("");
+
+  $("orderList").querySelectorAll("[data-update]").forEach(b=>{
+   b.onclick=async()=>{
+    const orderDocId=b.dataset.update;
+    const orderId=b.dataset.orderid;
+    const select=$("orderList").querySelector(`[data-status="${CSS.escape(orderDocId)}"]`);
+    const newStatus=select.value;
+    b.disabled=true;
+    try{
+     await updateDoc(doc(db,"orders",orderDocId),{status:newStatus});
+     await setDoc(doc(db,"orderTracking",orderId),{
+      orderId,status:newStatus,updatedAt:serverTimestamp()
+     },{merge:true});
+     alert("Order status updated.");
+     await loadOrders();
+    }catch(e){
+     console.error(e);
+     alert("Status update failed: "+e.message);
+    }finally{
+     b.disabled=false;
+    }
+   };
+  });
+ }catch(e){
+  console.error(e);
+  $("orderList").textContent="Orders load failed: "+e.message;
+ }
 }
+
+$("refreshOrders").onclick=loadOrders;
 </script>
 </body>
 </html>
