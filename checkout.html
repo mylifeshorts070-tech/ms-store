@@ -242,7 +242,7 @@ $('toggle').onclick=()=>{
 };
 
 $('authSubmit').onclick=async()=>{
- const email=$('email').value.trim();
+ const email=$('email').value.trim().toLowerCase();
  const password=$('password').value;
 
  $('authMsg').textContent='';
@@ -289,8 +289,7 @@ $('authSubmit').onclick=async()=>{
  }
 };
 
-$('forgot').onclick=async()=>{
- const email=$('email').value.trim();
+const email=$('email').value.trim().toLowerCase();
 
  if(!email){
   $('authMsg').textContent='আগে Email লিখুন।';
