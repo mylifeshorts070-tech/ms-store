@@ -1,20 +1,19 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MS STORE Admin Panel</title>
+<title>MS STORE Admin</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f1f5f9;font-family:Arial,sans-serif;color:#1e293b}
-header{background:#111827;color:white;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header{background:#111827;color:white;padding:17px;display:flex;justify-content:space-between;align-items:center}
 header h2{margin:0;color:#f59e0b}
 main{max-width:1000px;margin:20px auto;padding:12px}
-.card{background:white;padding:18px;border-radius:14px;margin-bottom:18px;box-shadow:0 3px 12px #0000000b}
+.card{background:white;padding:17px;border-radius:13px;margin-bottom:17px;box-shadow:0 3px 12px #0000000b}
 h3{margin-top:0}
-input,select,textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:15px}
-button{padding:11px 15px;border:0;border-radius:8px;background:#111827;color:white;font-weight:bold;cursor:pointer}
+input,select{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:15px}
+button{padding:11px 14px;border:0;border-radius:8px;background:#111827;color:white;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.5}
 .orange{background:#f59e0b;color:#111827}
 .red{background:#dc2626}
@@ -23,23 +22,22 @@ button:disabled{opacity:.5}
 .hidden{display:none!important}
 .msg{font-size:14px;line-height:1.5;margin:8px 0}
 .product,.order{border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin:10px 0;overflow-wrap:anywhere}
-.product img{width:75px;height:75px;object-fit:cover;border-radius:7px}
+.product img{width:85px;height:85px;object-fit:cover;border-radius:8px}
+#imagePreview{width:130px;height:130px;object-fit:cover;border-radius:10px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .small{font-size:12px;color:#64748b}
 #logout{background:#dc2626}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:13px}
-.stat b{display:block;font-size:25px;margin-top:5px}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding:5px 0 12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:12px}
+.stat b{display:block;font-size:24px;margin-top:5px}
+.tabs{display:flex;gap:7px;overflow-x:auto;padding:5px 0 12px}
 .tab{white-space:nowrap;background:#e2e8f0;color:#1e293b}
 .tab.active{background:#111827;color:white}
-.tab span{background:#f59e0b;color:#111827;border-radius:20px;padding:2px 7px;margin-left:4px}
-.order h4{margin:0 0 10px;font-size:18px}
 .order p{margin:7px 0;line-height:1.45}
 .order label{display:block;margin-top:12px;font-weight:bold}
-.order-badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#e2e8f0;font-size:12px;font-weight:bold}
 .order-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.order-badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#e2e8f0;font-size:12px;font-weight:bold}
 @media(max-width:650px){
  .stats{grid-template-columns:repeat(2,1fr)}
  .row{grid-template-columns:1fr}
@@ -56,6 +54,7 @@ button:disabled{opacity:.5}
 </header>
 
 <main>
+
 <section id="loginSection" class="card">
 <h3>Admin Login</h3>
 <input id="email" type="email" placeholder="Admin Email">
@@ -77,19 +76,43 @@ button:disabled{opacity:.5}
 </section>
 
 <section class="card">
+<h3>Payment Settings</h3>
+<p class="small">এখানে তোমার Personal bKash ও Nagad নম্বর সেট করো।</p>
+
+<label>Personal bKash Number</label>
+<input id="bkashNumber" type="tel" placeholder="01XXXXXXXXX">
+
+<label>Personal Nagad Number</label>
+<input id="nagadNumber" type="tel" placeholder="01XXXXXXXXX">
+
+<button id="savePayment" class="orange">SAVE PAYMENT NUMBERS</button>
+<p id="paymentMsg" class="msg"></p>
+</section>
+
+<section class="card">
 <h3 id="formTitle">Add New Product</h3>
+
 <input id="productName" placeholder="Product Name">
+
 <div class="row">
 <input id="productPrice" type="number" min="0" placeholder="Price">
 <input id="productStock" type="number" min="0" placeholder="Stock">
 </div>
+
 <input id="productCategory" placeholder="Category">
-<input id="productImage" type="url" placeholder="Image URL (optional)">
-<p class="small">ছবির সরাসরি URL দিতে হবে। Firebase Storage এখানে ব্যবহার করা হচ্ছে না।</p>
+
+<label for="productImage">Product Image - Gallery থেকে ছবি নাও</label>
+<input id="productImage" type="file" accept="image/*">
+
+<img id="imagePreview" class="hidden" alt="Image Preview">
+
+<p class="small">ছবি স্বয়ংক্রিয়ভাবে ছোট করে সংরক্ষণ করা হবে।</p>
+
 <div class="actions">
 <button id="saveProduct" class="orange">SAVE PRODUCT</button>
 <button id="cancelEdit" class="hidden">CANCEL</button>
 </div>
+
 <p id="productMsg" class="msg"></p>
 </section>
 
@@ -115,7 +138,7 @@ button:disabled{opacity:.5}
 <button class="tab" data-filter="all">All Orders</button>
 </div>
 
-<p class="small" id="orderHelp">নতুন অর্ডারগুলো এখানে দেখানো হবে। দেখে নিলে Mark as Seen চাপবে।</p>
+<p class="small">নতুন অর্ডার দেখার পর Mark as Seen চাপবে।</p>
 <div id="orderList">Loading...</div>
 </section>
 
@@ -131,10 +154,10 @@ import {
 
 import {
  getFirestore,collection,addDoc,getDocs,doc,updateDoc,
- deleteDoc,setDoc,serverTimestamp
+ deleteDoc,setDoc,serverTimestamp,getDoc
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
-const firebaseConfig = {
+const firebaseConfig={
  apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
  authDomain:"ms-store-admin-26416.firebaseapp.com",
  projectId:"ms-store-admin-26416",
@@ -149,6 +172,8 @@ const db=getFirestore(app);
 const $=id=>document.getElementById(id);
 
 let editingId=null;
+let existingImageUrl="";
+let selectedImage="";
 let allOrders=[];
 let currentFilter="new";
 
@@ -167,6 +192,7 @@ function formatDate(value){
  }catch(e){return "সময় পাওয়া যায়নি";}
 }
 
+/* LOGIN */
 $("loginBtn").onclick=async()=>{
  $("loginMsg").textContent="Logging in...";
  $("loginBtn").disabled=true;
@@ -189,6 +215,7 @@ onAuthStateChanged(auth,user=>{
   $("logout").classList.remove("hidden");
   loadProducts();
   loadOrders();
+  loadPaymentSettings();
  }else{
   $("loginSection").classList.remove("hidden");
   $("adminArea").classList.add("hidden");
@@ -196,35 +223,144 @@ onAuthStateChanged(auth,user=>{
  }
 });
 
+/* PAYMENT SETTINGS */
+async function loadPaymentSettings(){
+ try{
+  const snap=await getDoc(doc(db,"storeSettings","paymentMethods"));
+  if(snap.exists()){
+   const p=snap.data();
+   $("bkashNumber").value=p.bkashNumber||"";
+   $("nagadNumber").value=p.nagadNumber||"";
+  }
+ }catch(e){
+  $("paymentMsg").textContent="Payment settings load failed: "+e.message;
+ }
+}
+
+$("savePayment").onclick=async()=>{
+ const bkashNumber=$("bkashNumber").value.trim();
+ const nagadNumber=$("nagadNumber").value.trim();
+
+ if(bkashNumber&&!/^01[3-9]\d{8}$/.test(bkashNumber)){
+  $("paymentMsg").textContent="সঠিক bKash নম্বর দাও।";
+  return;
+ }
+ if(nagadNumber&&!/^01[3-9]\d{8}$/.test(nagadNumber)){
+  $("paymentMsg").textContent="সঠিক Nagad নম্বর দাও।";
+  return;
+ }
+
+ $("savePayment").disabled=true;
+ $("paymentMsg").textContent="Saving...";
+
+ try{
+  await setDoc(doc(db,"storeSettings","paymentMethods"),{
+   bkashNumber,nagadNumber,updatedAt:serverTimestamp()
+  });
+  $("paymentMsg").textContent="Payment numbers saved successfully.";
+ }catch(e){
+  $("paymentMsg").textContent="Save failed: "+e.message;
+ }finally{
+  $("savePayment").disabled=false;
+ }
+};
+
+/* PRODUCT IMAGE COMPRESSION */
+function compressImage(file){
+ return new Promise((resolve,reject)=>{
+  const reader=new FileReader();
+
+  reader.onerror=()=>reject(new Error("ছবি পড়া যায়নি।"));
+  reader.onload=()=>{
+   const img=new Image();
+   img.onerror=()=>reject(new Error("ছবিটি খোলা যায়নি।"));
+
+   img.onload=()=>{
+    const maxSize=480;
+    const scale=Math.min(1,maxSize/Math.max(img.width,img.height));
+    const canvas=document.createElement("canvas");
+    canvas.width=Math.round(img.width*scale);
+    canvas.height=Math.round(img.height*scale);
+
+    const ctx=canvas.getContext("2d");
+    ctx.fillStyle="#ffffff";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+
+    const result=canvas.toDataURL("image/jpeg",0.55);
+
+    if(result.length>700000){
+     reject(new Error("ছবিটি এখনও বড়। অন্য ছোট ছবি ব্যবহার করো।"));
+    }else{
+     resolve(result);
+    }
+   };
+   img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+ });
+}
+
+$("productImage").onchange=async()=>{
+ const file=$("productImage").files[0];
+ if(!file)return;
+
+ if(!file.type.startsWith("image/")){
+  alert("শুধু Image নির্বাচন করো।");
+  return;
+ }
+
+ $("productMsg").textContent="ছবি প্রস্তুত হচ্ছে...";
+ try{
+  selectedImage=await compressImage(file);
+  $("imagePreview").src=selectedImage;
+  $("imagePreview").classList.remove("hidden");
+  $("productMsg").textContent="ছবি প্রস্তুত। এখন Save Product চাপতে পারো।";
+ }catch(e){
+  selectedImage="";
+  $("productMsg").textContent=e.message;
+ }
+};
+
 function clearForm(){
  editingId=null;
+ existingImageUrl="";
+ selectedImage="";
  $("productName").value="";
  $("productPrice").value="";
  $("productStock").value="";
  $("productCategory").value="";
  $("productImage").value="";
+ $("imagePreview").src="";
+ $("imagePreview").classList.add("hidden");
  $("formTitle").textContent="Add New Product";
  $("saveProduct").textContent="SAVE PRODUCT";
  $("cancelEdit").classList.add("hidden");
 }
+
 $("cancelEdit").onclick=clearForm;
 
+/* SAVE PRODUCT */
 $("saveProduct").onclick=async()=>{
  const name=$("productName").value.trim();
  const price=Number($("productPrice").value);
  const stock=Number($("productStock").value);
  const category=$("productCategory").value.trim()||"General";
- const imageUrl=$("productImage").value.trim();
 
  if(!name||$("productPrice").value===""||$("productStock").value===""||
  !Number.isFinite(price)||price<0||!Number.isInteger(stock)||stock<0){
-  $("productMsg").textContent="সঠিক Product Name, Price ও Stock দিন।";
+  $("productMsg").textContent="সঠিক Product Name, Price ও Stock দাও।";
   return;
  }
 
  $("saveProduct").disabled=true;
  $("productMsg").textContent="Saving...";
- const data={name,price,stock,category,active:true,imageUrl};
+
+ const imageUrl=selectedImage||existingImageUrl;
+
+ const data={
+  name,price,stock,category,active:true,imageUrl
+ };
 
  try{
   if(editingId){
@@ -238,6 +374,7 @@ $("saveProduct").onclick=async()=>{
   }
   clearForm();
   await loadProducts();
+  $("productMsg").textContent="Product saved successfully.";
  }catch(e){
   console.error(e);
   $("productMsg").textContent="Save failed: "+e.message;
@@ -246,6 +383,7 @@ $("saveProduct").onclick=async()=>{
  }
 };
 
+/* LOAD PRODUCTS */
 async function loadProducts(){
  $("productList").textContent="Loading...";
  try{
@@ -278,12 +416,24 @@ async function loadProducts(){
    b.onclick=()=>{
     const d=snap.docs.find(x=>x.id===b.dataset.edit);
     const p=d.data();
+
     editingId=d.id;
+    existingImageUrl=p.imageUrl||"";
+    selectedImage="";
+
     $("productName").value=p.name||"";
     $("productPrice").value=p.price??"";
     $("productStock").value=p.stock??"";
     $("productCategory").value=p.category||"";
-    $("productImage").value=p.imageUrl||"";
+    $("productImage").value="";
+
+    if(existingImageUrl){
+     $("imagePreview").src=existingImageUrl;
+     $("imagePreview").classList.remove("hidden");
+    }else{
+     $("imagePreview").classList.add("hidden");
+    }
+
     $("formTitle").textContent="Edit Product";
     $("saveProduct").textContent="UPDATE PRODUCT";
     $("cancelEdit").classList.remove("hidden");
@@ -306,6 +456,7 @@ async function loadProducts(){
  }
 }
 
+/* ORDERS */
 const statuses=["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled"];
 
 function updateCounts(){
@@ -323,6 +474,7 @@ function renderOrders(){
  });
 
  let list=allOrders;
+
  if(currentFilter==="new"){
   list=allOrders.filter(o=>o.adminSeen!==true);
  }else if(currentFilter!=="all"){
@@ -343,8 +495,6 @@ function renderOrders(){
 
   const email=o.email||"";
   const paymentInfo=o.transactionId||o.trxId||"";
-  const subtotal=o.subtotal;
-  const delivery=o.deliveryCharge;
 
   return `<div class="order">
    <div class="order-top">
@@ -357,8 +507,8 @@ function renderOrders(){
    ${email?`<p><b>Email:</b> ${safe(email)}</p>`:""}
    <p><b>Address:</b> ${safe(o.address)}</p>
    <p><b>Products:</b><br>${items}</p>
-   ${subtotal!==undefined?`<p><b>Subtotal:</b> ৳${safe(subtotal)}</p>`:""}
-   ${delivery!==undefined?`<p><b>Delivery Charge:</b> ৳${safe(delivery)}</p>`:""}
+   ${o.subtotal!==undefined?`<p><b>Subtotal:</b> ৳${safe(o.subtotal)}</p>`:""}
+   ${o.deliveryCharge!==undefined?`<p><b>Delivery Charge:</b> ৳${safe(o.deliveryCharge)}</p>`:""}
    <p><b>Total:</b> ৳${safe(o.totalPrice)}</p>
    <p><b>Payment:</b> ${safe(o.paymentMethod)}</p>
    <p><b>Payment Status:</b> ${safe(o.paymentStatus||"Pending")}</p>
@@ -384,7 +534,6 @@ function renderOrders(){
     await updateDoc(doc(db,"orders",b.dataset.seen),{adminSeen:true});
     await loadOrders();
    }catch(e){
-    console.error(e);
     alert("Could not mark as seen: "+e.message);
     b.disabled=false;
    }
@@ -400,7 +549,8 @@ function renderOrders(){
    const newStatus=select.value;
 
    if(!order)return;
-   if(newStatus=== (order.status||"Pending")){
+
+   if(newStatus===(order.status||"Pending")){
     alert("এই অর্ডারের স্ট্যাটাস আগে থেকেই "+newStatus);
     return;
    }
@@ -410,9 +560,9 @@ function renderOrders(){
    b.disabled=true;
    try{
     await updateDoc(doc(db,"orders",orderDocId),{
-     status:newStatus,
-     adminSeen:true
+     status:newStatus,adminSeen:true
     });
+
     await setDoc(doc(db,"orderTracking",orderId),{
      orderId,status:newStatus,updatedAt:serverTimestamp()
     },{merge:true});
@@ -455,7 +605,10 @@ $("orderTabs").querySelectorAll("[data-filter]").forEach(b=>{
  };
 });
 
-$("refreshOrders").onclick=loadOrders;
+$("refreshOrders").onclick=()=>{
+ loadOrders();
+ loadProducts();
+};
 </script>
 </body>
-</html>
+ </html>
