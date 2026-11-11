@@ -5,45 +5,262 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MS STORE | My Account</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f6fa;font-family:Arial,sans-serif;color:#202536}
-header{background:#111827;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:10px}
-header a{color:#f59e0b;text-decoration:none;font-weight:bold}
-main{max-width:850px;margin:25px auto;padding:0 14px}
-.panel{background:white;border-radius:13px;padding:19px;margin-bottom:16px}
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:#f5f6fa;
+ font-family:Arial,sans-serif;
+ color:#202536;
+}
+
+header{
+ background:#111827;
+ color:white;
+ padding:16px 5%;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+
+header a{
+ color:#f59e0b;
+ text-decoration:none;
+ font-weight:bold;
+}
+
+main{
+ max-width:850px;
+ margin:25px auto;
+ padding:0 14px;
+}
+
+.panel{
+ background:white;
+ border-radius:13px;
+ padding:19px;
+ margin-bottom:16px;
+}
+
 h2{margin-top:0;font-size:21px}
-button{border:0;border-radius:8px;padding:11px 15px;background:#111827;color:white;font-weight:bold;cursor:pointer}
-button.red{background:#dc2626}
-input{width:100%;padding:12px;border:1px solid #d7dce5;border-radius:8px;margin:5px 0 10px;font-size:15px}
-.order{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:15px;margin:12px 0;line-height:1.7;overflow-wrap:anywhere}
-.order textarea{width:100%;min-height:75px;padding:10px;border:1px solid #ddd;border-radius:8px;margin:8px 0}
-.status{display:inline-block;background:#e2e8f0;padding:4px 9px;border-radius:15px;font-size:12px;font-weight:bold}
-.msg{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+
+input{
+ width:100%;
+ padding:12px;
+ border:1px solid #d7dce5;
+ border-radius:8px;
+ margin:5px 0 10px;
+ font-size:15px;
+}
+
+button{
+ border:0;
+ border-radius:8px;
+ padding:13px 15px;
+ background:#111827;
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+ margin-top:7px;
+ font-size:15px;
+}
+
+button:disabled{opacity:.6}
+
+.btn{
+ width:100%;
+}
+
+.secondary{background:#64748b}
+.orange{background:#f59e0b;color:#111827}
+.red{background:#dc2626}
+
+.order{
+ background:#f8fafc;
+ border:1px solid #e5e7eb;
+ border-radius:10px;
+ padding:15px;
+ margin:12px 0;
+ line-height:1.7;
+ overflow-wrap:anywhere;
+}
+
+.order textarea{
+ width:100%;
+ min-height:75px;
+ padding:10px;
+ border:1px solid #ddd;
+ border-radius:8px;
+ margin:8px 0;
+}
+
+.status{
+ display:inline-block;
+ background:#e2e8f0;
+ padding:4px 9px;
+ border-radius:15px;
+ font-size:12px;
+ font-weight:bold;
+}
+
+.msg{
+ font-size:14px;
+ line-height:1.6;
+ overflow-wrap:anywhere;
+}
+
 .hidden{display:none!important}
+
+#toast{
+ position:fixed;
+ top:15px;
+ left:50%;
+ transform:translateX(-50%) translateY(-120px);
+ width:calc(100% - 30px);
+ max-width:500px;
+ padding:16px;
+ border-radius:12px;
+ background:#dcfce7;
+ color:#166534;
+ font-size:16px;
+ font-weight:bold;
+ text-align:center;
+ box-shadow:0 5px 20px #0002;
+ z-index:99999;
+ transition:transform .35s ease;
+}
+
+#toast.show{
+ transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:520px){
+ .panel{padding:17px}
+}
 </style>
 </head>
+
 <body>
+
+<div id="toast"></div>
+
 <header>
  <b style="font-size:22px">MS STORE</b>
  <a href="index.html">← SHOPPING</a>
 </header>
+
 <main>
- <section class="panel">
-  <h2>My Account / আমার অ্যাকাউন্ট</h2>
-  <div id="profile">অ্যাকাউন্ট লোড হচ্ছে...</div>
-  <button id="logout" class="red hidden">Logout</button>
-  <p id="authMsg" class="msg"></p>
- </section>
- <section class="panel">
-  <h2>My Orders / আমার অর্ডার</h2>
-  <div id="orders">অর্ডার লোড হচ্ছে...</div>
- </section>
+
+<!-- ACCOUNT -->
+
+<section class="panel">
+
+ <h2>My Account / আমার অ্যাকাউন্ট</h2>
+
+ <div id="authBox">
+
+  <p id="authStatus" class="msg">
+   Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।
+  </p>
+
+  <div id="registerFields" class="hidden">
+
+   <input id="regName" placeholder="আপনার নাম">
+
+   <input id="regPhone" type="tel" placeholder="মোবাইল নম্বর">
+
+  </div>
+
+  <input
+   id="email"
+   type="email"
+   placeholder="Gmail / Email"
+   autocomplete="email"
+  >
+
+  <input
+   id="password"
+   type="password"
+   placeholder="Password (কমপক্ষে ৬ অক্ষর)"
+   autocomplete="current-password"
+  >
+
+  <button id="authSubmit" class="btn">
+   Login
+  </button>
+
+  <button id="toggle" class="btn secondary">
+   নতুন অ্যাকাউন্ট তৈরি করুন
+  </button>
+
+  <button id="forgot" class="btn secondary">
+   Forgot Password
+  </button>
+
+ </div>
+
+ <div id="profile" class="msg hidden"></div>
+
+ <button id="logout" class="red hidden">
+  Logout
+ </button>
+
+ <p id="authMsg" class="msg"></p>
+
+</section>
+
+
+<!-- ORDERS -->
+
+<section class="panel">
+
+ <h2>My Orders / আমার অর্ডার</h2>
+
+ <div id="orders">
+  অর্ডার দেখতে Login করুন।
+ </div>
+
+</section>
+
 </main>
 
+
 <script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
-import{getAuth,onAuthStateChanged,signOut}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-import{getFirestore,doc,getDoc,collection,getDocs,query,where,updateDoc,serverTimestamp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+import{
+ initializeApp
+}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+
+import{
+ getAuth,
+ onAuthStateChanged,
+ createUserWithEmailAndPassword,
+ signInWithEmailAndPassword,
+ signOut,
+ sendEmailVerification,
+ sendPasswordResetEmail,
+ setPersistence,
+ browserLocalPersistence
+}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+
+import{
+ getFirestore,
+ doc,
+ getDoc,
+ collection,
+ getDocs,
+ query,
+ where,
+ updateDoc,
+ setDoc,
+ serverTimestamp
+}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+
+/* FIREBASE CONFIG */
 
 const firebaseConfig={
  apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
@@ -53,110 +270,559 @@ const firebaseConfig={
  messagingSenderId:"968008425065",
  appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
-const $=id=>document.getElementById(id);
-const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let currentUser=null;
 
-$('logout').onclick=async()=>{
- await signOut(auth);
- location.href='index.html';
-};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+
+/* COMMON */
+
+const $=id=>document.getElementById(id);
+
+const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
+
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
+ '&':'&amp;',
+ '<':'&lt;',
+ '>':'&gt;',
+ '"':'&quot;',
+ "'":'&#39;'
+}[c]));
+
+let currentUser=null;
+let isRegister=false;
+let toastTimer;
+
+
+function showToast(message){
+
+ const toast=$('toast');
+
+ toast.textContent=message;
+ toast.classList.add('show');
+
+ clearTimeout(toastTimer);
+
+ toastTimer=setTimeout(()=>{
+  toast.classList.remove('show');
+ },3500);
+
+}
+
+
+function authError(e){
+
+ const m=e.code||e.message;
+
+ return ({
+  'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
+  'auth/invalid-email':'Email ঠিক নয়।',
+  'auth/weak-password':'Password কমপক্ষে ৬ অক্ষরের হতে হবে।',
+  'auth/invalid-credential':'Email অথবা Password ভুল।',
+  'auth/user-not-found':'এই Email দিয়ে অ্যাকাউন্ট পাওয়া যায়নি।',
+  'auth/wrong-password':'Password ভুল হয়েছে।',
+  'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।',
+  'auth/network-request-failed':'Internet Connection পরীক্ষা করুন।',
+  'auth/invalid-api-key':'Firebase API Key সঠিক নয়।'
+ })[m]||m;
+
+}
+
 
 function dateText(timestamp){
- if(!timestamp?.toDate)return 'তারিখ পাওয়া যায়নি';
- return timestamp.toDate().toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'});
+
+ if(!timestamp?.toDate){
+  return 'তারিখ পাওয়া যায়নি';
+ }
+
+ return timestamp.toDate().toLocaleString(
+  'bn-BD',
+  {dateStyle:'medium',timeStyle:'short'}
+ );
+
 }
+
+
+/* LOCAL LOGIN SESSION */
+
+async function startApp(){
+
+ try{
+
+  await setPersistence(auth,browserLocalPersistence);
+
+  onAuthStateChanged(auth,async user=>{
+
+   currentUser=user;
+
+   if(!user){
+
+    $('authBox').classList.remove('hidden');
+    $('profile').classList.add('hidden');
+    $('logout').classList.add('hidden');
+
+    $('authStatus').textContent=
+     'Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।';
+
+    $('orders').textContent=
+     'অর্ডার দেখতে Login করুন।';
+
+    return;
+
+   }
+
+   await loadAccount(user);
+
+  });
+
+ }catch(e){
+
+  console.error(e);
+
+  $('authMsg').textContent=
+   'Authentication চালু হয়নি: '+authError(e);
+
+ }
+
+}
+
+
+/* TOGGLE REGISTER */
+
+$('toggle').onclick=()=>{
+
+ isRegister=!isRegister;
+
+ $('registerFields').classList.toggle('hidden',!isRegister);
+
+ $('authSubmit').textContent=
+  isRegister?'Register':'Login';
+
+ $('toggle').textContent=isRegister?
+  'আগে থেকেই অ্যাকাউন্ট আছে? Login':
+  'নতুন অ্যাকাউন্ট তৈরি করুন';
+
+ $('authMsg').textContent='';
+
+};
+
+
+/* LOGIN / REGISTER */
+
+$('authSubmit').onclick=async()=>{
+
+ const email=$('email').value.trim().toLowerCase();
+ const password=$('password').value;
+
+ $('authMsg').textContent='';
+
+ if(!email||!password){
+
+  $('authMsg').textContent='Email ও Password লিখুন।';
+  return;
+
+ }
+
+ if(password.length<6){
+
+  $('authMsg').textContent=
+   'Password কমপক্ষে ৬ অক্ষরের হতে হবে।';
+
+  return;
+
+ }
+
+ $('authSubmit').disabled=true;
+
+ try{
+
+  if(isRegister){
+
+   const name=$('regName').value.trim();
+   const phone=$('regPhone').value.trim();
+
+   if(!name||!phone){
+
+    throw Error('নাম ও মোবাইল নম্বর লিখুন।');
+
+   }
+
+   const result=await createUserWithEmailAndPassword(
+    auth,
+    email,
+    password
+   );
+
+   await setDoc(
+    doc(db,'customerProfiles',result.user.uid),
+    {
+     uid:result.user.uid,
+     name,
+     phone,
+     email,
+     banned:false,
+     createdAt:serverTimestamp()
+    }
+   );
+
+   await sendEmailVerification(result.user);
+
+   isRegister=false;
+
+   $('registerFields').classList.add('hidden');
+
+   $('authSubmit').textContent='Login';
+
+   $('authMsg').textContent=
+    'Gmail-এর Inbox/Spam থেকে Verification সম্পন্ন করুন।';
+
+   showToast('আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।');
+
+  }else{
+
+   await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+   );
+
+   showToast('আপনার লগইন সম্পন্ন হয়েছে।');
+
+  }
+
+ }catch(e){
+
+  console.error(e);
+
+  $('authMsg').textContent=authError(e);
+
+ }finally{
+
+  $('authSubmit').disabled=false;
+
+ }
+
+};
+
+
+/* FORGOT PASSWORD */
+
+$('forgot').onclick=async()=>{
+
+ const email=$('email').value.trim().toLowerCase();
+
+ $('authMsg').textContent='';
+
+ if(!email){
+
+  $('authMsg').textContent='আগে Email লিখুন।';
+
+  return;
+
+ }
+
+ $('forgot').disabled=true;
+
+ try{
+
+  await sendPasswordResetEmail(auth,email);
+
+  $('authMsg').textContent=
+   'Password reset email পাঠানো হয়েছে।';
+
+  showToast('Password reset email পাঠানো হয়েছে।');
+
+ }catch(e){
+
+  $('authMsg').textContent=authError(e);
+
+ }finally{
+
+  $('forgot').disabled=false;
+
+ }
+
+};
+
+
+/* LOGOUT */
+
+$('logout').onclick=async()=>{
+
+ try{
+
+  await signOut(auth);
+
+  showToast('আপনি সফলভাবে Logout করেছেন।');
+
+ }catch(e){
+
+  $('authMsg').textContent=authError(e);
+
+ }
+
+};
+
+
+/* ACCOUNT DETAILS */
 
 async function loadAccount(user){
+
  currentUser=user;
+
  try{
-  const p=await getDoc(doc(db,'customerProfiles',user.uid));
+
+  const p=await getDoc(
+   doc(db,'customerProfiles',user.uid)
+  );
+
   if(p.exists()&&p.data().banned){
-   $('profile').textContent='এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।';
-   await signOut(auth);return;
+
+   $('profile').textContent=
+    'এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।';
+
+   await signOut(auth);
+
+   return;
+
   }
+
   const data=p.exists()?p.data():{};
+
+  $('authBox').classList.add('hidden');
+
+  $('profile').classList.remove('hidden');
+
   $('profile').innerHTML=`
+
    <p><b>নাম:</b> ${esc(data.name||'—')}</p>
+
    <p><b>Email:</b> ${esc(user.email)}</p>
+
    <p><b>মোবাইল:</b> ${esc(data.phone||'—')}</p>
-   <p><b>Account Created:</b> ${dateText(data.createdAt)}</p>`;
+
+   <p><b>Account Created:</b> ${dateText(data.createdAt)}</p>
+
+   <p><b>Email Verification:</b>
+   ${user.emailVerified?'Verified':'Not Verified'}</p>
+
+   ${
+    !user.emailVerified?
+    '<p style="color:#b45309">অর্ডারের আগে Gmail Verification সম্পন্ন করুন।</p>':
+    ''
+   }
+
+  `;
+
   $('logout').classList.remove('hidden');
+
   await loadOrders();
+
  }catch(e){
-  $('profile').textContent='অ্যাকাউন্ট লোড হয়নি: '+e.message;
+
+  console.error(e);
+
+  $('profile').textContent=
+   'অ্যাকাউন্ট লোড হয়নি: '+authError(e);
+
  }
+
 }
+
+
+/* LOAD ORDERS */
 
 async function loadOrders(){
+
  if(!currentUser)return;
+
  $('orders').textContent='অর্ডার লোড হচ্ছে...';
+
  try{
-  const s=await getDocs(query(collection(db,'orders'),where('uid','==',currentUser.uid)));
-  const list=s.docs.map(d=>({id:d.id,...d.data()}))
-   .sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  if(!list.length){$('orders').textContent='এখনো কোনো অর্ডার করেননি।';return}
+
+  const s=await getDocs(
+
+   query(
+    collection(db,'orders'),
+    where('uid','==',currentUser.uid)
+   )
+
+  );
+
+  const list=s.docs.map(d=>({
+   id:d.id,
+   ...d.data()
+  })).sort((a,b)=>
+   (b.createdAt?.seconds||0)-
+   (a.createdAt?.seconds||0)
+  );
+
+  if(!list.length){
+
+   $('orders').textContent=
+    'এখনো কোনো অর্ডার করেননি।';
+
+   return;
+
+  }
+
   $('orders').innerHTML=list.map(o=>`
+
    <div class="order">
-    <b>Order ID:</b> ${esc(o.orderId||o.id)}<br>
-    <b>তারিখ:</b> ${dateText(o.createdAt)}<br>
-    <b>পণ্য:</b> ${esc(o.productName||'—')}<br>
-    <b>মোট পরিমাণ:</b> ${Number(o.quantity||0)}<br>
-    <b>Subtotal:</b> ${money(o.subtotal)}<br>
-    <b>Delivery:</b> ${money(o.deliveryCharge)}<br>
-    <b>Total:</b> ${money(o.totalPrice)}<br>
-    <b>Payment:</b> ${esc(o.paymentMethod||'—')}<br>
-    <b>Payment Status:</b> ${esc(o.paymentStatus||'—')}<br>
-    <b>Order Status:</b> <span class="status">${esc(o.status||'Pending')}</span>
+
+    <b>Order ID:</b>
+    ${esc(o.orderId||o.id)}<br>
+
+    <b>তারিখ:</b>
+    ${dateText(o.createdAt)}<br>
+
+    <b>পণ্য:</b>
+    ${esc(o.productName||'—')}<br>
+
+    <b>মোট পরিমাণ:</b>
+    ${Number(o.quantity||0)}<br>
+
+    <b>Subtotal:</b>
+    ${money(o.subtotal)}<br>
+
+    <b>Delivery:</b>
+    ${money(o.deliveryCharge)}<br>
+
+    <b>Total:</b>
+    ${money(o.totalPrice)}<br>
+
+    <b>Payment:</b>
+    ${esc(o.paymentMethod||'—')}<br>
+
+    <b>Payment Status:</b>
+    ${esc(o.paymentStatus||'—')}<br>
+
+    <b>Order Status:</b>
+
+    <span class="status">
+     ${esc(o.status||'Pending')}
+    </span>
+
     ${o.status==='Pending'?`
-     <textarea id="reason-${esc(o.id)}" placeholder="অর্ডার বাতিলের কারণ লিখুন"></textarea>
-     <button class="red" data-cancel="${esc(o.id)}">CONFIRM CANCELLATION</button>`:''}
-    ${o.status==='Cancelled'&&o.cancellationReason?`<p><b>বাতিলের কারণ:</b> ${esc(o.cancellationReason)}</p>`:''}
-   </div>`).join('');
+
+     <textarea
+      id="reason-${esc(o.id)}"
+      placeholder="অর্ডার বাতিলের কারণ লিখুন"
+     ></textarea>
+
+     <button
+      class="red"
+      data-cancel="${esc(o.id)}"
+     >
+      CONFIRM CANCELLATION
+     </button>
+
+    `:''}
+
+    ${
+     o.status==='Cancelled'&&o.cancellationReason?
+     `<p><b>বাতিলের কারণ:</b>
+     ${esc(o.cancellationReason)}</p>`:
+     ''
+    }
+
+   </div>
+
+  `).join('');
+
+
   $('orders').querySelectorAll('[data-cancel]').forEach(b=>{
+
    b.onclick=()=>cancelOrder(b.dataset.cancel);
+
   });
+
  }catch(e){
-  $('orders').textContent='অর্ডার লোড হয়নি: '+e.message;
+
+  console.error(e);
+
+  $('orders').textContent=
+   'অর্ডার লোড হয়নি: '+authError(e);
+
  }
+
 }
+
+
+/* CANCEL ORDER */
 
 async function cancelOrder(id){
+
  const reason=$('reason-'+id)?.value.trim();
- if(!reason){alert('অর্ডার বাতিলের কারণ লিখুন।');return}
- if(!confirm('আপনি কি এই Pending অর্ডারটি বাতিল করতে চান?'))return;
- try{
-  const ref=doc(db,'orders',id),s=await getDoc(ref);
-  if(!s.exists()||s.data().uid!==currentUser.uid||s.data().status!=='Pending'){
-   throw Error('শুধু নিজের Pending অর্ডার বাতিল করা যাবে।');
-  }
-  await updateDoc(ref,{
-   status:'Cancelled',
-   cancellationReason:reason,
-   cancelledAt:serverTimestamp()
-  });
-  await updateDoc(doc(db,'orderTracking',s.data().orderId||id),{
-   status:'Cancelled'
-  });
-  alert('আপনার অর্ডার বাতিল হয়েছে।');
-  await loadOrders();
- }catch(e){
-  alert('অর্ডার বাতিল করা যায়নি: '+e.message);
+
+ if(!reason){
+
+  alert('অর্ডার বাতিলের কারণ লিখুন।');
+
+  return;
+
  }
+
+ if(!confirm('আপনি কি এই Pending অর্ডারটি বাতিল করতে চান?')){
+
+  return;
+
+ }
+
+ try{
+
+  const ref=doc(db,'orders',id);
+
+  const s=await getDoc(ref);
+
+  if(
+   !s.exists()||
+   s.data().uid!==currentUser.uid||
+   s.data().status!=='Pending'
+  ){
+
+   throw Error(
+    'শুধু নিজের Pending অর্ডার বাতিল করা যাবে।'
+   );
+
+  }
+
+  await updateDoc(ref,{
+
+   status:'Cancelled',
+
+   cancellationReason:reason,
+
+   cancelledAt:serverTimestamp()
+
+  });
+
+  await updateDoc(
+   doc(db,'orderTracking',s.data().orderId||id),
+   {
+    status:'Cancelled'
+   }
+  );
+
+  showToast('আপনার অর্ডার বাতিল হয়েছে।');
+
+  await loadOrders();
+
+ }catch(e){
+
+  alert('অর্ডার বাতিল করা যায়নি: '+e.message);
+
+ }
+
 }
 
-onAuthStateChanged(auth,user=>{
- if(!user){
-  currentUser=null;
-  $('profile').innerHTML='আপনি Login করেননি।<br><br><a href="checkout.html">Checkout পেজে গিয়ে Login করুন</a>';
-  $('orders').textContent='অর্ডার দেখতে Login করুন।';
-  $('logout').classList.add('hidden');
-  return;
- }
- loadAccount(user);
-});
+
+/* START APPLICATION */
+
+startApp();
+
 </script>
+
 </body>
 </html>
