@@ -231,17 +231,7 @@ footer p{color:#bbb;margin-top:8px;font-size:13px}
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const products=[
-{id:1,name:"Sample T-Shirt",price:450,category:"Fashion",emoji:"👕"},
-{id:2,name:"Stylish Watch",price:850,category:"Gadgets",emoji:"⌚"},
-{id:3,name:"Wireless Earbuds",price:650,category:"Electronics",emoji:"🎧"},
-{id:4,name:"Fashion Bag",price:550,category:"Fashion",emoji:"👜"},
-{id:5,name:"Smart Bottle",price:300,category:"Lifestyle",emoji:"🧴"},
-{id:6,name:"Sunglasses",price:350,category:"Fashion",emoji:"🕶️"},
-{id:7,name:"Headphones",price:950,category:"Electronics",emoji:"🎧"},
-{id:8,name:"Mobile Stand",price:200,category:"Gadgets",emoji:"📱"}
-];
-
+let products = [];
 let selected="All";
 let cart={};
 
