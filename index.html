@@ -77,14 +77,35 @@ footer p{color:#bbb;margin-top:8px;font-size:13px}
 <div id="cartItems"><div class="empty">আপনার Cart এখন খালি</div></div>
 <div class="total" id="total">Total: ৳0</div>
 </section>
-
+<section class="cart-box" id="checkout">
+<h2>🛍️ Checkout</h2>
+<input id="customerName" placeholder="আপনার নাম">
+<input id="customerPhone" type="tel" placeholder="মোবাইল নম্বর">
+<textarea id="customerAddress" placeholder="সম্পূর্ণ ঠিকানা"></textarea>
+<h3>Payment Method</h3>
+<label><input type="radio" name="payment" value="bKash" checked> bKash</label>
+<label><input type="radio" name="payment" value="COD"> Cash on Delivery</label>
+<input id="bkashTrx" placeholder="bKash Transaction ID">
+<button onclick="placeOrder()">Place Order</button>
+<p id="orderMessage"></p>
+</section>
 <footer>
 <h2>MS STORE</h2>
 <p>Your Trusted Online Shopping Store</p>
 <p>© 2026 MS STORE. All Rights Reserved.</p>
 </footer>
-
+<script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore-compat.js"></script>
 <script>
+ const firebaseConfig = {
+  apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+  authDomain: "ms-store-admin-26416.firebaseapp.com",
+  projectId: "ms-store-admin-26416",
+  appId: "1:968008425065:web:1e0904dcab96d4d003ccf8"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 const products=[
 {id:1,name:"Sample T-Shirt",price:450,category:"Fashion",emoji:"👕"},
 {id:2,name:"Stylish Watch",price:850,category:"Gadgets",emoji:"⌚"},
@@ -159,7 +180,66 @@ ${cart[id]}
 </div>`;
 }).join(""):'<div class="empty">আপনার Cart এখন খালি</div>';
 }
+async function placeOrder() {
+  const name = document.getElementById("customerName").value.trim();
+  const phone = document.getElementById("customerPhone").value.trim();
+  const address = document.getElementById("customerAddress").value.trim();
+  const trxId = document.getElementById("bkashTrx").value.trim();
+  const payment = document.querySelector('input[name="payment"]:checked').value;
+  const message = document.getElementById("orderMessage");
 
+  const ids = Object.keys(cart);
+  if (!ids.length) {
+    message.textContent = "আপনার Cart খালি!";
+    return;
+  }
+
+  if (!name || !phone || !address) {
+    message.textContent = "সব তথ্য পূরণ করুন।";
+    return;
+  }
+
+  if (payment === "bKash" && !trxId) {
+    message.textContent = "bKash Transaction ID দিন।";
+    return;
+  }
+
+  const quantity = ids.reduce((sum, id) => sum + cart[id], 0);
+  const totalPrice = ids.reduce((sum, id) => {
+    const p = products.find(item => item.id == id);
+    return sum + (p ? p.price * cart[id] : 0);
+  }, 0);
+
+  const productName = ids.map(id => {
+    const p = products.find(item => item.id == id);
+    return p ? p.name + " x " + cart[id] : "";
+  }).join(", ");
+
+  message.textContent = "অর্ডার পাঠানো হচ্ছে...";
+
+  try {
+    await db.collection("orders").add({
+      customerName: name,
+      phone: phone,
+      address: address,
+      productName: productName,
+      quantity: quantity,
+      totalPrice: totalPrice,
+      status: "Pending",
+      paymentMethod: payment,
+      trxId: payment === "bKash" ? trxId : "",
+      paymentStatus: payment === "bKash" ? "Unverified" : "Not applicable",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    message.textContent = "অর্ডার সফলভাবে জমা হয়েছে!";
+    cart = {};
+    renderCart();
+
+  } catch (error) {
+    message.textContent = "অর্ডার জমা হয়নি: " + error.message;
+  }
+}
 renderCategories();
 renderProducts();
 renderCart();
