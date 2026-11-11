@@ -5,7 +5,95 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MS STORE | Online Shopping</title>
-<style>
+/* PROFESSIONAL CHECKOUT DESIGN */
+#checkout {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 20px;
+  margin: 30px auto;
+  max-width: 650px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.07);
+}
+
+#checkout h2 {
+  font-size: 30px;
+  margin-bottom: 24px;
+  color: #111827;
+}
+
+#checkout input:not([type="radio"]),
+#checkout textarea {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  margin: 14px 0;
+  border: 1.5px solid #dbe1eb;
+  border-radius: 12px;
+  font-size: 17px;
+  background: #f9fafb;
+  outline: none;
+}
+
+#checkout input:focus,
+#checkout textarea:focus {
+  border-color: #f59e0b;
+  background: #fff;
+}
+
+#checkout textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+#checkout h3 {
+  font-size: 21px;
+  margin: 22px 0 12px;
+}
+
+#checkout label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: #f3f5fa;
+  padding: 15px;
+  margin: 5px 4px 12px 0;
+  border-radius: 12px;
+  font-size: 17px;
+}
+
+#checkout input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #f59e0b;
+}
+
+#checkout button {
+  display: block;
+  width: 100%;
+  padding: 17px;
+  margin-top: 16px;
+  border: none;
+  border-radius: 12px;
+  background: #f59e0b;
+  color: #111827;
+  font-size: 19px;
+  font-weight: bold;
+}
+
+#checkout #orderMessage {
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+@media(max-width:600px) {
+  #checkout {
+    padding: 20px;
+    margin: 20px auto;
+  }
+  #checkout h2 {
+    font-size: 26px;
+  }
+}<style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:Arial,sans-serif;background:#f5f6fa;color:#222}
 header{background:#111827;color:white;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
