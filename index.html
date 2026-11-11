@@ -5,6 +5,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MS STORE | Online Shopping</title>
+ <link rel="manifest" href="/ms-store/manifest.json">
+<meta name="theme-color" content="#172554">
 <meta name="description" content="MS STORE থেকে আপনার পছন্দের পণ্য কিনুন সহজে ও নিশ্চিন্তে।">
 
 <style>
@@ -924,5 +926,14 @@ onSnapshot(collection(db,'storeNotices'),s=>{
 loadProducts();
 
 </script>
+ <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/ms-store/service-worker.js")
+      .then(() => console.log("MS STORE PWA Ready"))
+      .catch(error => console.error("PWA Error:", error));
+  });
+}
+ </script>
 </body>
 </html>
