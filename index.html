@@ -77,7 +77,7 @@ footer p{color:#cbd5e1;font-size:13px}
 }
 </style>
 </head>
-
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <body>
 <header>
  <div class="logo">MS <span>STORE</span></div>
@@ -168,7 +168,7 @@ footer p{color:#cbd5e1;font-size:13px}
  <p>Your Trusted Online Shopping Store</p>
  <p>© 2026 MS STORE. All Rights Reserved.</p>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
@@ -187,6 +187,12 @@ const firebaseConfig={
 
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
+ emailjs.init({
+  publicKey: "4gQjk5EWAQ7tk-stZ"
+});
+
+const EMAIL_SERVICE_ID = "service_9ck9kob";
+const EMAIL_TEMPLATE_ID = "template_rbe08jk";
 const $=id=>document.getElementById(id);
 let products=[];
 let cart={};
@@ -408,6 +414,27 @@ $("placeOrder").onclick=async()=>{
   cart={};
   renderCart();
   $("checkoutMsg").textContent="অর্ডার সফলভাবে জমা হয়েছে। Order ID: "+orderId;
+  try {
+  await emailjs.send(
+    EMAIL_SERVICE_ID,
+    EMAIL_TEMPLATE_ID,
+    {
+      email: $("email").value.trim(),
+      customer_name: customerName,
+      order_id: orderId,
+      product_name: orderProducts.map(p =>
+        p.productName + " x" + p.quantity
+      ).join(", "),
+      subtotal: subtotal,
+      delivery_charge: deliveryCharge,
+      total_price: totalPrice,
+      order_status: "Pending",
+      tracking_link: "https://mylifeshorts070-tech.github.io/ms-store/"
+    }
+  );
+} catch (emailError) {
+  console.error("Email sending failed:", emailError);
+  }
   $("successOrderId").textContent=orderId;
   $("successNotice").classList.add("show");
   $("trackId").value=orderId;
