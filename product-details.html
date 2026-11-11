@@ -146,9 +146,7 @@ import{
  doc,
  getDoc,
  getDocs,
- addDoc,
- query,
- where,
+ setDoc,
  serverTimestamp
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
@@ -190,7 +188,6 @@ let product=null;
 let allProducts=[];
 let currentUser=null;
 let selectedRating=0;
-let selectedImage=0;
 let reviews=[];
 
 function toast(message){
@@ -328,10 +325,10 @@ function renderProduct(){
 
  $('thumbnails').querySelectorAll('[data-image]').forEach(b=>{
   b.onclick=()=>{
-   selectedImage=Number(b.dataset.image);
+   const index=Number(b.dataset.image);
 
    $('mainImage').innerHTML=
-    `<img src="${esc(images[selectedImage])}" alt="${esc(product.name)}">`;
+    `<img src="${esc(images[index])}" alt="${esc(product.name)}">`;
 
    $('thumbnails').querySelectorAll('.thumb').forEach(x=>
     x.classList.remove('active')
@@ -381,10 +378,7 @@ async function loadSimilar(){
 
   allProducts=snap.docs
    .map(d=>({id:d.id,...d.data()}))
-   .filter(p=>
-    p.id!==productId&&
-    p.active!==false
-   );
+   .filter(p=>p.id!==productId&&p.active!==false);
 
   const sameCategory=allProducts.filter(p=>
    (p.category||'General')===(product.category||'General')
@@ -419,6 +413,7 @@ async function loadSimilar(){
 }
 
 function drawStars(n){
+ n=Math.max(0,Math.min(5,Number(n)||0));
  return '★'.repeat(n)+'☆'.repeat(5-n);
 }
 
@@ -436,7 +431,7 @@ function renderReviews(){
   reviews.map(r=>`
    <div class="review-card">
     <div class="review-name">${esc(r.name||'Customer')}</div>
-    <div class="stars">${drawStars(Number(r.rating)||0)}</div>
+    <div class="stars">${drawStars(r.rating)}</div>
     <div class="review-date">
      ${r.createdAt?.toDate?
       r.createdAt.toDate().toLocaleDateString('bn-BD'):
@@ -485,12 +480,11 @@ $('ratingInput').querySelectorAll('[data-rating]').forEach(b=>{
 });
 
 $('submitReview').onclick=async()=>{
+
  $('reviewMessage').textContent='';
 
  if(!currentUser){
-  $('reviewMessage').textContent=
-   'Review দিতে আগে Login করুন।';
-
+  $('reviewMessage').textContent='Review দিতে আগে Login করুন।';
   location.href='my-account.html';
   return;
  }
@@ -524,31 +518,50 @@ $('submitReview').onclick=async()=>{
  $('submitReview').textContent='SUBMITTING...';
 
  try{
-  // একই Customer-এর দ্বিতীয় Review আটকানোর চেষ্টা
-  const existing=reviews.find(r=>r.uid===currentUser.uid);
 
-  if(existing){
+  // Customer profile যাচাই
+  const profileRef=doc(
+   db,'customerProfiles',currentUser.uid
+  );
+
+  const profileSnap=await getDoc(profileRef);
+
+  if(!profileSnap.exists()){
+   throw Error('Customer Profile পাওয়া যায়নি।');
+  }
+
+  const profile=profileSnap.data();
+
+  if(profile.banned===true){
+   throw Error('আপনার Customer Account বর্তমানে বন্ধ আছে।');
+  }
+
+  const customerName=profile.name||'Customer';
+
+  // UID-কে Review Document ID হিসেবে ব্যবহার
+  const reviewRef=doc(
+   db,
+   'storeProducts',
+   productId,
+   'reviews',
+   currentUser.uid
+  );
+
+  // আগে Review দেওয়া হয়েছে কি না পরীক্ষা
+  const existing=await getDoc(reviewRef);
+
+  if(existing.exists()){
    throw Error('আপনি এই পণ্যে ইতিমধ্যে Review দিয়েছেন।');
   }
 
-  const profileSnap=await getDoc(
-   doc(db,'customerProfiles',currentUser.uid)
-  );
-
-  const customerName=profileSnap.exists()?
-   profileSnap.data().name||'Customer':
-   'Customer';
-
-  await addDoc(
-   collection(db,'storeProducts',productId,'reviews'),
-   {
-    uid:currentUser.uid,
-    name:customerName,
-    rating:selectedRating,
-    comment,
-    createdAt:serverTimestamp()
-   }
-  );
+  // নতুন Review জমা
+  await setDoc(reviewRef,{
+   uid:currentUser.uid,
+   name:customerName,
+   rating:selectedRating,
+   comment:comment,
+   createdAt:serverTimestamp()
+  });
 
   $('reviewComment').value='';
   selectedRating=0;
@@ -565,12 +578,17 @@ $('submitReview').onclick=async()=>{
   await loadReviews();
 
  }catch(e){
-  console.error(e);
+
+  console.error('Review submit error:',e);
+
   $('reviewMessage').textContent=
    'Review জমা হয়নি: '+e.message;
+
  }finally{
+
   $('submitReview').disabled=false;
   $('submitReview').textContent='SUBMIT REVIEW';
+
  }
 };
 
