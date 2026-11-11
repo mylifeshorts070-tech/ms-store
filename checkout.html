@@ -5,32 +5,141 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MS STORE | Checkout</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f5f6fa;font-family:Arial,sans-serif;color:#202536}
-header{background:#111827;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center}
-header a{color:#f59e0b;text-decoration:none;font-weight:bold}
+
+body{
+ margin:0;
+ background:#f5f6fa;
+ font-family:Arial,sans-serif;
+ color:#202536;
+}
+
+header{
+ background:#111827;
+ color:white;
+ padding:16px 5%;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+
+header a{
+ color:#f59e0b;
+ text-decoration:none;
+ font-weight:bold;
+}
+
 .logo{font-size:23px;font-weight:bold}
-main{max-width:750px;margin:25px auto;padding:0 14px}
-.panel{background:white;border-radius:13px;padding:19px;margin-bottom:16px}
+
+main{
+ max-width:750px;
+ margin:25px auto;
+ padding:0 14px;
+}
+
+.panel{
+ background:white;
+ border-radius:13px;
+ padding:19px;
+ margin-bottom:16px;
+}
+
 h2{margin-top:0;font-size:21px}
-input,textarea,select{width:100%;padding:12px;border:1px solid #d7dce5;border-radius:8px;font-size:15px;margin:5px 0 10px}
+
+input,textarea,select{
+ width:100%;
+ padding:12px;
+ border:1px solid #d7dce5;
+ border-radius:8px;
+ font-size:15px;
+ margin:5px 0 10px;
+}
+
 textarea{min-height:85px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:5px;
+}
+
 .full{grid-column:1/-1}
-button{width:100%;padding:14px;border:0;border-radius:9px;background:#111827;color:white;font-size:16px;font-weight:bold;margin-top:8px}
-button:disabled{opacity:.6;cursor:not-allowed}
+
+button{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:9px;
+ background:#111827;
+ color:white;
+ font-size:16px;
+ font-weight:bold;
+ margin-top:8px;
+ cursor:pointer;
+}
+
+button:disabled{
+ opacity:.6;
+ cursor:not-allowed;
+}
+
 .orange{background:#f59e0b;color:#111827}
 .red{background:#dc2626}
 .secondary{background:#64748b}
-.row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #eee}
+
+.row{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ padding:10px 0;
+ border-bottom:1px solid #eee;
+}
+
 .total{font-weight:bold;font-size:18px}
-.msg{font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+
+.msg{
+ font-size:14px;
+ line-height:1.5;
+ overflow-wrap:anywhere;
+}
+
 .hidden{display:none!important}
-@media(max-width:520px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+
+#toast{
+ position:fixed;
+ top:15px;
+ left:50%;
+ transform:translateX(-50%) translateY(-120px);
+ width:calc(100% - 30px);
+ max-width:500px;
+ padding:16px;
+ border-radius:12px;
+ background:#dcfce7;
+ color:#166534;
+ font-size:16px;
+ font-weight:bold;
+ text-align:center;
+ box-shadow:0 5px 20px #0002;
+ z-index:99999;
+ transition:transform .35s ease;
+}
+
+#toast.show{
+ transform:translateX(-50%) translateY(0);
+}
+
+@media(max-width:520px){
+ .grid{grid-template-columns:1fr}
+ .full{grid-column:auto}
+}
 </style>
 </head>
+
 <body>
+
+<div id="toast"></div>
 
 <header>
  <div class="logo">MS STORE</div>
@@ -38,136 +147,295 @@ button:disabled{opacity:.6;cursor:not-allowed}
 </header>
 
 <main>
- <section class="panel">
-  <h2>🛒 Your Order</h2>
-  <div id="cartList">Cart লোড হচ্ছে...</div>
-  <div class="row"><span>Subtotal</span><b id="subtotal">৳0</b></div>
-  <div class="row"><span>Delivery Charge</span><b id="delivery">৳0</b></div>
-  <div class="row total"><span>Total</span><b id="total">৳0</b></div>
- </section>
 
- <section class="panel">
-  <h2>Customer Login / Register</h2>
-  <p id="authStatus" class="msg">অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।</p>
+<section class="panel">
+ <h2>🛒 Your Order</h2>
 
-  <div id="authBox">
-   <div id="registerFields" class="hidden">
-    <input id="regName" placeholder="আপনার নাম">
-    <input id="regPhone" placeholder="মোবাইল নম্বর">
-   </div>
+ <div id="cartList">Cart লোড হচ্ছে...</div>
 
-   <input id="email" type="email" placeholder="Gmail / Email">
-   <input id="password" type="password" placeholder="Password (কমপক্ষে ৬ অক্ষর)">
+ <div class="row">
+  <span>Subtotal</span>
+  <b id="subtotal">৳0</b>
+ </div>
 
-   <button id="authSubmit">Login</button>
-   <button class="secondary" id="toggle">নতুন অ্যাকাউন্ট তৈরি করুন</button>
-   <button class="secondary" id="forgot">Forgot Password</button>
-   <button class="red hidden" id="logout">Logout</button>
+ <div class="row">
+  <span>Delivery Charge</span>
+  <b id="delivery">৳0</b>
+ </div>
+
+ <div class="row total">
+  <span>Total</span>
+  <b id="total">৳0</b>
+ </div>
+</section>
+
+<section class="panel">
+
+ <h2>Customer Login / Register</h2>
+
+ <p id="authStatus" class="msg">
+  অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।
+ </p>
+
+ <div id="authBox">
+
+  <div id="registerFields" class="hidden">
+   <input id="regName" placeholder="আপনার নাম">
+   <input id="regPhone" placeholder="মোবাইল নম্বর">
   </div>
 
-  <p id="authMsg" class="msg"></p>
- </section>
+  <input
+   id="email"
+   type="email"
+   placeholder="Gmail / Email"
+   autocomplete="email"
+  >
 
- <section class="panel">
-  <h2>Delivery Information</h2>
+  <input
+   id="password"
+   type="password"
+   placeholder="Password (কমপক্ষে ৬ অক্ষর)"
+   autocomplete="current-password"
+  >
 
-  <div class="grid">
-   <input id="customerName" placeholder="আপনার নাম *">
-   <input id="phone" type="tel" placeholder="মোবাইল নম্বর *">
-   <input id="division" placeholder="বিভাগ *">
-   <input id="district" placeholder="জেলা *">
-   <input id="upazila" placeholder="উপজেলা / থানা *">
-   <textarea id="address" class="full" placeholder="বিস্তারিত ঠিকানা *"></textarea>
+  <button id="authSubmit">Login</button>
 
-   <select id="paymentMethod" class="full">
-    <option value="Cash on Delivery">Cash on Delivery</option>
-    <option value="bKash Manual">bKash (ম্যানুয়াল পেমেন্ট)</option>
-    <option value="Nagad Manual">Nagad (ম্যানুয়াল পেমেন্ট)</option>
-   </select>
+  <button class="secondary" id="toggle">
+   নতুন অ্যাকাউন্ট তৈরি করুন
+  </button>
 
-   <div id="paymentInfo" class="full msg"></div>
-   <input id="senderNumber" class="full hidden" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
-   <input id="trxId" class="full hidden" placeholder="Transaction ID">
-  </div>
+  <button class="secondary" id="forgot">
+   Forgot Password
+  </button>
 
-  <button id="placeOrder" class="orange">LOGIN TO PLACE ORDER</button>
-  <p id="orderMsg" class="msg"></p>
- </section>
+  <button class="red hidden" id="logout">
+   Logout
+  </button>
+
+ </div>
+
+ <p id="authMsg" class="msg"></p>
+
+</section>
+
+<section class="panel">
+
+ <h2>Delivery Information</h2>
+
+ <div class="grid">
+
+  <input id="customerName" placeholder="আপনার নাম *">
+
+  <input id="phone" type="tel" placeholder="মোবাইল নম্বর *">
+
+  <input id="division" placeholder="বিভাগ *">
+
+  <input id="district" placeholder="জেলা *">
+
+  <input id="upazila" placeholder="উপজেলা / থানা *">
+
+  <textarea
+   id="address"
+   class="full"
+   placeholder="বিস্তারিত ঠিকানা *"
+  ></textarea>
+
+  <select id="paymentMethod" class="full">
+   <option value="Cash on Delivery">Cash on Delivery</option>
+   <option value="bKash Manual">bKash (ম্যানুয়াল পেমেন্ট)</option>
+   <option value="Nagad Manual">Nagad (ম্যানুয়াল পেমেন্ট)</option>
+  </select>
+
+  <div id="paymentInfo" class="full msg"></div>
+
+  <input
+   id="senderNumber"
+   class="full hidden"
+   placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন"
+  >
+
+  <input
+   id="trxId"
+   class="full hidden"
+   placeholder="Transaction ID"
+  >
+
+ </div>
+
+ <button id="placeOrder" class="orange">
+  LOGIN TO PLACE ORDER
+ </button>
+
+ <p id="orderMsg" class="msg"></p>
+
+</section>
+
 </main>
 
 <script type="module">
-import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
 
 import{
- getAuth,onAuthStateChanged,createUserWithEmailAndPassword,
- signInWithEmailAndPassword,signOut,sendEmailVerification,
+ initializeApp
+}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+
+import{
+ getAuth,
+ onAuthStateChanged,
+ createUserWithEmailAndPassword,
+ signInWithEmailAndPassword,
+ signOut,
+ sendEmailVerification,
  sendPasswordResetEmail
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
 import{
- getFirestore,collection,getDocs,doc,getDoc,setDoc,
- runTransaction,serverTimestamp
+ getFirestore,
+ collection,
+ getDocs,
+ doc,
+ getDoc,
+ setDoc,
+ runTransaction,
+ serverTimestamp
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
+
+/* FIREBASE CONFIG */
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
-  authDomain: "ms-store-admin-26416.firebaseapp.com",
-  projectId: "ms-store-admin-26416",
-  storageBucket: "ms-store-admin-26416.firebasestorage.app",
-  messagingSenderId: "968008425065",
-  appId: "1:968008425065:web:1e0904dcab96d4d003ccf8"
+ apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+ authDomain: "ms-store-admin-26416.firebaseapp.com",
+ projectId: "ms-store-admin-26416",
+ storageBucket: "ms-store-admin-26416.firebasestorage.app",
+ messagingSenderId: "968008425065",
+ appId: "1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
 
+
+/* COMMON FUNCTIONS */
+
 const $=id=>document.getElementById(id);
+
 const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
- '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+ '&':'&amp;',
+ '<':'&lt;',
+ '>':'&gt;',
+ '"':'&quot;',
+ "'":'&#39;'
 }[c]));
+
+let toastTimer;
+
+function showToast(message){
+ const toast=$('toast');
+
+ toast.textContent=message;
+ toast.classList.add('show');
+
+ clearTimeout(toastTimer);
+
+ toastTimer=setTimeout(()=>{
+  toast.classList.remove('show');
+ },3500);
+}
+
+
+/* ERROR MESSAGES */
+
+function authError(e){
+
+ const m=e.code||e.message;
+
+ return ({
+  'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
+  'auth/invalid-email':'Email ঠিক নয়।',
+  'auth/weak-password':'Password কমপক্ষে ৬ অক্ষরের হতে হবে।',
+  'auth/invalid-credential':'Email অথবা Password ভুল।',
+  'auth/user-not-found':'এই Email দিয়ে কোনো অ্যাকাউন্ট পাওয়া যায়নি।',
+  'auth/wrong-password':'Password ভুল হয়েছে।',
+  'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।',
+  'auth/network-request-failed':'Internet Connection পরীক্ষা করুন।',
+  'auth/invalid-api-key':'Firebase API Key সঠিক নয়।'
+ })[m]||m;
+}
+
+
+/* VARIABLES */
 
 let cart={};
 let products=[];
 let currentUser=null;
 let isRegister=false;
-let payment={bkashNumber:'',nagadNumber:''};
+let payment={
+ bkashNumber:'',
+ nagadNumber:''
+};
 
 try{
  cart=JSON.parse(localStorage.getItem('msCart')||'{}');
-}catch(e){cart={};}
 
-function authError(e){
- const m=e.code||e.message;
-
- return ({
- 'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
- 'auth/invalid-email':'Email ঠিক নয়।',
- 'auth/weak-password':'Password কমপক্ষে ৬ অক্ষরের হতে হবে।',
- 'auth/invalid-credential':'Email অথবা Password ভুল।',
- 'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।'
- })[m]||m;
+ if(!cart||typeof cart!=='object'||Array.isArray(cart)){
+  cart={};
+ }
+}catch(e){
+ cart={};
 }
+
+
+/* LOAD PRODUCTS AND PAYMENT SETTINGS */
 
 async function loadData(){
- const [ps,pm]=await Promise.all([
-  getDocs(collection(db,'storeProducts')),
-  getDoc(doc(db,'storeSettings','paymentMethods'))
- ]);
 
- products=ps.docs.map(d=>({id:d.id,...d.data()}));
+ $('cartList').textContent='Cart লোড হচ্ছে...';
 
- if(pm.exists())payment=pm.data();
+ try{
 
- renderCart();
- renderPayment();
+  const [ps,pm]=await Promise.all([
+
+   getDocs(collection(db,'storeProducts')),
+
+   getDoc(doc(db,'storeSettings','paymentMethods'))
+
+  ]);
+
+  products=ps.docs.map(d=>({
+   id:d.id,
+   ...d.data()
+  }));
+
+  if(pm.exists()){
+   payment=pm.data();
+  }
+
+  renderCart();
+  renderPayment();
+
+ }catch(e){
+
+  console.error('Load error:',e);
+
+  $('cartList').textContent=
+   'তথ্য লোড হয়নি: '+authError(e);
+
+ }
+
 }
 
+
+/* CART */
+
 function renderCart(){
+
  const entries=Object.entries(cart).filter(([id,q])=>
-  products.some(p=>p.id===id)&&Number(q)>0
+  products.some(p=>p.id===id)&&
+  Number.isInteger(Number(q))&&
+  Number(q)>0
  );
 
  cart=Object.fromEntries(entries);
@@ -175,8 +443,11 @@ function renderCart(){
  let sub=0;
  let invalid=false;
 
- $('cartList').innerHTML=entries.length?entries.map(([id,q])=>{
+ $('cartList').innerHTML=entries.length?
+ entries.map(([id,q])=>{
+
   const p=products.find(x=>x.id===id);
+
   const stock=Math.max(0,Number(p.stock)||0);
   const price=Number(p.price)||0;
 
@@ -188,11 +459,20 @@ function renderCart(){
    <div class="row">
     <span>
      ${esc(p.name)} × ${q}
-     ${Number(q)>stock?'<br><small style="color:red">স্টক পর্যাপ্ত নেই</small>':''}
+     ${
+      Number(q)>stock?
+      '<br><small style="color:red">স্টক পর্যাপ্ত নেই</small>':
+      ''
+     }
     </span>
+
     <b>${money(price*Number(q))}</b>
-   </div>`;
- }).join(''):'আপনার Cart খালি। <a href="index.html">পণ্য বেছে নিন</a>';
+   </div>
+  `;
+
+ }).join(''):
+
+ 'আপনার Cart খালি। <a href="index.html">পণ্য বেছে নিন</a>';
 
  const d=entries.length?
   ($('division').value.trim().toLowerCase()==='dhaka'?60:80):0;
@@ -202,162 +482,306 @@ function renderCart(){
  $('total').textContent=money(sub+d);
 
  if(invalid){
-  $('orderMsg').textContent='Cart-এর কিছু পণ্যের পরিমাণ বর্তমান স্টকের চেয়ে বেশি। Shopping পেজে গিয়ে পরিমাণ ঠিক করুন।';
+
+  $('orderMsg').textContent=
+   'Cart-এর কিছু পণ্যের পরিমাণ বর্তমান স্টকের চেয়ে বেশি। Shopping পেজে গিয়ে পরিমাণ ঠিক করুন।';
+
  }
+
 }
 
+
+/* PAYMENT */
+
 function renderPayment(){
+
  const m=$('paymentMethod').value;
 
  if(m==='Cash on Delivery'){
+
   $('paymentInfo').textContent='Cash on Delivery';
+
   $('senderNumber').classList.add('hidden');
   $('trxId').classList.add('hidden');
+
  }else{
+
   const n=m.startsWith('bKash')?
-   payment.bkashNumber:payment.nagadNumber;
+   payment.bkashNumber:
+   payment.nagadNumber;
 
   $('paymentInfo').innerHTML=
    `${m} নম্বর: <b>${esc(n||'Admin Panel থেকে নম্বর সেট করা হয়নি')}</b>`;
 
   $('senderNumber').classList.remove('hidden');
   $('trxId').classList.remove('hidden');
+
  }
+
 }
 
 $('division').oninput=renderCart;
 $('paymentMethod').onchange=renderPayment;
 
+
+/* TOGGLE REGISTER */
+
 $('toggle').onclick=()=>{
+
  isRegister=!isRegister;
 
  $('registerFields').classList.toggle('hidden',!isRegister);
- $('authSubmit').textContent=isRegister?'Register':'Login';
+
+ $('authSubmit').textContent=
+  isRegister?'Register':'Login';
 
  $('toggle').textContent=isRegister?
   'আগে থেকেই অ্যাকাউন্ট আছে? Login':
   'নতুন অ্যাকাউন্ট তৈরি করুন';
 
  $('authMsg').textContent='';
+
 };
 
+
+/* LOGIN AND REGISTER */
+
 $('authSubmit').onclick=async()=>{
+
  const email=$('email').value.trim().toLowerCase();
  const password=$('password').value;
 
  $('authMsg').textContent='';
 
- try{
-  if(!email||!password)throw Error('Email ও Password লিখুন।');
+ if(!email||!password){
 
-  $('authSubmit').disabled=true;
+  $('authMsg').textContent='Email ও Password লিখুন।';
+  return;
+
+ }
+
+ if(password.length<6){
+
+  $('authMsg').textContent='Password কমপক্ষে ৬ অক্ষরের হতে হবে।';
+  return;
+
+ }
+
+ $('authSubmit').disabled=true;
+
+ try{
 
   if(isRegister){
+
    const name=$('regName').value.trim();
    const phone=$('regPhone').value.trim();
 
-   if(!name||!phone)throw Error('নাম ও মোবাইল নম্বর লিখুন।');
+   if(!name||!phone){
+    throw Error('নাম ও মোবাইল নম্বর লিখুন।');
+   }
 
-   const result=await createUserWithEmailAndPassword(auth,email,password);
-
-   await setDoc(doc(db,'customerProfiles',result.user.uid),{
-    uid:result.user.uid,
-    name,
-    phone,
+   const result=await createUserWithEmailAndPassword(
+    auth,
     email,
-    banned:false,
-    createdAt:serverTimestamp()
-   });
+    password
+   );
+
+   await setDoc(
+    doc(db,'customerProfiles',result.user.uid),
+    {
+     uid:result.user.uid,
+     name,
+     phone,
+     email,
+     banned:false,
+     createdAt:serverTimestamp()
+    }
+   );
 
    await sendEmailVerification(result.user);
 
-   $('authMsg').textContent=
-    'অ্যাকাউন্ট তৈরি হয়েছে। Gmail-এর Inbox/Spam থেকে Verification করুন।';
-
    isRegister=false;
+
    $('registerFields').classList.add('hidden');
    $('authSubmit').textContent='Login';
 
+   $('authMsg').textContent=
+    'Gmail-এর Inbox/Spam থেকে Verification সম্পন্ন করুন।';
+
+   showToast('আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।');
+
   }else{
-   await signInWithEmailAndPassword(auth,email,password);
+
+   await signInWithEmailAndPassword(
+    auth,
+    email,
+    password
+   );
+
+   showToast('আপনার লগইন সম্পন্ন হয়েছে।');
+
   }
 
  }catch(e){
+
+  console.error(e);
   $('authMsg').textContent=authError(e);
+
  }finally{
+
   $('authSubmit').disabled=false;
+
  }
+
 };
 
-const email=$('email').value.trim().toLowerCase();
+
+/* FORGOT PASSWORD */
+
+$('forgot').onclick=async()=>{
+
+ const email=$('email').value.trim().toLowerCase();
+
+ $('authMsg').textContent='';
 
  if(!email){
+
   $('authMsg').textContent='আগে Email লিখুন।';
   return;
+
  }
+
+ $('forgot').disabled=true;
 
  try{
+
   await sendPasswordResetEmail(auth,email);
-  $('authMsg').textContent='Password reset email পাঠানো হয়েছে।';
+
+  $('authMsg').textContent=
+   'Password reset email পাঠানো হয়েছে।';
+
+  showToast('Password reset email পাঠানো হয়েছে।');
+
  }catch(e){
+
+  console.error(e);
   $('authMsg').textContent=authError(e);
+
+ }finally{
+
+  $('forgot').disabled=false;
+
  }
+
 };
 
-$('logout').onclick=()=>signOut(auth);
+
+/* LOGOUT */
+
+$('logout').onclick=async()=>{
+
+ try{
+
+  await signOut(auth);
+
+  showToast('আপনি সফলভাবে Logout করেছেন।');
+
+ }catch(e){
+
+  $('authMsg').textContent=authError(e);
+
+ }
+
+};
+
+
+/* AUTH STATE */
 
 onAuthStateChanged(auth,async u=>{
+
  currentUser=u;
 
  if(!u){
+
   $('authStatus').textContent=
    'অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।';
 
   $('authBox').classList.remove('hidden');
   $('logout').classList.add('hidden');
+
   $('placeOrder').textContent='LOGIN TO PLACE ORDER';
+
   return;
+
  }
 
  try{
-  const p=await getDoc(doc(db,'customerProfiles',u.uid));
+
+  const p=await getDoc(
+   doc(db,'customerProfiles',u.uid)
+  );
 
   if(p.exists()&&p.data().banned){
+
    await signOut(auth);
+
    alert('এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।');
+
    return;
+
   }
 
-  $('authStatus').textContent='লগইন করা আছে: '+u.email;
+  $('authStatus').textContent=
+   'লগইন করা আছে: '+u.email;
+
   $('authBox').classList.add('hidden');
   $('logout').classList.remove('hidden');
 
   $('placeOrder').textContent=
-   u.emailVerified?'CONFIRM ORDER':'VERIFY GMAIL TO ORDER';
+   u.emailVerified?
+   'CONFIRM ORDER':
+   'VERIFY GMAIL TO ORDER';
 
   if(p.exists()){
+
    $('customerName').value=p.data().name||'';
    $('phone').value=p.data().phone||'';
+
   }
 
  }catch(e){
-  $('authMsg').textContent=e.message;
+
+  console.error(e);
+  $('authMsg').textContent=authError(e);
+
  }
+
 });
 
+
+/* PLACE ORDER */
+
 $('placeOrder').onclick=async()=>{
+
  $('orderMsg').textContent='';
 
  if(!currentUser){
+
   $('orderMsg').textContent='আগে Login / Register করুন।';
+
   $('email').focus();
+
   return;
+
  }
 
  if(!currentUser.emailVerified){
+
   $('orderMsg').textContent=
    'অর্ডার করার আগে Gmail Verification সম্পন্ন করুন।';
+
   return;
+
  }
 
  const entries=Object.entries(cart).filter(([id,q])=>
@@ -365,8 +789,11 @@ $('placeOrder').onclick=async()=>{
  );
 
  if(!entries.length){
+
   $('orderMsg').textContent='আপনার Cart খালি।';
+
   return;
+
  }
 
  const name=$('customerName').value.trim();
@@ -381,13 +808,20 @@ $('placeOrder').onclick=async()=>{
  const trxId=$('trxId').value.trim();
 
  if(!name||!phone||!division||!district||!upazila||!address){
+
   $('orderMsg').textContent='সব ঠিকানার তথ্য পূরণ করুন।';
+
   return;
+
  }
 
  if(method!=='Cash on Delivery'&&(!senderNumber||!trxId)){
-  $('orderMsg').textContent='Sender Number ও Transaction ID দিন।';
+
+  $('orderMsg').textContent=
+   'Sender Number ও Transaction ID দিন।';
+
   return;
+
  }
 
  $('placeOrder').disabled=true;
@@ -399,52 +833,77 @@ $('placeOrder').onclick=async()=>{
 
   const orderId=await runTransaction(db,async tx=>{
 
+   // READ ALL DOCUMENTS BEFORE WRITING
+
    const counterSnap=await tx.get(counterRef);
 
    const freshProducts=[];
 
    for(const [productId,quantity] of entries){
+
     const productRef=doc(db,'storeProducts',productId);
+
     const productSnap=await tx.get(productRef);
 
     if(!productSnap.exists()){
+
      throw Error('একটি পণ্য আর পাওয়া যাচ্ছে না।');
+
     }
 
     const data=productSnap.data();
+
     const stock=Math.max(0,Number(data.stock)||0);
 
     if(data.active===false){
+
      throw Error(data.name+' বর্তমানে বিক্রির জন্য নেই।');
+
     }
 
     if(!Number.isInteger(Number(quantity))||Number(quantity)<=0){
+
      throw Error('পণ্যের পরিমাণ সঠিক নয়।');
+
     }
 
     if(stock<Number(quantity)){
-     throw Error(data.name+' এর পর্যাপ্ত স্টক নেই। বর্তমানে স্টক: '+stock);
+
+     throw Error(
+      data.name+' এর পর্যাপ্ত স্টক নেই। বর্তমানে স্টক: '+stock
+     );
+
     }
 
     freshProducts.push({
+
      id:productId,
      ref:productRef,
      name:data.name||'Product',
      price:Number(data.price)||0,
      oldStock:stock,
      quantity:Number(quantity)
+
     });
+
    }
 
    const lines=freshProducts.map(p=>({
+
     productId:p.id,
     productName:p.name,
     price:p.price,
     quantity:p.quantity
+
    }));
 
-   const sub=lines.reduce((s,p)=>s+p.price*p.quantity,0);
+   const sub=lines.reduce(
+    (s,p)=>s+p.price*p.quantity,
+    0
+   );
+
    const del=division.toLowerCase()==='dhaka'?60:80;
+
    const total=sub+del;
 
    const num=(counterSnap.exists()?
@@ -453,6 +912,7 @@ $('placeOrder').onclick=async()=>{
    const newOrderId='MS-'+String(num).padStart(4,'0');
 
    const orderRef=doc(db,'orders',newOrderId);
+
    const trackingRef=doc(db,'orderTracking',newOrderId);
 
    const stockChanges={};
@@ -461,13 +921,22 @@ $('placeOrder').onclick=async()=>{
     stockChanges[p.id]=p.quantity;
    });
 
-   tx.set(counterRef,{lastNumber:num});
+   // ORDER COUNTER
+
+   tx.set(counterRef,{
+    lastNumber:num
+   });
+
+   // ORDER DATA
 
    tx.set(orderRef,{
+
     uid:currentUser.uid,
+
     customerName:name,
     phone,
     email:currentUser.email,
+
     address,
     division,
     district,
@@ -480,7 +949,11 @@ $('placeOrder').onclick=async()=>{
     products:lines,
     stockChanges,
 
-    quantity:lines.reduce((s,p)=>s+p.quantity,0),
+    quantity:lines.reduce(
+     (s,p)=>s+p.quantity,
+     0
+    ),
+
     subtotal:sub,
     deliveryCharge:del,
     totalPrice:total,
@@ -490,51 +963,85 @@ $('placeOrder').onclick=async()=>{
     trxId,
 
     paymentStatus:
-     method==='Cash on Delivery'?'Pending':'Unverified',
+     method==='Cash on Delivery'?
+     'Pending':
+     'Unverified',
 
     orderId:newOrderId,
     status:'Pending',
+
     createdAt:serverTimestamp()
+
    });
+
+   // ORDER TRACKING
 
    tx.set(trackingRef,{
+
     orderId:newOrderId,
     status:'Pending',
     createdAt:serverTimestamp()
+
    });
 
+   // STOCK UPDATE
+
    freshProducts.forEach(p=>{
+
     tx.update(p.ref,{
+
      stock:p.oldStock-p.quantity,
      lastStockOrderId:newOrderId
+
     });
+
    });
 
    return newOrderId;
+
   });
 
+  // CLEAR CART AFTER SUCCESS
+
   cart={};
+
   localStorage.removeItem('msCart');
+
   renderCart();
 
   $('orderMsg').innerHTML=
-   `<b style="color:green">অর্ডার সফল হয়েছে! Order ID: ${esc(orderId)}</b><br>
+   `<b style="color:green">
+   অর্ডার সফল হয়েছে! Order ID: ${esc(orderId)}
+   </b><br>
    স্টক স্বয়ংক্রিয়ভাবে আপডেট হয়েছে।<br>
    <a href="my-account.html">আমার অর্ডার দেখুন</a>`;
 
+  showToast('আপনার অর্ডার সফলভাবে গ্রহণ করা হয়েছে।');
+
  }catch(e){
+
   console.error(e);
-  $('orderMsg').textContent='অর্ডার জমা হয়নি: '+e.message;
+
+  $('orderMsg').textContent=
+   'অর্ডার জমা হয়নি: '+authError(e);
 
  }finally{
+
   $('placeOrder').disabled=false;
-  $('placeOrder').textContent='CONFIRM ORDER';
+
+  $('placeOrder').textContent=
+   'CONFIRM ORDER';
+
  }
+
 };
 
-loadData().catch(e=>{
- $('cartList').textContent='তথ্য লোড হয়নি: '+e.message;
-});
+
+/* START */
+
+loadData();
+
 </script>
+
 </body>
 </html>
