@@ -8,62 +8,295 @@
 <meta name="description" content="MS STORE product details, photos, descriptions and customer reviews.">
 
 <style>
-:root{--navy:#111827;--orange:#f59e0b;--bg:#f5f6fa}
+:root{
+ --navy:#111827;
+ --orange:#f59e0b;
+ --bg:#f5f6fa;
+ --text:#202536;
+ --muted:#475569;
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#202536}
-header{background:var(--navy);color:white;padding:15px 5%;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.logo{font-size:23px;font-weight:bold}
+body{
+ margin:0;
+ background:var(--bg);
+ font-family:Arial,sans-serif;
+ color:var(--text);
+}
+header{
+ background:var(--navy);
+ color:white;
+ padding:12px 4%;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+}
+.logo{font-size:21px;font-weight:bold}
 .logo span{color:var(--orange)}
-header a{color:var(--navy);background:var(--orange);padding:10px 13px;border-radius:8px;text-decoration:none;font-weight:bold}
-main{max-width:1050px;margin:22px auto;padding:0 14px}
-.panel{background:white;padding:18px;border-radius:13px;margin-bottom:18px}
-.product-layout{display:grid;grid-template-columns:1fr;gap:22px}
-.main-image{height:320px;background:#eef1f5;border-radius:12px;display:grid;place-items:center;overflow:hidden}
-.main-image img{width:100%;height:100%;object-fit:contain}
-.thumbnails{display:flex;gap:9px;overflow:auto;margin-top:12px;padding-bottom:5px}
-.thumb{width:70px;height:70px;flex:0 0 70px;border:2px solid transparent;border-radius:8px;overflow:hidden;background:#eee;padding:0}
+header a{
+ color:var(--navy);
+ background:var(--orange);
+ padding:8px 11px;
+ border-radius:7px;
+ text-decoration:none;
+ font-weight:bold;
+ font-size:13px;
+}
+main{
+ max-width:950px;
+ margin:14px auto;
+ padding:0 10px;
+}
+.panel{
+ background:white;
+ padding:13px;
+ border-radius:11px;
+ margin-bottom:12px;
+}
+.product-layout{
+ display:grid;
+ grid-template-columns:1fr;
+ gap:14px;
+}
+.main-image{
+ height:230px;
+ background:#f1f3f7;
+ border-radius:9px;
+ display:grid;
+ place-items:center;
+ overflow:hidden;
+}
+.main-image img{
+ width:100%;
+ height:100%;
+ object-fit:contain;
+}
+.thumbnails{
+ display:flex;
+ gap:7px;
+ overflow:auto;
+ margin-top:8px;
+ padding-bottom:3px;
+}
+.thumb{
+ width:54px;
+ height:54px;
+ flex:0 0 54px;
+ border:2px solid transparent;
+ border-radius:7px;
+ overflow:hidden;
+ background:#eee;
+ padding:0;
+}
 .thumb.active{border-color:var(--orange)}
-.thumb img{width:100%;height:100%;object-fit:cover}
-h1{font-size:26px;line-height:1.4;margin:0 0 14px;overflow-wrap:anywhere}
-.price{font-size:28px;color:#b45309;font-weight:bold;background:#fff7e6;padding:12px;border-radius:9px;display:block;margin:15px 0}
-.stock{color:#475569;font-weight:bold;margin:12px 0}
-.description{line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
-button{cursor:pointer;border:0;border-radius:9px;padding:13px;font-size:15px;font-weight:bold}
+.thumb img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+}
+h1{
+ font-size:21px;
+ line-height:1.35;
+ color:#111827;
+ margin:0 0 8px;
+ overflow-wrap:anywhere;
+}
+.price{
+ font-size:23px;
+ color:#a94d08;
+ font-weight:bold;
+ background:#fff7e6;
+ padding:9px 12px;
+ border-radius:8px;
+ display:block;
+ margin:10px 0;
+}
+.stock{
+ color:#1e293b;
+ font-size:14px;
+ font-weight:bold;
+ margin:9px 0;
+}
+.description{
+ font-size:14px;
+ line-height:1.7;
+ color:#263244;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+}
+button{
+ cursor:pointer;
+ border:0;
+ border-radius:8px;
+ padding:10px;
+ font-size:13px;
+ font-weight:bold;
+}
 button:disabled{opacity:.5;cursor:not-allowed}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px}
+.actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:13px;
+}
 .add{background:var(--navy);color:white}
 .buy{background:var(--orange);color:#111827}
-.section-title{font-size:21px;margin:0 0 16px}
-.rating-summary{display:flex;align-items:center;gap:15px;margin-bottom:18px}
-.big-rating{font-size:36px;font-weight:bold}
-.stars{color:#f59e0b;font-size:22px;letter-spacing:2px}
-.review-card{border-bottom:1px solid #eee;padding:14px 0}
-.review-name{font-weight:bold}
-.review-date{font-size:12px;color:#64748b}
-.review-comment{line-height:1.6;white-space:pre-wrap;margin-top:8px;overflow-wrap:anywhere}
-.rating-input{display:flex;gap:7px;margin:10px 0 15px}
-.rating-input button{background:#f1f5f9;color:#94a3b8;font-size:27px;padding:3px 7px}
-.rating-input button.selected{color:#f59e0b;background:#fff7e6}
-input,textarea{width:100%;padding:12px;border:1px solid #d5dbe5;border-radius:8px;font-size:15px;margin:6px 0 12px}
-textarea{min-height:100px;resize:vertical}
-.submit{background:var(--orange);color:#111827;width:100%}
-.message{font-size:14px;line-height:1.5;color:#475569}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 3px 12px #00000010;cursor:pointer}
-.card img{width:100%;height:150px;object-fit:cover;background:#eee}
-.card-info{padding:12px}
-.card-info b{display:block;line-height:1.4;overflow-wrap:anywhere}
-.card-price{color:#b45309;font-weight:bold;margin-top:8px}
-.empty{padding:20px;text-align:center;background:#f8fafc;border-radius:9px;color:#64748b}
-footer{text-align:center;background:var(--navy);color:white;padding:22px;margin-top:30px}
-#toast{position:fixed;top:15px;left:50%;transform:translate(-50%,-130px);background:#dcfce7;color:#166534;padding:14px 18px;border-radius:10px;z-index:99;transition:.3s;max-width:90%;font-weight:bold}
+.section-title{
+ font-size:18px;
+ color:#111827;
+ margin:0 0 12px;
+}
+.rating-summary{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ margin-bottom:13px;
+}
+.big-rating{
+ font-size:30px;
+ font-weight:bold;
+ color:#111827;
+}
+.stars{
+ color:#f59e0b;
+ font-size:19px;
+ letter-spacing:1px;
+}
+.review-card{
+ border-bottom:1px solid #eee;
+ padding:11px 0;
+}
+.review-name{
+ font-weight:bold;
+ color:#111827;
+ font-size:14px;
+}
+.review-date{
+ font-size:11px;
+ color:#64748b;
+ margin-top:3px;
+}
+.review-comment{
+ font-size:13px;
+ color:#263244;
+ line-height:1.6;
+ white-space:pre-wrap;
+ margin-top:6px;
+ overflow-wrap:anywhere;
+}
+.rating-input{
+ display:flex;
+ gap:6px;
+ margin:9px 0 12px;
+}
+.rating-input button{
+ background:#f1f5f9;
+ color:#94a3b8;
+ font-size:23px;
+ padding:3px 7px;
+}
+.rating-input button.selected{
+ color:#f59e0b;
+ background:#fff7e6;
+}
+input,textarea{
+ width:100%;
+ padding:10px;
+ border:1px solid #d5dbe5;
+ border-radius:7px;
+ font-size:14px;
+ margin:5px 0 10px;
+}
+textarea{min-height:80px;resize:vertical}
+.submit{
+ background:var(--orange);
+ color:#111827;
+ width:100%;
+}
+.message{
+ font-size:12px;
+ line-height:1.5;
+ color:#263244;
+}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:9px;
+}
+.card{
+ background:white;
+ border-radius:9px;
+ overflow:hidden;
+ box-shadow:0 2px 8px #0000000d;
+ cursor:pointer;
+}
+.card img{
+ width:100%;
+ height:115px;
+ object-fit:contain;
+ background:#f1f3f7;
+}
+.card-info{padding:9px}
+.card-info b{
+ display:block;
+ line-height:1.35;
+ font-size:13px;
+ color:#111827;
+ overflow-wrap:anywhere;
+}
+.card-price{
+ color:#a94d08;
+ font-size:14px;
+ font-weight:bold;
+ margin-top:6px;
+}
+.empty{
+ padding:14px;
+ text-align:center;
+ background:#f8fafc;
+ border-radius:8px;
+ color:#334155;
+ font-size:13px;
+}
+footer{
+ text-align:center;
+ background:var(--navy);
+ color:white;
+ padding:17px;
+ margin-top:20px;
+}
+footer h2{font-size:19px;margin:0 0 6px}
+footer p{font-size:12px;margin:5px}
+#toast{
+ position:fixed;
+ top:12px;
+ left:50%;
+ transform:translate(-50%,-130px);
+ background:#dcfce7;
+ color:#166534;
+ padding:11px 15px;
+ border-radius:9px;
+ z-index:99;
+ transition:.3s;
+ max-width:90%;
+ font-size:13px;
+ font-weight:bold;
+}
 #toast.show{transform:translate(-50%,0)}
+
 @media(min-width:700px){
- main{padding:0 22px}
- .product-layout{grid-template-columns:1fr 1fr;gap:28px}
- .main-image{height:420px}
+ main{padding:0 18px}
+ .panel{padding:17px}
+ .product-layout{
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+ }
+ .main-image{height:340px}
+ h1{font-size:24px}
+ .price{font-size:25px}
  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
- .card img{height:190px}
+ .card img{height:145px}
+ .card-info b{font-size:14px}
 }
 </style>
 </head>
@@ -74,7 +307,7 @@ footer{text-align:center;background:var(--navy);color:white;padding:22px;margin-
 
 <header>
  <div class="logo">MS <span>STORE</span></div>
- <div style="display:flex;gap:8px">
+ <div style="display:flex;gap:7px">
   <a href="index.html">SHOP</a>
   <a href="my-account.html" style="background:white">My Account</a>
  </div>
@@ -102,7 +335,7 @@ footer{text-align:center;background:var(--navy);color:white;padding:22px;margin-
   </div>
  </div>
 
- <h3>Write a Review</h3>
+ <h3 style="font-size:15px;color:#111827">Write a Review</h3>
  <p class="message">আপনার কেনাকাটার অভিজ্ঞতা শেয়ার করুন। Review দিতে Verified Gmail দিয়ে Login করতে হবে।</p>
 
  <div class="rating-input" id="ratingInput">
@@ -117,7 +350,7 @@ footer{text-align:center;background:var(--navy);color:white;padding:22px;margin-
  <button class="submit" id="submitReview">SUBMIT REVIEW</button>
  <p id="reviewMessage" class="message"></p>
 
- <h3>All Reviews</h3>
+ <h3 style="font-size:15px;color:#111827">All Reviews</h3>
  <div id="reviewList"><div class="empty">Review লোড হচ্ছে...</div></div>
 </section>
 
@@ -155,7 +388,6 @@ import{
  onAuthStateChanged
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
-
 const firebaseConfig={
  apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
  authDomain:"ms-store-admin-26416.firebaseapp.com",
@@ -170,7 +402,6 @@ const db=getFirestore(app);
 const auth=getAuth(app);
 
 const $=id=>document.getElementById(id);
-
 const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
@@ -185,7 +416,6 @@ const params=new URLSearchParams(location.search);
 const productId=params.get('id');
 
 let product=null;
-let allProducts=[];
 let currentUser=null;
 let selectedRating=0;
 let reviews=[];
@@ -248,7 +478,6 @@ function addToCart(){
  if(!product)return;
 
  const stock=Math.max(0,Number(product.stock)||0);
-
  let cart={};
 
  try{
@@ -362,7 +591,6 @@ async function loadProduct(){
   }
 
   renderProduct();
-
   await loadReviews();
   await loadSimilar();
 
@@ -376,7 +604,7 @@ async function loadSimilar(){
  try{
   const snap=await getDocs(collection(db,'storeProducts'));
 
-  allProducts=snap.docs
+  const allProducts=snap.docs
    .map(d=>({id:d.id,...d.data()}))
    .filter(p=>p.id!==productId&&p.active!==false);
 
@@ -391,7 +619,7 @@ async function loadSimilar(){
     <div class="card" data-product="${esc(p.id)}">
      ${p.imageUrl?
       `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy">`:
-      '<div style="height:150px;display:grid;place-items:center">🛍️</div>'}
+      '<div style="height:115px;display:grid;place-items:center">🛍️</div>'}
      <div class="card-info">
       <b>${esc(p.name||'Product')}</b>
       <div class="card-price">${money(p.price)}</div>
@@ -503,14 +731,12 @@ $('submitReview').onclick=async()=>{
  const comment=$('reviewComment').value.trim();
 
  if(comment.length<3){
-  $('reviewMessage').textContent=
-   'কমপক্ষে ৩ অক্ষরের Review লিখুন।';
+  $('reviewMessage').textContent='কমপক্ষে ৩ অক্ষরের Review লিখুন।';
   return;
  }
 
  if(comment.length>1000){
-  $('reviewMessage').textContent=
-   'Review সর্বোচ্চ ১০০০ অক্ষরের হতে পারবে।';
+  $('reviewMessage').textContent='Review সর্বোচ্চ ১০০০ অক্ষরের হতে পারবে।';
   return;
  }
 
@@ -519,11 +745,7 @@ $('submitReview').onclick=async()=>{
 
  try{
 
-  // Customer profile যাচাই
-  const profileRef=doc(
-   db,'customerProfiles',currentUser.uid
-  );
-
+  const profileRef=doc(db,'customerProfiles',currentUser.uid);
   const profileSnap=await getDoc(profileRef);
 
   if(!profileSnap.exists()){
@@ -536,9 +758,6 @@ $('submitReview').onclick=async()=>{
    throw Error('আপনার Customer Account বর্তমানে বন্ধ আছে।');
   }
 
-  const customerName=profile.name||'Customer';
-
-  // UID-কে Review Document ID হিসেবে ব্যবহার
   const reviewRef=doc(
    db,
    'storeProducts',
@@ -547,17 +766,15 @@ $('submitReview').onclick=async()=>{
    currentUser.uid
   );
 
-  // আগে Review দেওয়া হয়েছে কি না পরীক্ষা
   const existing=await getDoc(reviewRef);
 
   if(existing.exists()){
    throw Error('আপনি এই পণ্যে ইতিমধ্যে Review দিয়েছেন।');
   }
 
-  // নতুন Review জমা
   await setDoc(reviewRef,{
    uid:currentUser.uid,
-   name:customerName,
+   name:profile.name||'Customer',
    rating:selectedRating,
    comment:comment,
    createdAt:serverTimestamp()
@@ -570,9 +787,7 @@ $('submitReview').onclick=async()=>{
    b.classList.remove('selected')
   );
 
-  $('reviewMessage').textContent=
-   'আপনার Review সফলভাবে জমা হয়েছে।';
-
+  $('reviewMessage').textContent='আপনার Review সফলভাবে জমা হয়েছে।';
   toast('Review জমা হয়েছে!');
 
   await loadReviews();
@@ -580,9 +795,7 @@ $('submitReview').onclick=async()=>{
  }catch(e){
 
   console.error('Review submit error:',e);
-
-  $('reviewMessage').textContent=
-   'Review জমা হয়নি: '+e.message;
+  $('reviewMessage').textContent='Review জমা হয়নি: '+e.message;
 
  }finally{
 
