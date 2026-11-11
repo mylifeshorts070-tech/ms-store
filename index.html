@@ -1,939 +1,404 @@
 
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MS STORE | Online Shopping</title>
- <link rel="manifest" href="/ms-store/manifest.json">
-<meta name="theme-color" content="#172554">
-<meta name="description" content="MS STORE থেকে আপনার পছন্দের পণ্য কিনুন সহজে ও নিশ্চিন্তে।">
-
-<style>
-:root{
- --navy:#111827;
- --orange:#f59e0b;
- --bg:#f5f6fa;
- --text:#202536;
-}
-*{box-sizing:border-box}
-
-body{
- margin:0;
- background:var(--bg);
- font-family:Arial,sans-serif;
- color:var(--text);
+:root {
+  --navy: #172554;
+  --dark: #101827;
+  --orange: #f59e0b;
+  --bg: #f7f8fc;
+  --text: #202536;
+  --white: #ffffff;
 }
 
-header{
- background:var(--navy);
- color:white;
- padding:10px 4%;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:8px;
- flex-wrap:wrap;
- position:sticky;
- top:0;
- z-index:5;
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding-bottom: 75px;
+  background: var(--bg);
+  font-family: Arial, sans-serif;
+  color: var(--text);
 }
 
-.logo{
- font-size:21px;
- font-weight:bold;
-}
-.logo span{color:var(--orange)}
+button, a { cursor: pointer; }
 
-button,a{cursor:pointer}
-
-header a{
- color:var(--navy);
- background:var(--orange);
- padding:8px 11px;
- border-radius:7px;
- text-decoration:none;
- font-weight:bold;
- font-size:13px;
+header {
+  background: var(--dark);
+  color: white;
+  padding: 13px 4%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 3px 15px #0002;
 }
 
-.account{
- background:white;
- color:var(--navy)!important;
+.logo {
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: .5px;
 }
 
-.notice{
- background:#fff1f2;
- color:#b91c1c;
- padding:6px;
- overflow:hidden;
- white-space:nowrap;
- font-size:12px;
- font-weight:600;
+.logo span { color: var(--orange); }
+
+header a {
+  color: var(--dark);
+  background: var(--orange);
+  padding: 9px 12px;
+  border-radius: 9px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 12px;
 }
 
-.notice span{
- display:inline-block;
- padding-right:55px;
- animation:move 22s linear infinite;
+header .account {
+  background: white;
+  color: var(--navy);
 }
 
-@keyframes move{
- from{transform:translateX(100vw)}
- to{transform:translateX(-100%)}
+.notice {
+  background: #fff7e6;
+  color: #9a4b00;
+  padding: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: bold;
 }
 
-.hero{
- text-align:center;
- padding:25px 12px;
- background:linear-gradient(120deg,#111827,#334155);
- color:white;
+.notice span {
+  display: inline-block;
+  padding-right: 55px;
+  animation: move 22s linear infinite;
 }
 
-.hero h1{
- font-size:clamp(23px,5vw,32px);
- margin:0 0 7px;
+@keyframes move {
+  from { transform: translateX(100vw); }
+  to { transform: translateX(-100%); }
 }
 
-.hero p{
- color:#f1f5f9;
- font-size:13px;
- margin:0;
+.hero {
+  text-align: left;
+  padding: 30px 5%;
+  background: linear-gradient(120deg, #101827, #243b70);
+  color: white;
+  border-radius: 0 0 22px 22px;
 }
 
-main{
- padding:13px 4%;
- max-width:1250px;
- margin:auto;
+.hero h1 {
+  font-size: clamp(25px, 6vw, 35px);
+  margin: 0 0 9px;
+  font-weight: 900;
 }
 
-.search-wrap{
- position:relative;
- margin-bottom:14px;
+.hero p {
+  color: #e2e8f0;
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.6;
 }
 
-#search{
- width:100%;
- padding:11px 13px;
- border:1px solid #d5dbe5;
- border-radius:8px;
- font-size:14px;
- outline:none;
+main {
+  padding: 15px 4%;
+  max-width: 1250px;
+  margin: auto;
 }
 
-#search:focus{
- border-color:var(--orange);
+.search-wrap { margin-bottom: 17px; }
+
+#search {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #dbe1eb;
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  background: white;
+  box-shadow: 0 3px 12px #00000008;
 }
 
-.search-hint{
- font-size:11px;
- color:#334155;
- margin:5px 3px;
+#search:focus { border-color: var(--orange); }
+
+.search-hint {
+  font-size: 11px;
+  color: #64748b;
+  margin: 6px 3px;
 }
 
-h2{
- font-size:18px;
- color:#111827;
- margin:15px 0 9px;
+h2 {
+  font-size: 19px;
+  color: var(--navy);
+  margin: 19px 0 11px;
 }
 
-.category-list{
- display:flex;
- gap:7px;
- overflow:auto;
- padding:3px 0 9px;
+.category-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 3px 0 12px;
+  scrollbar-width: none;
 }
 
-.category-list button{
- border:1px solid #ddd;
- background:white;
- border-radius:20px;
- padding:7px 12px;
- white-space:nowrap;
- font-size:12px;
- color:#111827;
+.category-list button {
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 22px;
+  padding: 9px 15px;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--navy);
+  font-weight: bold;
 }
 
-.category-list button.active{
- background:var(--navy);
- color:white;
- border-color:var(--navy);
+.category-list button.active {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
 }
 
-.grid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:9px;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 11px;
 }
 
-.card{
- background:white;
- border-radius:10px;
- overflow:hidden;
- box-shadow:0 2px 9px #0000000d;
- min-width:0;
+.card {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #edf0f5;
+  box-shadow: 0 4px 14px #0000000b;
+  min-width: 0;
+  transition: transform .2s;
 }
 
-.photo{
- height:125px;
- background:#edf0f5;
- display:grid;
- place-items:center;
- font-size:30px;
- overflow:hidden;
- cursor:pointer;
+.card:active { transform: scale(.98); }
+
+.photo {
+  height: 145px;
+  background: #f1f3f8;
+  display: grid;
+  place-items: center;
+  font-size: 32px;
+  overflow: hidden;
+  cursor: pointer;
 }
 
-.photo img{
- width:100%;
- height:100%;
- object-fit:contain;
+.photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 5px;
 }
 
-.info{
- padding:9px;
+.info { padding: 10px; }
+
+.info h3 {
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0 0 9px;
+  color: var(--navy);
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  min-height: 36px;
 }
 
-.info h3{
- font-size:14px;
- line-height:1.35;
- margin:0 0 8px;
- color:#111827;
- overflow-wrap:anywhere;
- cursor:pointer;
- min-height:36px;
+.price {
+  display: block;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 900;
+  color: #a94d08;
+  background: #fff7e6;
+  padding: 8px;
+  border-radius: 9px;
+  margin-bottom: 9px;
+  overflow-wrap: anywhere;
 }
 
-.price{
- display:block;
- width:100%;
- font-size:18px;
- line-height:1.3;
- font-weight:800;
- color:#a94d08;
- background:#fff7e6;
- padding:7px 8px;
- border-radius:7px;
- margin:0 0 8px;
- overflow-wrap:anywhere;
+.stock {
+  font-size: 11px;
+  color: #475569;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
 
-.stock{
- font-size:12px;
- color:#1e293b;
- margin-bottom:9px;
- font-weight:700;
+.product-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
 }
 
-.product-actions{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:5px;
+.add, .buy, .details {
+  width: 100%;
+  min-width: 0;
+  padding: 10px 3px;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 10px;
 }
 
-.add,.buy,.details{
- width:100%;
- min-width:0;
- padding:9px 3px;
- border:0;
- border-radius:7px;
- font-weight:bold;
- font-size:11px;
- line-height:1.3;
+.add {
+  background: var(--navy);
+  color: white;
 }
 
-.add{
- background:var(--navy);
- color:white;
+.buy {
+  background: var(--orange);
+  color: #111827;
 }
 
-.buy{
- background:var(--orange);
- color:#111827;
+.details {
+  background: #eef1f6;
+  color: var(--navy);
+  grid-column: 1 / -1;
 }
 
-.details{
- background:#e5e7eb;
- color:#111827;
- grid-column:1/-1;
+.add:disabled, .buy:disabled {
+  background: #aaa;
+  color: white;
+  cursor: not-allowed;
 }
 
-.add:disabled,.buy:disabled{
- background:#aaa;
- color:white;
- cursor:not-allowed;
+.empty {
+  background: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 12px;
+  grid-column: 1 / -1;
+  color: #64748b;
+  font-size: 13px;
 }
 
-.empty{
- background:white;
- padding:17px;
- text-align:center;
- border-radius:9px;
- grid-column:1/-1;
- color:#334155;
- font-size:13px;
+.result-label {
+  font-size: 12px;
+  color: #64748b;
+  margin: 6px 0 10px;
 }
 
-.result-label{
- font-size:12px;
- color:#334155;
- margin:6px 0 10px;
+.cart {
+  margin-top: 22px;
+  background: white;
+  padding: 15px;
+  border-radius: 14px;
+  box-shadow: 0 3px 14px #00000008;
 }
 
-.cart{
- margin-top:20px;
- background:white;
- padding:13px;
- border-radius:10px;
+.cart h2 { margin-top: 0; }
+
+.cart-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
 }
 
-.cart h2{
- margin-top:0;
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
 }
 
-.cart-row{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:8px;
- padding:10px 0;
- border-bottom:1px solid #eee;
- font-size:13px;
- color:#111827;
+.qty button {
+  border: 0;
+  padding: 7px 11px;
+  border-radius: 7px;
+  background: #e5e7eb;
+  font-size: 16px;
 }
 
-.qty{
- display:flex;
- align-items:center;
- gap:7px;
- white-space:nowrap;
+.qty button:disabled { opacity: .4; }
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  color: var(--navy);
+  margin: 14px 0;
 }
 
-.qty button{
- border:0;
- padding:6px 10px;
- border-radius:6px;
- background:#e5e7eb;
- font-size:16px;
+.checkout {
+  display: block;
+  text-align: center;
+  background: var(--orange);
+  color: #111827;
+  text-decoration: none;
+  padding: 13px;
+  border-radius: 10px;
+  font-weight: 900;
+  font-size: 13px;
 }
 
-.qty button:disabled{
- opacity:.4;
- cursor:not-allowed;
+.cart-warning {
+  color: #b91c1c;
+  font-size: 12px;
+  margin-top: 9px;
+  line-height: 1.5;
 }
 
-.total{
- display:flex;
- justify-content:space-between;
- font-weight:bold;
- color:#111827;
- margin:12px 0;
- font-size:14px;
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -3px 15px #00000010;
+  padding: 9px 3px calc(9px + env(safe-area-inset-bottom));
 }
 
-.checkout{
- display:block;
- text-align:center;
- background:var(--orange);
- color:#111827;
- text-decoration:none;
- padding:11px;
- border-radius:8px;
- font-weight:bold;
- font-size:13px;
+.bottom-nav a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: #64748b;
+  font-size: 10px;
+  font-weight: bold;
 }
 
-.cart-warning{
- color:#b91c1c;
- font-size:12px;
- margin-top:9px;
- line-height:1.5;
+.bottom-nav .nav-icon { font-size: 19px; }
+
+.bottom-nav a.active { color: var(--orange); }
+
+footer {
+  text-align: center;
+  background: var(--dark);
+  color: white;
+  padding: 20px;
+  margin-top: 25px;
 }
 
-footer{
- text-align:center;
- background:var(--navy);
- color:white;
- padding:18px;
- margin-top:22px;
+footer h2 {
+  color: white;
+  margin: 0 0 6px;
 }
 
-footer h2{
- color:white;
- margin:0 0 6px;
- font-size:19px;
-}
+footer p { font-size: 12px; }
 
-footer p{
- font-size:12px;
- margin:5px;
-}
-
-@media(min-width:650px){
-
- main{padding:18px 4%}
-
- .hero{padding:32px 15px}
-
- .grid{
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:14px;
- }
-
- .photo{height:165px}
-
- .info{padding:11px}
-
- .info h3{font-size:15px}
-
- .price{font-size:20px}
-
- .add,.buy,.details{
-  font-size:12px;
-  padding:10px 5px;
- }
-
- .cart{padding:17px}
-}
-
-@media(min-width:1000px){
- .grid{grid-template-columns:repeat(5,minmax(0,1fr))}
- .photo{height:175px}
-}
-</style>
-</head>
-
-<body>
-
-<header>
- <div class="logo">MS <span>STORE</span></div>
- <div style="display:flex;gap:7px;flex-wrap:wrap">
-  <a class="account" href="my-account.html">My Account</a>
-  <a href="#cart">🛒 Cart (<span id="cartCount">0</span>)</a>
- </div>
-</header>
-
-<div class="notice">
- <span id="noticeText">Welcome to MS STORE</span>
-</div>
-
-<section class="hero">
- <h1>Welcome to MS STORE</h1>
- <p>আপনার পছন্দের পণ্য কিনুন সহজে ও নিশ্চিন্তে।</p>
-</section>
-
-<main>
-
- <div class="search-wrap">
-  <input id="search" type="search" placeholder="🔍 পণ্যের নাম লিখে খুঁজুন...">
-  <div class="search-hint">
-   পণ্যের নাম, Category অথবা কাছাকাছি বানান দিয়ে খুঁজুন।
-  </div>
- </div>
-
- <h2>Categories</h2>
- <div class="category-list" id="categories"></div>
-
- <h2 id="productHeading">Our Products</h2>
- <div class="result-label" id="resultLabel"></div>
-
- <div class="grid" id="products">
-  <div class="empty">পণ্য লোড হচ্ছে...</div>
- </div>
-
- <section class="cart" id="cart">
-  <h2>🛒 Your Cart</h2>
-
-  <div id="cartItems">আপনার Cart খালি।</div>
-
-  <div id="cartWarning" class="cart-warning"></div>
-
-  <div class="total">
-   <span>Subtotal</span>
-   <span id="subtotal">৳0</span>
-  </div>
-
-  <a class="checkout" href="checkout.html">
-   PROCEED TO CHECKOUT
-  </a>
- </section>
-
-</main>
-
-<footer>
- <h2>MS STORE</h2>
- <p>Your Trusted Online Shopping Store</p>
- <small>© 2026 MS STORE</small>
-</footer>
-
-<script type="module">
-
-import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
-
-import{
- getFirestore,
- collection,
- onSnapshot
-}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
-
-const firebaseConfig={
- apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
- authDomain:"ms-store-admin-26416.firebaseapp.com",
- projectId:"ms-store-admin-26416",
- storageBucket:"ms-store-admin-26416.firebasestorage.app",
- messagingSenderId:"968008425065",
- appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
-};
-
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-
-const $=id=>document.getElementById(id);
-
-const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
-
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
- '&':'&amp;',
- '<':'&lt;',
- '>':'&gt;',
- '"':'&quot;',
- "'":'&#39;'
-}[c]));
-
-let products=[];
-let category='All';
-let cart={};
-
-try{
-
- if(localStorage.getItem('msBuyNowMode')==='1'){
-
-  const backup=localStorage.getItem('msCartBackup');
-
-  if(backup!==null){
-   localStorage.setItem('msCart',backup);
+@media(min-width:650px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
   }
-
-  localStorage.removeItem('msCartBackup');
-  localStorage.removeItem('msBuyNowMode');
- }
-
- cart=JSON.parse(localStorage.getItem('msCart')||'{}');
-
- if(!cart||typeof cart!=='object'||Array.isArray(cart)){
-  cart={};
- }
-
-}catch(e){
- cart={};
+  .photo { height: 180px; }
+  .info h3 { font-size: 15px; }
+  .add, .buy, .details { font-size: 12px; }
 }
 
-function saveCart(){
- localStorage.setItem('msCart',JSON.stringify(cart));
- renderCart();
- renderProducts();
+@media(min-width:1000px) {
+  .grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .photo { height: 190px; }
 }
-
-function openDetails(id){
- location.href='product-details.html?id='+encodeURIComponent(id);
-}
-
-function buyNow(id){
-
- const p=products.find(x=>x.id===id);
-
- if(!p)return;
-
- const stock=Math.max(0,Number(p.stock)||0);
-
- if(stock<1){
-  alert('দুঃখিত! এই পণ্যটি স্টকে নেই।');
-  return;
- }
-
- try{
-
-  localStorage.setItem(
-   'msCartBackup',
-   localStorage.getItem('msCart')||'{}'
-  );
-
-  localStorage.setItem(
-   'msCart',
-   JSON.stringify({[id]:1})
-  );
-
-  localStorage.setItem('msBuyNowMode','1');
-
-  location.href='checkout.html';
-
- }catch(error){
-  alert('Checkout চালু করা যাচ্ছে না। আবার চেষ্টা করুন।');
- }
-}
-
-// Approximate matching for slightly misspelled searches
-function editDistance(a,b){
-
- const dp=Array.from(
-  {length:b.length+1},
-  (_,i)=>[i]
- );
-
- for(let j=0;j<=a.length;j++){
-  dp[0][j]=j;
- }
-
- for(let i=1;i<=b.length;i++){
-
-  for(let j=1;j<=a.length;j++){
-
-   dp[i][j]=Math.min(
-    dp[i-1][j]+1,
-    dp[i][j-1]+1,
-    dp[i-1][j-1]+(b[i-1]===a[j-1]?0:1)
-   );
-
-  }
- }
-
- return dp[b.length][a.length];
-}
-
-function searchScore(p,query){
-
- const name=String(p.name||'').toLowerCase();
- const cat=String(p.category||'General').toLowerCase();
- const desc=String(p.description||'').toLowerCase();
- const q=query.toLowerCase().trim();
-
- if(!q)return 1;
- if(name===q)return 100;
- if(name.includes(q))return 90;
- if(cat.includes(q))return 75;
- if(desc.includes(q))return 60;
-
- const words=(name+' '+cat+' '+desc).split(/\s+/);
-
- let best=0;
-
- for(const word of words){
-
-  if(word.includes(q)||q.includes(word)){
-   best=Math.max(best,65);
-   continue;
-  }
-
-  if(Math.min(word.length,q.length)>=3){
-
-   const distance=editDistance(word,q);
-   const similarity=1-distance/Math.max(word.length,q.length);
-
-   if(similarity>=0.65){
-    best=Math.max(best,similarity*55);
-   }
-  }
- }
-
- return best;
-}
-
-function loadProducts(){
-
- onSnapshot(collection(db,'storeProducts'),s=>{
-
-  products=s.docs
-   .map(d=>({id:d.id,...d.data()}))
-   .filter(p=>p.active!==false);
-
-  renderCategories();
-  renderProducts();
-  renderCart();
-
- },e=>{
-
-  console.error(e);
-
-  $('products').innerHTML=
-   '<div class="empty">পণ্য লোড হয়নি। Firebase Rules পরীক্ষা করুন।</div>';
-
- });
-}
-
-function renderCategories(){
-
- const cats=[
-  'All',
-  ...new Set(products.map(p=>p.category||'General'))
- ];
-
- if(!cats.includes(category)){
-  category='All';
- }
-
- $('categories').innerHTML=cats.map(c=>
-  `<button class="${c===category?'active':''}" data-cat="${esc(c)}">${esc(c)}</button>`
- ).join('');
-
- $('categories').querySelectorAll('[data-cat]').forEach(b=>{
-
-  b.onclick=()=>{
-   category=b.dataset.cat;
-   renderCategories();
-   renderProducts();
-  };
-
- });
-}
-
-function renderProducts(){
-
- const q=$('search').value.trim();
-
- let list=products.filter(p=>
-  category==='All'||(p.category||'General')===category
- );
-
- if(q){
-
-  list=list.map(p=>({
-   ...p,
-   _score:searchScore(p,q)
-  }))
-  .filter(p=>p._score>0)
-  .sort((a,b)=>b._score-a._score);
-
- }
-
- $('productHeading').textContent=
-  q?'Search Results':'Our Products';
-
- $('resultLabel').textContent=
-  `${list.length}টি ${q?'মিল পাওয়া পণ্য':'পণ্য'}`;
-
- if(q&&list.length===0){
-
-  const similar=products
-   .filter(p=>category==='All'||(p.category||'General')===category)
-   .slice(0,8);
-
-  $('products').innerHTML=similar.length?
-   '<div class="empty">এই নামে পণ্য পাওয়া যায়নি। Similar Products দেখুন।</div>'+
-   similar.map(productCard).join(''):
-   '<div class="empty">কোনো পণ্য পাওয়া যায়নি।</div>';
-
- }else{
-
-  $('products').innerHTML=list.length?
-   list.map(productCard).join(''):
-   '<div class="empty">কোনো পণ্য পাওয়া যায়নি।</div>';
-
- }
-
- $('products').querySelectorAll('[data-details]').forEach(b=>{
-  b.onclick=()=>openDetails(b.dataset.details);
- });
-
- $('products').querySelectorAll('[data-add]').forEach(b=>{
-
-  b.onclick=()=>{
-
-   const p=products.find(x=>x.id===b.dataset.add);
-
-   if(!p)return;
-
-   const stock=Math.max(0,Number(p.stock)||0);
-   const count=Number(cart[p.id]||0);
-
-   if(count>=stock){
-    alert('স্টকে পর্যাপ্ত পণ্য নেই।');
-    return;
-   }
-
-   cart[p.id]=count+1;
-   saveCart();
-
-  };
-
- });
-
- $('products').querySelectorAll('[data-buy]').forEach(b=>{
-  b.onclick=()=>buyNow(b.dataset.buy);
- });
-
-}
-
-function productCard(p){
-
- const stock=Math.max(0,Number(p.stock)||0);
- const inCart=Number(cart[p.id]||0);
- const available=stock-inCart;
-
- return `
- <article class="card">
-
-  <div class="photo" data-details="${esc(p.id)}">
-   ${p.imageUrl?
-    `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy">`:
-    '🛍️'}
-  </div>
-
-  <div class="info">
-
-   <h3 data-details="${esc(p.id)}">
-    ${esc(p.name||'Product')}
-   </h3>
-
-   <div class="price">${money(p.price)}</div>
-
-   <div class="stock">
-    ${stock<=0?'স্টক শেষ':'স্টক: '+stock}
-   </div>
-
-   <div class="product-actions">
-
-    <button class="add"
-     data-add="${esc(p.id)}"
-     ${available<=0?'disabled':''}>
-     ${stock<=0?'OUT OF STOCK':available<=0?'CART LIMIT':'ADD TO CART'}
-    </button>
-
-    <button class="buy"
-     data-buy="${esc(p.id)}"
-     ${stock<=0?'disabled':''}>
-     ${stock<=0?'OUT OF STOCK':'BUY NOW'}
-    </button>
-
-    <button class="details" data-details="${esc(p.id)}">
-     VIEW DETAILS
-    </button>
-
-   </div>
-
-  </div>
- </article>`;
-}
-
-function renderCart(){
-
- const entries=Object.entries(cart).filter(([id,q])=>
-  products.some(p=>p.id===id)&&Number(q)>0
- );
-
- cart=Object.fromEntries(entries);
-
- localStorage.setItem('msCart',JSON.stringify(cart));
-
- $('cartCount').textContent=
-  entries.reduce((s,[,q])=>s+Number(q),0);
-
- let sum=0;
- let warning=false;
-
- $('cartItems').innerHTML=entries.length?
-  entries.map(([id,q])=>{
-
-   const p=products.find(x=>x.id===id);
-
-   if(!p)return '';
-
-   const stock=Math.max(0,Number(p.stock)||0);
-   const qty=Number(q);
-
-   sum+=Number(p.price||0)*qty;
-
-   if(qty>stock)warning=true;
-
-   return `
-   <div class="cart-row">
-
-    <span>
-     <b>${esc(p.name)}</b><br>
-     ${money(p.price)} × ${qty}
-
-     ${qty>stock?
-      '<br><small style="color:#b91c1c">স্টকের চেয়ে বেশি পরিমাণ Cart-এ আছে</small>':
-      ''}
-    </span>
-
-    <span class="qty">
-
-     <button data-id="${esc(id)}" data-change="-1">−</button>
-
-     ${qty}
-
-     <button
-      data-id="${esc(id)}"
-      data-change="1"
-      ${qty>=stock?'disabled':''}>+</button>
-
-    </span>
-
-   </div>`;
-
-  }).join(''):
-  'আপনার Cart খালি।';
-
- $('cartWarning').textContent=warning?
-  'আপনার Cart-এর কিছু পণ্যের পরিমাণ বর্তমানে থাকা স্টকের চেয়ে বেশি। Checkout করার আগে পরিমাণ ঠিক করুন।':
-  '';
-
- $('subtotal').textContent=money(sum);
-
- $('cartItems').querySelectorAll('[data-id]').forEach(b=>{
-
-  b.onclick=()=>{
-
-   const id=b.dataset.id;
-   const p=products.find(x=>x.id===id);
-
-   if(!p)return;
-
-   const n=Number(cart[id]||0)+Number(b.dataset.change);
-   const stock=Math.max(0,Number(p.stock)||0);
-
-   if(n<=0){
-    delete cart[id];
-   }else if(n<=stock){
-    cart[id]=n;
-   }else{
-    alert('স্টকে পর্যাপ্ত পণ্য নেই।');
-   }
-
-   saveCart();
-
-  };
-
- });
-
-}
-
-$('search').oninput=renderProducts;
-
-onSnapshot(collection(db,'storeNotices'),s=>{
-
- const texts=s.docs
-  .map(d=>d.data())
-  .filter(n=>n.active&&n.text)
-  .map(n=>n.text);
-
- $('noticeText').textContent=texts.length?
-  texts.join('   •   '):
-  'Welcome to MS STORE';
-
-});
-
-loadProducts();
-
-</script>
- <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/ms-store/service-worker.js")
-      .then(() => console.log("MS STORE PWA Ready"))
-      .catch(error => console.error("PWA Error:", error));
-  });
-}
- </script>
-</body>
-</html>
