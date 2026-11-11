@@ -5,425 +5,261 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MS STORE | Online Shopping</title>
-<style>/* PROFESSIONAL CHECKOUT DESIGN */
-#checkout {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 20px;
-  margin: 30px auto;
-  max-width: 650px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.07);
-}
-
-#checkout h2 {
-  font-size: 30px;
-  margin-bottom: 24px;
-  color: #111827;
-}
-
-#checkout input:not([type="radio"]),
-#checkout textarea {
-  display: block;
-  width: 100%;
-  padding: 16px;
-  margin: 14px 0;
-  border: 1.5px solid #dbe1eb;
-  border-radius: 12px;
-  font-size: 17px;
-  background: #f9fafb;
-  outline: none;
-}
-
-#checkout input:focus,
-#checkout textarea:focus {
-  border-color: #f59e0b;
-  background: #fff;
-}
-
-#checkout textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-#checkout h3 {
-  font-size: 21px;
-  margin: 22px 0 12px;
-}
-
-#checkout label {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  background: #f3f5fa;
-  padding: 15px;
-  margin: 5px 4px 12px 0;
-  border-radius: 12px;
-  font-size: 17px;
-}
-
-#checkout input[type="radio"] {
-  width: 20px;
-  height: 20px;
-  accent-color: #f59e0b;
-}
-
-#checkoutstyon {
-  display: block;
-  width: 100%;
-  padding: 17px;
-  margin-top: 16px;
-  border: none;
-  border-radius: 12px;
-  background: #f59e0b;
-  color: #111827;
-  font-size: 19px;
-  font-weight: bold;
-}
-
-#checkout #orderMessage {
-  font-size: 16px;
-  margin-top: 15px;
-}
-
-@media(max-width:600px) {
-  #checkout {
-    padding: 20px;
-    margin: 20px auto;
-  }
-  #checkout h2 {
-    font-size: 26px;
-  }
-
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Arial,sans-serif;background:#f5f6fa;color:#222}
-header{background:#111827;color:white;padding:17px 5%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.logo{font-size:25px;font-weight:bold;color:#fff}
-.logo span{color:#f59e0b}
-header button{background:#f59e0b;color:#111;border:0;padding:11px 16px;border-radius:8px;font-weight:bold}
-.hero{background:linear-gradient(120deg,#111827,#374151);color:white;padding:55px 7%;text-align:center}
-.hero h1{font-size:35px;margin-bottom:12px}
-.hero p{color:#ddd;margin-bottom:22px}
-.hero a{background:#f59e0b;color:#111;text-decoration:none;padding:12px 25px;border-radius:7px;font-weight:bold}
-.search{padding:20px 5%;display:flex;gap:10px}
-.search input{width:100%;padding:14px;border:1px solid #ddd;border-radius:9px;font-size:15px}
-.categories{padding:5px 5% 20px}
-.categories h2,.products h2{margin-bottom:16px}
-.cat-list{display:flex;gap:10px;overflow-x:auto}
-.cat-list button{padding:10px 17px;border:1px solid #ddd;border-radius:20px;background:white;white-space:nowrap}
-.cat-list button.active{background:#111827;color:white}
-.products{padding:15px 5% 40px}
-.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.card{background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px #0000000c}
-.product-img{height:145px;background:#e9edf3;display:flex;align-items:center;justify-content:center;font-size:55px}
-.card-info{padding:12px}
-.card h3{font-size:15px;margin-bottom:8px}
-.price{font-weight:bold;color:#e58b00;margin-bottom:10px}
-.card button{width:100%;padding:10px;background:#111827;color:white;border:0;border-radius:7px}
-.cart-box{margin:15px 5% 35px;background:white;padding:18px;border-radius:12px}
-.cart-box h2{margin-bottom:12px}
-.cart-item{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #eee;font-size:14px}
-.total{font-weight:bold;text-align:right;margin-top:15px}
-footer{background:#111827;color:white;text-align:center;padding:28px 15px}
-footer p{color:#bbb;margin-top:8px;font-size:13px}
-.empty{text-align:center;color:#888;padding:15px}
-@media(min-width:650px){
-.product-grid{grid-template-columns:repeat(4,1fr)}
-.product-img{height:190px}
-.hero h1{font-size:45px}
-}
+<style>
+:root{--navy:#111827;--orange:#f59e0b;--red:#dc2626;--bg:#f5f6fa}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#202536;font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:20;background:var(--navy);color:#fff;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 12px #0002}
+.logo{font-size:24px;font-weight:800;letter-spacing:.4px}.logo span{color:var(--orange)}
+.header-actions{display:flex;gap:8px;align-items:center}
+.header-actions button{border:0;border-radius:8px;padding:10px 13px;font-weight:bold;cursor:pointer}
+.cart-btn{background:var(--orange);color:#111827}
+.hero{padding:48px 6%;text-align:center;color:#fff;background:linear-gradient(125deg,#111827,#334155)}
+.hero h1{font-size:clamp(28px,6vw,44px);margin:0 0 12px}
+.hero p{color:#e5e7eb;margin:0 0 22px;line-height:1.6}
+.shop-btn{display:inline-block;text-decoration:none;background:var(--orange);color:#111827;padding:12px 24px;border-radius:8px;font-weight:bold}
+.search-wrap{padding:20px 5% 8px}
+#search{width:100%;padding:14px 15px;border:1px solid #d7dce5;border-radius:10px;font-size:16px;background:#fff}
+.categories,.products,.cart-section,.checkout-section{padding:16px 5%}
+h2.section-title{font-size:22px;margin:4px 0 16px;color:#172033}
+.category-list{display:flex;gap:9px;overflow:auto;padding-bottom:6px}
+.category-list button{white-space:nowrap;border:1px solid #d8dce5;background:#fff;color:#273044;border-radius:22px;padding:9px 16px}
+.category-list button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.product-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.product-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 3px 13px #1118270d;min-width:0}
+.product-photo{height:155px;background:#e9edf3;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:42px;overflow:hidden}
+.product-photo img{width:100%;height:100%;object-fit:cover}
+.product-info{padding:12px}
+.product-info h3{font-size:15px;line-height:1.35;margin:0 0 8px;overflow-wrap:anywhere}
+.price{color:#e58b00;font-weight:800;margin-bottom:7px}
+.stock{font-size:12px;color:#64748b;margin-bottom:10px}
+.add-btn{width:100%;border:0;border-radius:8px;padding:10px;background:var(--navy);color:#fff;font-weight:bold}
+.add-btn:disabled{background:#9ca3af}
+.empty{grid-column:1/-1;text-align:center;padding:24px;color:#64748b;background:#fff;border-radius:10px}
+.cart-section,.checkout-section{margin:12px 5%;padding:18px;background:#fff;border-radius:13px}
+.cart-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #edf0f4;font-size:14px}
+.qty-controls{display:flex;align-items:center;gap:8px;white-space:nowrap}
+.qty-controls button{border:0;border-radius:6px;background:#e5e7eb;padding:5px 10px;font-size:17px}
+.total-line{display:flex;justify-content:space-between;margin-top:14px;font-weight:bold;font-size:17px}
+.checkout-grid{display:grid;grid-template-columns:1fr;gap:9px}
+.checkout-grid input,.checkout-grid select,.checkout-grid textarea{width:100%;padding:12px;border:1px solid #d7dce5;border-radius:8px;font-size:15px;background:#fff}
+.checkout-grid textarea{min-height:85px;resize:vertical}
+.order-button{display:block;width:100%;margin-top:17px;padding:17px 14px;border:0;border-radius:10px;background:#dc2626;color:#fff;font-size:19px;font-weight:800;letter-spacing:.4px;box-shadow:0 4px 0 #991b1b;cursor:pointer}
+.order-button:disabled{opacity:.6;cursor:not-allowed}
+.note{font-size:12px;color:#64748b;line-height:1.5;margin-top:10px}
+#checkoutMsg{margin-top:12px;font-size:14px;line-height:1.5}
+footer{margin-top:30px;background:var(--navy);color:#fff;text-align:center;padding:28px 15px}
+footer p{color:#cbd5e1;font-size:13px;margin:8px 0 0}
+@media(min-width:650px){.product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.product-photo{height:190px}.checkout-grid{grid-template-columns:1fr 1fr}.checkout-grid .full{grid-column:1/-1}.hero{padding:65px 8%}}
 </style>
 </head>
 <body>
-
 <header>
-<div class="logo">MS <span>STORE</span></div>
-<button onclick="document.getElementById('cart').scrollIntoView()">🛒 Cart (<span id="count">0</span>)</button>
+  <div class="logo">MS <span>STORE</span></div>
+  <div class="header-actions"><button class="cart-btn" onclick="document.getElementById('cart').scrollIntoView()">🛒 Cart (<span id="cartCount">0</span>)</button></div>
 </header>
-
 <section class="hero">
-<h1>Welcome to MS STORE</h1>
-<p>আপনার পছন্দের পণ্য কিনুন সহজেই!</p>
-<a href="#products">Shop Now</a>
+  <h1>Welcome to MS STORE</h1>
+  <p>আপনার পছন্দের পণ্য কিনুন সহজে ও নিশ্চিন্তে।</p>
+  <a class="shop-btn" href="#products">SHOP NOW</a>
 </section>
-
-<div class="search">
-<input type="search" id="search" placeholder="পণ্য খুঁজুন..." oninput="renderProducts()">
-</div>
-
+<div class="search-wrap"><input id="search" type="search" placeholder="পণ্য খুঁজুন..." autocomplete="off"></div>
 <section class="categories">
-<h2>Categories</h2>
-<div class="cat-list" id="categories"></div>
+  <h2 class="section-title">Categories</h2>
+  <div class="category-list" id="categoryList"></div>
 </section>
-
 <section class="products" id="products">
-<h2>Our Products</h2>
-<div class="product-grid" id="productGrid"></div>
+  <h2 class="section-title">Our Products</h2>
+  <div class="product-grid" id="productGrid"><div class="empty">পণ্য লোড হচ্ছে...</div></div>
 </section>
-
-<section class="cart-box" id="cart">
-<h2>🛒 Your Cart</h2>
-<div id="cartItems"><div class="empty">আপনার Cart এখন খালি</div></div>
-<div class="total" id="total">Total: ৳0</div>
+<section class="cart-section" id="cart">
+  <h2 class="section-title">🛒 Your Cart</h2>
+  <div id="cartItems"><div class="empty">আপনার Cart এখন খালি।</div></div>
+  <div class="total-line"><span>Subtotal</span><span id="subtotal">৳0</span></div>
 </section>
-
-<section class="cart-box" id="checkout">
-  <h2>🛍️ Checkout</h2>
-
-  <input id="customerName" placeholder="আপনার নাম">
-  <input id="customerPhone" type="tel" placeholder="মোবাইল নম্বর">
-
-  <h3>Delivery Address</h3>
-
-  <input id="customerDivision" list="divisionList"
-    placeholder="বিভাগ লিখে নির্বাচন করুন">
-  <datalist id="divisionList"></datalist>
-
-  <input id="customerDistrict" list="districtList"
-    placeholder="জেলা লিখে নির্বাচন করুন">
-  <datalist id="districtList"></datalist>
-
-  <input id="customerUpazila" list="upazilaList"
-    placeholder="থানা / উপজেলা লিখে নির্বাচন করুন">
-  <datalist id="upazilaList"></datalist>
-
-  <textarea id="customerAddress"
-    placeholder="বাড়ি, রোড, এলাকা ও বিস্তারিত ঠিকানা"></textarea>
-
-  <h3>Payment Method</h3>
-
-  <label>
-    <input type="radio" name="payment" value="bKash" checked>
-    bKash
-  </label>
-
-  <label>
-    <input type="radio" name="payment" value="COD">
-    Cash on Delivery
-  </label>
-
-  <input id="bkashTrx"
-    placeholder="bKash Transaction ID">
-
-  <div id="deliveryInfo">
-    পণ্যের দাম: ৳0<br>
-    ডেলিভারি চার্জ: ৳0<br>
-    মোট: ৳0
+<section class="checkout-section" id="checkout">
+  <h2 class="section-title">Checkout / অর্ডার করুন</h2>
+  <div class="checkout-grid">
+    <input id="customerName" placeholder="আপনার নাম *" autocomplete="name">
+    <input id="phone" type="tel" placeholder="মোবাইল নম্বর *" autocomplete="tel">
+    <input id="email" type="email" placeholder="ইমেইল (ঐচ্ছিক)" autocomplete="email">
+    <select id="division">
+      <option value="">বিভাগ নির্বাচন করুন *</option>
+      <option>Dhaka</option><option>Chattogram</option><option>Rajshahi</option><option>Khulna</option>
+      <option>Barishal</option><option>Sylhet</option><option>Rangpur</option><option>Mymensingh</option>
+    </select>
+    <input id="district" placeholder="জেলা *">
+    <input id="upazila" placeholder="উপজেলা / থানা *">
+    <textarea class="full" id="address" placeholder="বিস্তারিত ঠিকানা (বাড়ি, রোড, এলাকা) *"></textarea>
+    <select class="full" id="paymentMethod">
+      <option value="Cash on Delivery">Cash on Delivery</option>
+      <option value="bKash Manual">bKash (ম্যানুয়াল পেমেন্ট)</option>
+    </select>
+    <input class="full" id="trxId" placeholder="bKash Transaction ID (শুধু bKash হলে)">
   </div>
-
-  <button onclick="placeOrder()">Place Order</button>
-  <p id="orderMessage"></p>
+  <div class="total-line"><span>Delivery Charge</span><span id="deliveryCharge">৳0</span></div>
+  <div class="total-line"><span>Total</span><span id="grandTotal">৳0</span></div>
+  <button class="order-button" id="placeOrder">PLACE ORDER</button>
+  <p class="note">bKash নির্বাচন করলে Transaction ID দিন। শুধু Transaction ID দিলেই পেমেন্ট Verified হবে না; দোকান কর্তৃপক্ষ যাচাই করবে।</p>
+  <p id="checkoutMsg"></p>
 </section>
+<footer><h2>MS STORE</h2><p>Your Trusted Online Shopping Store</p><p>© 2026 MS STORE. All Rights Reserved.</p></footer>
 
-<footer>
-<h2>MS STORE</h2>
-<p>Your Trusted Online Shopping Store</p>
-<p>© 2026 MS STORE. All Rights Reserved.</p>
-</footer>
-<script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore-compat.js"></script>
-<script>
- const firebaseConfig = {
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+const firebaseConfig = {
   apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
   authDomain: "ms-store-admin-26416.firebaseapp.com",
   projectId: "ms-store-admin-26416",
+  storageBucket: "ms-store-admin-26416.firebasestorage.app",
+  messagingSenderId: "968008425065",
   appId: "1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 let products = [];
-let selected="All";
-let cart={};
+let cart = {};
+let activeCategory = "All";
+const $ = id => document.getElementById(id);
+const money = n => "৳" + Number(n || 0).toLocaleString("en-BD");
 
-function renderCategories(){
-let cats=["All",...new Set(products.map(p=>p.category))];
-document.getElementById("categories").innerHTML=cats.map(c=>
-`<button class="${selected===c?'active':''}" onclick="selectCategory('${c}')">${c}</button>`
-).join("");
+function safeText(v){return String(v ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+
+async function loadProducts(){
+  $("productGrid").innerHTML = '<div class="empty">পণ্য লোড হচ্ছে...</div>';
+  try{
+    const snap = await getDocs(collection(db,"storeProducts"));
+    products = snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.active !== false);
+    renderCategories();
+    renderProducts();
+    renderCart();
+  }catch(err){
+    console.error(err);
+    $("productGrid").innerHTML = '<div class="empty">পণ্য লোড হয়নি। Firebase Firestore Rules ও Config পরীক্ষা করুন।</div>';
+  }
 }
 
-function selectCategory(c){
-selected=c;
-renderCategories();
-renderProducts();
+function renderCategories(){
+  const cats = ["All",...new Set(products.map(p=>p.category || "General"))];
+  if(!cats.includes(activeCategory)) activeCategory="All";
+  $("categoryList").innerHTML = cats.map(c=>`<button class="${c===activeCategory?'active':''}" data-category="${safeText(c)}">${safeText(c)}</button>`).join("");
+  $("categoryList").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+    activeCategory=b.dataset.category;renderCategories();renderProducts();
+  }));
 }
 
 function renderProducts(){
-let q=document.getElementById("search").value.toLowerCase();
-let list=products.filter(p=>
-(selected==="All"||p.category===selected)&&p.name.toLowerCase().includes(q)
-);
-document.getElementById("productGrid").innerHTML=list.length?list.map(p=>`
-<div class="card">
-<div class="product-img">${p.emoji}</div>
-<div class="card-info">
-<h3>${p.name}</h3>
-<div class="price">৳${p.price}</div>
-<button onclick="addCart(${p.id})">Add to Cart</button>
-</div>
-</div>`).join(""):'<p>No products found.</p>';
+  const query=$("search").value.trim().toLowerCase();
+  const list=products.filter(p=>(activeCategory==="All"||(p.category||"General")===activeCategory)&&String(p.name||"").toLowerCase().includes(query));
+  if(!list.length){$("productGrid").innerHTML='<div class="empty">কোনো পণ্য পাওয়া যায়নি। Admin Panel থেকে পণ্য যোগ করুন।</div>';return;}
+  $("productGrid").innerHTML=list.map(p=>{
+    const image=p.imageUrl?`<img src="${safeText(p.imageUrl)}" alt="${safeText(p.name)}">`:"🛍️";
+    const stock=Number(p.stock||0);
+    return `<article class="product-card">
+      <div class="product-photo">${image}</div>
+      <div class="product-info">
+        <h3>${safeText(p.name||"Product")}</h3>
+        <div class="price">${money(p.price)}</div>
+        <div class="stock">${stock>0?"স্টক: "+stock:"স্টক শেষ"}</div>
+        <button class="add-btn" data-add="${safeText(p.id)}" ${stock<=0?"disabled":""}>${stock>0?"ADD TO CART":"OUT OF STOCK"}</button>
+      </div>
+    </article>`;
+  }).join("");
+  $("productGrid").querySelectorAll("[data-add]").forEach(b=>b.addEventListener("click",()=>addToCart(b.dataset.add)));
 }
 
-function addCart(id){
-cart[id]=(cart[id]||0)+1;
-renderCart();
+function addToCart(id){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  if((cart[id]||0)>=Number(p.stock||0)){alert("এই পরিমাণ পণ্য স্টকে নেই।");return;}
+  cart[id]=(cart[id]||0)+1;renderCart();
 }
-
-function changeQty(id,amount){
-cart[id]+=amount;
-if(cart[id]<=0)delete cart[id];
-renderCart();
+function changeQty(id,delta){
+  const p=products.find(x=>x.id===id);if(!p)return;
+  const next=(cart[id]||0)+delta;
+  if(next<=0)delete cart[id];
+  else if(next<=Number(p.stock||0))cart[id]=next;
+  renderCart();
 }
-
+function getSubtotal(){
+  return Object.entries(cart).reduce((sum,[id,q])=>sum+(Number(products.find(p=>p.id===id)?.price)||0)*q,0);
+}
+function getDelivery(){
+  if(!Object.keys(cart).length)return 0;
+  return $("division").value==="Dhaka"?60:80;
+}
 function renderCart(){
-let ids=Object.keys(cart);
-let count=ids.reduce((s,id)=>s+cart[id],0);
-let total=ids.reduce((s,id)=>s+products.find(p=>p.id==id).price*cart[id],0);
-
-document.getElementById("count").innerText=count;
-document.getElementById("total").innerText="Total: ৳"+total;
-
-document.getElementById("cartItems").innerHTML=ids.length?ids.map(id=>{
-let p=products.find(x=>x.id==id);
-return `<div class="cart-item">
-<span>${p.name}<br>৳${p.price} × ${cart[id]}</span>
-<span>
-<button onclick="changeQty(${id},-1)">−</button>
-${cart[id]}
-<button onclick="changeQty(${id},1)">+</button>
-</span>
-</div>`;
-}).join(""):'<div class="empty">আপনার Cart এখন খালি</div>';
+  const entries=Object.entries(cart);
+  $("cartCount").textContent=entries.reduce((s,[,q])=>s+q,0);
+  $("cartItems").innerHTML=entries.length?entries.map(([id,q])=>{
+    const p=products.find(x=>x.id===id);
+    if(!p)return "";
+    return `<div class="cart-row"><span>${safeText(p.name)}<br>${money(p.price)} × ${q}</span>
+      <span class="qty-controls"><button data-minus="${safeText(id)}">−</button>${q}<button data-plus="${safeText(id)}">+</button></span></div>`;
+  }).join(""):'<div class="empty">আপনার Cart এখন খালি।</div>';
+  $("cartItems").querySelectorAll("[data-minus]").forEach(b=>b.addEventListener("click",()=>changeQty(b.dataset.minus,-1)));
+  $("cartItems").querySelectorAll("[data-plus]").forEach(b=>b.addEventListener("click",()=>changeQty(b.dataset.plus,1)));
+  updateTotals();
 }
-async function placeOrder() {
-  const name = document.getElementById("customerName").value.trim();
-  const phone = document.getElementById("customerPhone").value.trim();
-  const division = divisionInput.value.trim();
-  const district = districtInput.value.trim();
-  const upazila = upazilaInput.value.trim();
-  const address = document.getElementById("customerAddress").value.trim();
-  const trxId = document.getElementById("bkashTrx").value.trim();
-  const payment = document.querySelector('input[name="payment"]:checked').value;
-  const message = document.getElementById("orderMessage");
-
-  const ids = Object.keys(cart);
-  if (!ids.length) {
-    message.textContent = "আপনার Cart খালি!";
-    return;
-  }
-
-  const validDivision = bdLocations.find(d =>
-    d.bn_name === division || d.name === division
-  );
-
-  const validDistrict = validDivision?.districts.find(d =>
-    d.bn_name === district || d.name === district
-  );
-
-  const validUpazila = validDistrict?.upazilas.find(u =>
-    u.bn_name === upazila || u.name === upazila
-  );
-
-  if (!name || !phone || !validDivision ||
-      !validDistrict || !validUpazila || !address) {
-    message.textContent = "সব তথ্য সঠিকভাবে নির্বাচন ও পূরণ করুন।";
-    return;
-  }
-
-  if (payment === "bKash" && !trxId) {
-    message.textContent = "bKash Transaction ID দিন।";
-    return;
-  }
-
-  const subtotal = ids.reduce((sum, id) => {
-    const p = products.find(item => item.id == id);
-    return sum + (p ? p.price * cart[id] : 0);
-  }, 0);
-
-  const deliveryCharge =
-    validDivision.name.toLowerCase() === "dhaka" ||
-    validDivision.bn_name === "ঢাকা" ? 60 : 80;
-
-  const totalPrice = subtotal + deliveryCharge;
-  const quantity = ids.reduce((sum, id) => sum + cart[id], 0);
-
-  const productName = ids.map(id => {
-    const p = products.find(item => item.id == id);
-    return p ? p.name + " x " + cart[id] : "";
-  }).join(", ");
-
-  message.textContent = "অর্ডার পাঠানো হচ্ছে...";
-
-  try {
-    await db.collection("orders").add({
-      customerName: name,
-      phone: phone,
-      division: validDivision.bn_name,
-      district: validDistrict.bn_name,
-      upazila: validUpazila.bn_name,
-      address: address,
-      productName: productName,
-      quantity: quantity,
-      subtotal: subtotal,
-      deliveryCharge: deliveryCharge,
-      totalPrice: totalPrice,
-      status: "Pending",
-      paymentMethod: payment,
-      trxId: payment === "bKash" ? trxId : "",
-      paymentStatus: payment === "bKash" ? "Unverified" : "Not applicable",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    message.textContent = "অর্ডার সফলভাবে জমা হয়েছে!";
-    cart = {};
-    renderCart();
-    updateDeliveryInfo();
-
-  } catch (error) {
-    message.textContent = "অর্ডার জমা হয়নি: " + error.message;
-  }
-  }
-  updateDeliveryInfo();
-
-  if (!selectedDistrict) return;
-
-  document.getElementById("upazilaList").innerHTML =
-    selectedDistrict.upazilas.map(u =>
-      `<option value="${u.bn_name}">${u.name}</option>`
-    ).join("");
+function updateTotals(){
+  const sub=getSubtotal(),delivery=getDelivery();
+  $("subtotal").textContent=money(sub);
+  $("deliveryCharge").textContent=money(delivery);
+  $("grandTotal").textContent=money(sub+delivery);
+}
+$("search").addEventListener("input",renderProducts);
+$("division").addEventListener("change",updateTotals);
+$("paymentMethod").addEventListener("change",()=>{
+  $("trxId").style.display=$("paymentMethod").value==="bKash Manual"?"block":"none";
 });
+$("trxId").style.display="none";
 
-function updateDeliveryInfo() {
-  const ids = Object.keys(cart);
-
-  const subtotal = ids.reduce((sum, id) => {
-    const p = products.find(item => item.id == id);
-    return sum + (p ? p.price * cart[id] : 0);
-  }, 0);
-
-  const division = bdLocations.find(d =>
-    d.bn_name === divisionInput.value || d.name === divisionInput.value
-  );
-
-  const delivery = !division ? 0 :
-    (division.name.toLowerCase() === "dhaka" ||
-     division.bn_name === "ঢাকা" ? 60 : 80);
-
-  document.getElementById("deliveryInfo").innerHTML =
-    `পণ্যের দাম: ৳${subtotal}<br>
-     ডেলিভারি চার্জ: ৳${delivery}<br>
-     <strong>সর্বমোট: ৳${subtotal + delivery}</strong>`;
-}
-
-divisionInput.addEventListener("change", updateDeliveryInfo);
-districtInput.addEventListener("change", updateDeliveryInfo);
-
-loadLocations();
-
-}
-renderCategories();
-renderProducts();
-renderCart();
+$("placeOrder").addEventListener("click",async()=>{
+  const entries=Object.entries(cart);
+  if(!entries.length){$("checkoutMsg").textContent="আগে Cart-এ পণ্য যোগ করুন।";return;}
+  const customerName=$("customerName").value.trim();
+  const phone=$("phone").value.trim();
+  const address=$("address").value.trim();
+  const division=$("division").value;
+  const district=$("district").value.trim();
+  const upazila=$("upazila").value.trim();
+  const paymentMethod=$("paymentMethod").value;
+  const trxId=$("trxId").value.trim();
+  if(!customerName||!phone||!address||!division||!district||!upazila){
+    $("checkoutMsg").textContent="নাম, ফোন, বিভাগ, জেলা, উপজেলা ও ঠিকানা পূরণ করুন।";return;
+  }
+  if(paymentMethod==="bKash Manual"&&!trxId){
+    $("checkoutMsg").textContent="bKash Transaction ID লিখুন।";return;
+  }
+  const orderProducts=entries.map(([id,quantity])=>{
+    const p=products.find(x=>x.id===id);
+    return {productId:id,productName:p?.name||"Product",price:Number(p?.price)||0,quantity};
+  });
+  const subtotal=getSubtotal(),deliveryCharge=getDelivery(),totalPrice=subtotal+deliveryCharge;
+  $("placeOrder").disabled=true;$("placeOrder").textContent="PROCESSING...";
+  try{
+    await addDoc(collection(db,"orders"),{
+      customerName,phone,email:$("email").value.trim(),address,division,district,upazila,
+      productName:orderProducts.map(p=>p.productName+" x"+p.quantity).join(", "),
+      products:orderProducts,quantity:entries.reduce((s,[,q])=>s+q,0),
+      subtotal,deliveryCharge,totalPrice,paymentMethod,trxId,
+      paymentStatus:paymentMethod==="Cash on Delivery"?"Pending":"Unverified",
+      status:"Pending",createdAt:serverTimestamp()
+    });
+    cart={};renderCart();
+    $("checkoutMsg").textContent="আপনার অর্ডার গ্রহণ করা হয়েছে। অর্ডার নম্বর সংরক্ষণের জন্য দোকানের সঙ্গে যোগাযোগ করুন।";
+    ["customerName","phone","email","district","upazila","address","trxId"].forEach(id=>$(id).value="");
+  }catch(error){
+    console.error(error);
+    $("checkoutMsg").textContent="অর্ডার জমা হয়নি: "+error.message+" — Firestore Rules পরীক্ষা করুন।";
+  }finally{
+    $("placeOrder").disabled=false;$("placeOrder").textContent="PLACE ORDER";
+  }
+});
+loadProducts();
 </script>
 </body>
 </html>
