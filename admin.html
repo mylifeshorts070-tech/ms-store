@@ -1,160 +1,152 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MS STORE Admin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MS STORE | Admin Panel</title>
 <style>
+:root{--navy:#172554;--orange:#f59e0b;--red:#dc2626;--bg:#f3f5fa}
 *{box-sizing:border-box}
-body{margin:0;background:#f1f5f9;font-family:Arial,sans-serif;color:#1e293b}
-header{background:#111827;color:white;padding:17px;display:flex;justify-content:space-between;align-items:center}
-header h2{margin:0;color:#f59e0b}
-main{max-width:1000px;margin:20px auto;padding:12px}
-.card{background:white;padding:17px;border-radius:13px;margin-bottom:17px;box-shadow:0 3px 12px #0000000b}
-h3{margin-top:0}
-input,select{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:15px}
-button{padding:11px 14px;border:0;border-radius:8px;background:#111827;color:white;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.5}
-.orange{background:#f59e0b;color:#111827}
-.red{background:#dc2626}
-.green{background:#15803d}
-.blue{background:#2563eb}
+body{margin:0;background:var(--bg);color:#182033;font-family:Arial,sans-serif}
+header{background:var(--navy);color:white;padding:20px}
+header h2{margin:0 0 5px;font-size:22px}
+main{max-width:1000px;margin:auto;padding:16px}
+.card{background:#fff;padding:18px;border-radius:14px;margin:16px 0;box-shadow:0 2px 12px #00000010}
+h3{margin:0 0 14px}
+input,select,textarea,button{width:100%;padding:12px;margin:6px 0;border:1px solid #d7dce5;border-radius:8px;font-size:15px}
+textarea{min-height:75px}
+button{background:#1d4ed8;color:#fff;border:0;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.55}
+.danger{background:#dc2626}.green{background:#15803d}.gray{background:#64748b}.orange{background:#d97706}
 .hidden{display:none!important}
-.msg{font-size:14px;line-height:1.5;margin:8px 0}
-.product,.order{border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin:10px 0;overflow-wrap:anywhere}
-.product img{width:85px;height:85px;object-fit:cover;border-radius:8px}
-#imagePreview{width:130px;height:130px;object-fit:cover;border-radius:10px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.small{font-size:12px;color:#64748b}
-#logout{background:#dc2626}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;padding:12px}
-.stat b{display:block;font-size:24px;margin-top:5px}
-.tabs{display:flex;gap:7px;overflow-x:auto;padding:5px 0 12px}
-.tab{white-space:nowrap;background:#e2e8f0;color:#1e293b}
-.tab.active{background:#111827;color:white}
-.order p{margin:7px 0;line-height:1.45}
-.order label{display:block;margin-top:12px;font-weight:bold}
-.order-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.order-badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#e2e8f0;font-size:12px;font-weight:bold}
-@media(max-width:650px){
- .stats{grid-template-columns:repeat(2,1fr)}
- .row{grid-template-columns:1fr}
- main{padding:9px}
- .card{padding:14px}
-}
+.item{border-bottom:1px solid #e5e7eb;padding:14px 0}
+.productline{display:flex;gap:12px;align-items:center}
+.productline img{width:76px;height:76px;object-fit:cover;border-radius:9px;background:#eee}
+.productinfo{flex:1;min-width:0;overflow-wrap:anywhere}
+.actions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap}
+.actions button{flex:1;min-width:100px}
+small{color:#64748b}
+#loginMsg,#productMsg,#noticeMsg{overflow-wrap:anywhere;font-size:14px}
+#preview{display:none;width:110px;height:110px;object-fit:cover;border-radius:9px;margin-top:8px}
+label{display:block;margin-top:10px;font-weight:bold;font-size:14px}
+.order,.customer{background:#f8fafc;padding:13px;border-radius:9px;margin:10px 0;overflow-wrap:anywhere;border:1px solid #e5e7eb}
+.order p,.customer p{line-height:1.5;margin:6px 0}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:#eff6ff;padding:14px;border-radius:10px}
+.stat b{font-size:22px;display:block;margin-top:5px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:5px 0}
+.tabs button{white-space:nowrap;width:auto;min-width:max-content;padding:9px 13px}
+.section-note{font-size:12px;color:#64748b;line-height:1.5}
+.badge{display:inline-block;background:#dbeafe;color:#1e40af;padding:4px 8px;border-radius:15px;font-size:12px}
+@media(min-width:650px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 
 <header>
-<h2>MS STORE ADMIN</h2>
-<button id="logout" class="hidden">Logout</button>
+<h2>MS STORE | Admin Panel</h2>
+<small style="color:#dbeafe">Store Management Dashboard</small>
 </header>
 
 <main>
-
-<section id="loginSection" class="card">
+<section id="login" class="card">
 <h3>Admin Login</h3>
-<input id="email" type="email" placeholder="Admin Email">
-<input id="password" type="password" placeholder="Password">
+<input id="email" type="email" placeholder="Admin Email" autocomplete="username">
+<input id="password" type="password" placeholder="Password" autocomplete="current-password">
 <button id="loginBtn">LOGIN</button>
-<p id="loginMsg" class="msg"></p>
+<p id="loginMsg"></p>
 </section>
 
-<div id="adminArea" class="hidden">
+<section id="dashboard" class="hidden">
 
-<section class="card">
+<div class="card">
 <h3>Dashboard Overview</h3>
 <div class="stats">
-<div class="stat">New Orders<b id="newCount">0</b></div>
-<div class="stat">Pending<b id="pendingCount">0</b></div>
-<div class="stat">Confirmed<b id="confirmedCount">0</b></div>
-<div class="stat">Cancelled<b id="cancelledCount">0</b></div>
+<div class="stat">Total Products<b id="productCount">0</b></div>
+<div class="stat">Total Orders<b id="orderCount">0</b></div>
+<div class="stat">Pending Orders<b id="pendingCount">0</b></div>
+<div class="stat">Total Customers<b id="customerCount">0</b></div>
 </div>
-</section>
+<button id="refreshBtn" class="green">REFRESH DATA</button>
+<button id="logoutBtn" class="danger">LOGOUT</button>
+</div>
 
-<section class="card">
+<div class="card">
 <h3>Payment Settings</h3>
-<p class="small">এখানে তোমার Personal bKash ও Nagad নম্বর সেট করো।</p>
-
-<label>Personal bKash Number</label>
-<input id="bkashNumber" type="tel" placeholder="01XXXXXXXXX">
-
-<label>Personal Nagad Number</label>
-<input id="nagadNumber" type="tel" placeholder="01XXXXXXXXX">
-
-<button id="savePayment" class="orange">SAVE PAYMENT NUMBERS</button>
-<p id="paymentMsg" class="msg"></p>
-</section>
-
-<section class="card">
-<h3 id="formTitle">Add New Product</h3>
-
-<input id="productName" placeholder="Product Name">
-
-<div class="row">
-<input id="productPrice" type="number" min="0" placeholder="Price">
-<input id="productStock" type="number" min="0" placeholder="Stock">
+<label>bKash Personal Number</label>
+<input id="bkashNumber" placeholder="01XXXXXXXXX">
+<label>Nagad Personal Number</label>
+<input id="nagadNumber" placeholder="01XXXXXXXXX">
+<button id="savePayment" class="green">SAVE PAYMENT SETTINGS</button>
+<p id="paymentMsg"></p>
 </div>
 
-<input id="productCategory" placeholder="Category">
-
-<label for="productImage">Product Image - Gallery থেকে ছবি নাও</label>
-<input id="productImage" type="file" accept="image/*">
-
-<img id="imagePreview" class="hidden" alt="Image Preview">
-
-<p class="small">ছবি স্বয়ংক্রিয়ভাবে ছোট করে সংরক্ষণ করা হবে।</p>
-
-<div class="actions">
-<button id="saveProduct" class="orange">SAVE PRODUCT</button>
-<button id="cancelEdit" class="hidden">CANCEL</button>
+<div class="card">
+<h3>Scrolling Notice Management</h3>
+<textarea id="noticeText" placeholder="নতুন Notice লিখুন"></textarea>
+<label><input type="checkbox" id="noticeActive" checked style="width:auto"> Notice Active</label>
+<button id="addNotice" class="green">ADD NOTICE</button>
+<p id="noticeMsg"></p>
+<div id="notices">Loading...</div>
 </div>
 
-<p id="productMsg" class="msg"></p>
-</section>
+<div class="card">
+<h3>Add New Product</h3>
+<input id="pname" placeholder="Product Name">
+<input id="price" type="number" min="0" step="1" placeholder="Price (৳)">
+<input id="stock" type="number" min="0" step="1" placeholder="Stock">
+<input id="category" placeholder="Category (e.g. Fashion, Gadgets)">
+<label for="imageFile">Product Photo</label>
+<input id="imageFile" type="file" accept="image/*">
+<img id="preview" alt="Image preview">
+<button id="addBtn">ADD PRODUCT</button>
+<p id="productMsg"></p>
+</div>
 
-<section class="card">
+<div class="card">
 <h3>All Products</h3>
-<div id="productList">Loading...</div>
-</section>
+<div id="products">Loading...</div>
+</div>
 
-<section class="card">
-<div class="order-top">
+<div class="card">
 <h3>Customer Orders</h3>
-<button id="refreshOrders" class="orange">REFRESH</button>
+<div class="tabs" id="orderTabs"></div>
+<div id="orders">Loading...</div>
 </div>
 
-<div class="tabs" id="orderTabs">
-<button class="tab active" data-filter="new">New Orders</button>
-<button class="tab" data-filter="Pending">Pending</button>
-<button class="tab" data-filter="Confirmed">Confirmed</button>
-<button class="tab" data-filter="Processing">Processing</button>
-<button class="tab" data-filter="Shipped">Shipped</button>
-<button class="tab" data-filter="Delivered">Delivered</button>
-<button class="tab" data-filter="Cancelled">Cancelled</button>
-<button class="tab" data-filter="all">All Orders</button>
+<div class="card">
+<h3>Customer Management</h3>
+<p class="section-note">Customer Profile, UID, Gmail, Phone, Order History ও Account Status এখানে দেখা যাবে। Password দেখা সম্ভব নয়; প্রয়োজন হলে Password Reset Email পাঠানো যাবে।</p>
+<input id="customerSearch" placeholder="নাম / Gmail / ফোন দিয়ে খুঁজুন">
+<div id="customers">Loading...</div>
 </div>
 
-<p class="small">নতুন অর্ডার দেখার পর Mark as Seen চাপবে।</p>
-<div id="orderList">Loading...</div>
+<div class="card">
+<h3>Customer Purchase Analytics</h3>
+<p class="section-note">Cancelled অর্ডার মোট কেনাকাটার হিসাব থেকে বাদ দেওয়া হবে।</p>
+<div id="analytics">Loading...</div>
+</div>
+
+<div class="card">
+<h3>Test Order Reset</h3>
+<p>এই অপশন ব্যবহার করলে orders এবং orderTracking-এর সব রেকর্ড মুছে যাবে এবং পরবর্তী Order ID MS-0001 হবে। Products, Customers ও Payment Settings মুছবে না।</p>
+<button id="resetOrders" class="danger">DELETE ALL TEST ORDERS & RESET ID</button>
+<p id="resetMsg"></p>
+</div>
+
 </section>
-
-</div>
 </main>
 
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-
 import {
- getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut
+ getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut,
+ sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-
 import {
- getFirestore,collection,addDoc,getDocs,doc,updateDoc,
- deleteDoc,setDoc,serverTimestamp,getDoc
+ getFirestore,collection,addDoc,getDocs,deleteDoc,doc,updateDoc,
+ setDoc,getDoc,serverTimestamp,writeBatch
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 const firebaseConfig={
@@ -166,449 +158,435 @@ const firebaseConfig={
  appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
+const ADMIN_UID="JnIRynmTIdWzITNVE4TaKnmx52K2";
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
 const $=id=>document.getElementById(id);
+const money=n=>"৳"+Number(n||0).toLocaleString("en-BD");
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
 
-let editingId=null;
-let existingImageUrl="";
 let selectedImage="";
 let allOrders=[];
-let currentFilter="new";
+let allCustomers=[];
+let activeOrderTab="All";
+let editingNotice=null;
 
-function safe(v){
- return String(v??"").replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
-}
+function msg(id,text){$(id).textContent=text;}
 
-function formatDate(value){
- try{
-  if(!value)return "সময় পাওয়া যায়নি";
-  const d=value.toDate?value.toDate():new Date(value);
-  if(Number.isNaN(d.getTime()))return "সময় পাওয়া যায়নি";
-  return d.toLocaleString("en-GB");
- }catch(e){return "সময় পাওয়া যায়নি";}
-}
-
-/* LOGIN */
 $("loginBtn").onclick=async()=>{
- $("loginMsg").textContent="Logging in...";
  $("loginBtn").disabled=true;
+ msg("loginMsg","Logging in...");
  try{
   await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);
-  $("loginMsg").textContent="";
  }catch(e){
-  $("loginMsg").textContent="Login failed: "+e.message;
+  msg("loginMsg","Login failed: "+e.message);
  }finally{
   $("loginBtn").disabled=false;
  }
 };
 
-$("logout").onclick=()=>signOut(auth);
+$("logoutBtn").onclick=()=>signOut(auth);
+$("refreshBtn").onclick=loadData;
 
-onAuthStateChanged(auth,user=>{
- if(user){
-  $("loginSection").classList.add("hidden");
-  $("adminArea").classList.remove("hidden");
-  $("logout").classList.remove("hidden");
-  loadProducts();
-  loadOrders();
-  loadPaymentSettings();
- }else{
-  $("loginSection").classList.remove("hidden");
-  $("adminArea").classList.add("hidden");
-  $("logout").classList.add("hidden");
+onAuthStateChanged(auth,async user=>{
+ if(!user){
+  $("login").classList.remove("hidden");
+  $("dashboard").classList.add("hidden");
+  return;
  }
+ if(user.uid!==ADMIN_UID){
+  await signOut(auth);
+  msg("loginMsg","এই Account Admin নয়।");
+  return;
+ }
+ $("login").classList.add("hidden");
+ $("dashboard").classList.remove("hidden");
+ await loadData();
 });
 
-/* PAYMENT SETTINGS */
-async function loadPaymentSettings(){
+async function compressImage(file){
+ if(!file)return "";
+ if(!file.type.startsWith("image/"))throw Error("একটি ছবি নির্বাচন করুন");
+ const bitmap=await createImageBitmap(file);
+ const scale=Math.min(1,480/Math.max(bitmap.width,bitmap.height));
+ const canvas=document.createElement("canvas");
+ canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+ canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+ canvas.getContext("2d").drawImage(bitmap,0,0,canvas.width,canvas.height);
+ bitmap.close();
+ const data=canvas.toDataURL("image/jpeg",0.45);
+ if(data.length>600000)throw Error("ছবিটি অনেক বড়। ছোট ছবি নির্বাচন করুন।");
+ return data;
+}
+
+$("imageFile").onchange=async()=>{
+ selectedImage="";
+ $("preview").style.display="none";
+ const file=$("imageFile").files[0];
+ if(!file)return;
  try{
-  const snap=await getDoc(doc(db,"storeSettings","paymentMethods"));
-  if(snap.exists()){
-   const p=snap.data();
-   $("bkashNumber").value=p.bkashNumber||"";
-   $("nagadNumber").value=p.nagadNumber||"";
-  }
+  selectedImage=await compressImage(file);
+  $("preview").src=selectedImage;
+  $("preview").style.display="block";
  }catch(e){
-  $("paymentMsg").textContent="Payment settings load failed: "+e.message;
+  msg("productMsg",e.message);
+  $("imageFile").value="";
  }
+};
+
+$("addBtn").onclick=async()=>{
+ const name=$("pname").value.trim();
+ const price=Number($("price").value);
+ const stock=Number($("stock").value);
+ if(!name||$("price").value===""||$("stock").value===""||
+ !Number.isFinite(price)||!Number.isFinite(stock)||price<0||stock<0){
+  msg("productMsg","সঠিক Product Name, Price ও Stock দিন।");
+  return;
+ }
+ $("addBtn").disabled=true;
+ try{
+  await addDoc(collection(db,"storeProducts"),{
+   name,price,stock,
+   category:$("category").value.trim()||"General",
+   imageUrl:selectedImage,active:true,
+   createdAt:serverTimestamp()
+  });
+  ["pname","price","stock","category","imageFile"].forEach(id=>$(id).value="");
+  selectedImage="";
+  $("preview").style.display="none";
+  msg("productMsg","Product সফলভাবে যোগ হয়েছে।");
+  await loadProducts();
+ }catch(e){msg("productMsg","Product যোগ হয়নি: "+e.message);}
+ finally{$("addBtn").disabled=false;}
+};
+
+async function loadProducts(){
+ const snap=await getDocs(collection(db,"storeProducts"));
+ $("productCount").textContent=snap.size;
+ $("products").innerHTML="";
+ snap.forEach(d=>{
+  const p=d.data();
+  const box=document.createElement("div");
+  box.className="item";
+  const line=document.createElement("div");
+  line.className="productline";
+  if(p.imageUrl){
+   const im=document.createElement("img");
+   im.src=p.imageUrl;im.alt=p.name||"Product";line.append(im);
+  }
+  const info=document.createElement("div");
+  info.className="productinfo";
+  const title=document.createElement("b");
+  title.textContent=p.name||"Unnamed Product";
+  const details=document.createElement("div");
+  details.textContent=money(p.price)+" | Stock: "+(p.stock??0)+" | "+(p.category||"General");
+  info.append(title,details);line.append(info);box.append(line);
+
+  const actions=document.createElement("div");
+  actions.className="actions";
+  const edit=document.createElement("button");
+  edit.className="green";edit.textContent="EDIT";
+  edit.onclick=async()=>{
+   const name=prompt("Product Name:",p.name||"");
+   if(name===null)return;
+   const priceText=prompt("Price:",String(p.price??0));
+   if(priceText===null)return;
+   const stockText=prompt("Stock:",String(p.stock??0));
+   if(stockText===null)return;
+   const price=Number(priceText),stock=Number(stockText);
+   if(!name.trim()||priceText.trim()===""||stockText.trim()===""||
+   !Number.isFinite(price)||!Number.isFinite(stock)||price<0||stock<0){
+    alert("সঠিক তথ্য দিন।");return;
+   }
+   try{
+    await updateDoc(doc(db,"storeProducts",d.id),{name:name.trim(),price,stock});
+    await loadProducts();
+   }catch(e){alert(e.message);}
+  };
+  const toggle=document.createElement("button");
+  toggle.className="orange";
+  toggle.textContent=p.active===false?"ACTIVATE":"HIDE";
+  toggle.onclick=async()=>{
+   try{
+    await updateDoc(doc(db,"storeProducts",d.id),{active:p.active===false});
+    await loadProducts();
+   }catch(e){alert(e.message);}
+  };
+  const remove=document.createElement("button");
+  remove.className="danger";remove.textContent="DELETE";
+  remove.onclick=async()=>{
+   if(!confirm("এই Product স্থায়ীভাবে Delete করবেন?"))return;
+   try{await deleteDoc(doc(db,"storeProducts",d.id));await loadProducts();}
+   catch(e){alert(e.message);}
+  };
+  actions.append(edit,toggle,remove);box.append(actions);
+  $("products").append(box);
+ });
+ if(snap.empty)$("products").textContent="এখনো কোনো Product নেই।";
 }
 
 $("savePayment").onclick=async()=>{
- const bkashNumber=$("bkashNumber").value.trim();
- const nagadNumber=$("nagadNumber").value.trim();
-
- if(bkashNumber&&!/^01[3-9]\d{8}$/.test(bkashNumber)){
-  $("paymentMsg").textContent="সঠিক bKash নম্বর দাও।";
-  return;
- }
- if(nagadNumber&&!/^01[3-9]\d{8}$/.test(nagadNumber)){
-  $("paymentMsg").textContent="সঠিক Nagad নম্বর দাও।";
-  return;
- }
-
- $("savePayment").disabled=true;
- $("paymentMsg").textContent="Saving...";
-
  try{
   await setDoc(doc(db,"storeSettings","paymentMethods"),{
-   bkashNumber,nagadNumber,updatedAt:serverTimestamp()
+   bkashNumber:$("bkashNumber").value.trim(),
+   nagadNumber:$("nagadNumber").value.trim(),
+   updatedAt:serverTimestamp()
   });
-  $("paymentMsg").textContent="Payment numbers saved successfully.";
- }catch(e){
-  $("paymentMsg").textContent="Save failed: "+e.message;
- }finally{
-  $("savePayment").disabled=false;
- }
+  msg("paymentMsg","Payment Settings সংরক্ষণ হয়েছে।");
+ }catch(e){msg("paymentMsg","সংরক্ষণ হয়নি: "+e.message);}
 };
 
-/* PRODUCT IMAGE COMPRESSION */
-function compressImage(file){
- return new Promise((resolve,reject)=>{
-  const reader=new FileReader();
-
-  reader.onerror=()=>reject(new Error("ছবি পড়া যায়নি।"));
-  reader.onload=()=>{
-   const img=new Image();
-   img.onerror=()=>reject(new Error("ছবিটি খোলা যায়নি।"));
-
-   img.onload=()=>{
-    const maxSize=480;
-    const scale=Math.min(1,maxSize/Math.max(img.width,img.height));
-    const canvas=document.createElement("canvas");
-    canvas.width=Math.round(img.width*scale);
-    canvas.height=Math.round(img.height*scale);
-
-    const ctx=canvas.getContext("2d");
-    ctx.fillStyle="#ffffff";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.drawImage(img,0,0,canvas.width,canvas.height);
-
-    const result=canvas.toDataURL("image/jpeg",0.55);
-
-    if(result.length>700000){
-     reject(new Error("ছবিটি এখনও বড়। অন্য ছোট ছবি ব্যবহার করো।"));
-    }else{
-     resolve(result);
-    }
-   };
-   img.src=reader.result;
-  };
-  reader.readAsDataURL(file);
- });
+async function loadPayment(){
+ const s=await getDoc(doc(db,"storeSettings","paymentMethods"));
+ if(s.exists()){
+  $("bkashNumber").value=s.data().bkashNumber||"";
+  $("nagadNumber").value=s.data().nagadNumber||"";
+ }
 }
 
-$("productImage").onchange=async()=>{
- const file=$("productImage").files[0];
- if(!file)return;
-
- if(!file.type.startsWith("image/")){
-  alert("শুধু Image নির্বাচন করো।");
-  return;
- }
-
- $("productMsg").textContent="ছবি প্রস্তুত হচ্ছে...";
+$("addNotice").onclick=async()=>{
+ const text=$("noticeText").value.trim();
+ if(!text){msg("noticeMsg","Notice লিখুন।");return;}
  try{
-  selectedImage=await compressImage(file);
-  $("imagePreview").src=selectedImage;
-  $("imagePreview").classList.remove("hidden");
-  $("productMsg").textContent="ছবি প্রস্তুত। এখন Save Product চাপতে পারো।";
- }catch(e){
-  selectedImage="";
-  $("productMsg").textContent=e.message;
- }
-};
-
-function clearForm(){
- editingId=null;
- existingImageUrl="";
- selectedImage="";
- $("productName").value="";
- $("productPrice").value="";
- $("productStock").value="";
- $("productCategory").value="";
- $("productImage").value="";
- $("imagePreview").src="";
- $("imagePreview").classList.add("hidden");
- $("formTitle").textContent="Add New Product";
- $("saveProduct").textContent="SAVE PRODUCT";
- $("cancelEdit").classList.add("hidden");
-}
-
-$("cancelEdit").onclick=clearForm;
-
-/* SAVE PRODUCT */
-$("saveProduct").onclick=async()=>{
- const name=$("productName").value.trim();
- const price=Number($("productPrice").value);
- const stock=Number($("productStock").value);
- const category=$("productCategory").value.trim()||"General";
-
- if(!name||$("productPrice").value===""||$("productStock").value===""||
- !Number.isFinite(price)||price<0||!Number.isInteger(stock)||stock<0){
-  $("productMsg").textContent="সঠিক Product Name, Price ও Stock দাও।";
-  return;
- }
-
- $("saveProduct").disabled=true;
- $("productMsg").textContent="Saving...";
-
- const imageUrl=selectedImage||existingImageUrl;
-
- const data={
-  name,price,stock,category,active:true,imageUrl
- };
-
- try{
-  if(editingId){
-   await updateDoc(doc(db,"storeProducts",editingId),data);
-   $("productMsg").textContent="Product updated successfully.";
-  }else{
-   await addDoc(collection(db,"storeProducts"),{
-    ...data,createdAt:serverTimestamp()
+  if(editingNotice){
+   await updateDoc(doc(db,"storeNotices",editingNotice),{
+    text,active:$("noticeActive").checked,updatedAt:serverTimestamp()
    });
-   $("productMsg").textContent="Product added successfully.";
+   editingNotice=null;
+   $("addNotice").textContent="ADD NOTICE";
+  }else{
+   await addDoc(collection(db,"storeNotices"),{
+    text,active:$("noticeActive").checked,createdAt:serverTimestamp()
+   });
   }
-  clearForm();
-  await loadProducts();
-  $("productMsg").textContent="Product saved successfully.";
- }catch(e){
-  console.error(e);
-  $("productMsg").textContent="Save failed: "+e.message;
- }finally{
-  $("saveProduct").disabled=false;
- }
+  $("noticeText").value="";
+  $("noticeActive").checked=true;
+  msg("noticeMsg","Notice সংরক্ষণ হয়েছে।");
+  await loadNotices();
+ }catch(e){msg("noticeMsg","Notice সংরক্ষণ হয়নি: "+e.message);}
 };
 
-/* LOAD PRODUCTS */
-async function loadProducts(){
- $("productList").textContent="Loading...";
- try{
-  const snap=await getDocs(collection(db,"storeProducts"));
-  if(snap.empty){
-   $("productList").textContent="No products found.";
-   return;
-  }
-
-  $("productList").innerHTML=snap.docs.map(d=>{
-   const p=d.data();
-   return `<div class="product">
-    <div class="row">
-     <div>
-      <b>${safe(p.name)}</b><br>
-      Price: ৳${safe(p.price)}<br>
-      Stock: ${safe(p.stock)}<br>
-      Category: ${safe(p.category)}
-     </div>
-     <div>${p.imageUrl?`<img src="${safe(p.imageUrl)}" alt="Product">`:""}</div>
-    </div>
-    <div class="actions">
-     <button class="orange" data-edit="${safe(d.id)}">EDIT</button>
-     <button class="red" data-delete="${safe(d.id)}">DELETE</button>
-    </div>
-   </div>`;
-  }).join("");
-
-  $("productList").querySelectorAll("[data-edit]").forEach(b=>{
-   b.onclick=()=>{
-    const d=snap.docs.find(x=>x.id===b.dataset.edit);
-    const p=d.data();
-
-    editingId=d.id;
-    existingImageUrl=p.imageUrl||"";
-    selectedImage="";
-
-    $("productName").value=p.name||"";
-    $("productPrice").value=p.price??"";
-    $("productStock").value=p.stock??"";
-    $("productCategory").value=p.category||"";
-    $("productImage").value="";
-
-    if(existingImageUrl){
-     $("imagePreview").src=existingImageUrl;
-     $("imagePreview").classList.remove("hidden");
-    }else{
-     $("imagePreview").classList.add("hidden");
-    }
-
-    $("formTitle").textContent="Edit Product";
-    $("saveProduct").textContent="UPDATE PRODUCT";
-    $("cancelEdit").classList.remove("hidden");
-    window.scrollTo({top:0,behavior:"smooth"});
-   };
-  });
-
-  $("productList").querySelectorAll("[data-delete]").forEach(b=>{
-   b.onclick=async()=>{
-    if(!confirm("এই Product Delete করতে চাও?"))return;
-    try{
-     await deleteDoc(doc(db,"storeProducts",b.dataset.delete));
-     await loadProducts();
-    }catch(e){alert("Delete failed: "+e.message);}
-   };
-  });
- }catch(e){
-  console.error(e);
-  $("productList").textContent="Products load failed: "+e.message;
- }
+async function loadNotices(){
+ const s=await getDocs(collection(db,"storeNotices"));
+ $("notices").innerHTML="";
+ s.forEach(d=>{
+  const n=d.data();
+  const box=document.createElement("div");
+  box.className="item";
+  const p=document.createElement("p");
+  p.textContent=n.text||"";
+  const state=document.createElement("small");
+  state.textContent=n.active?"Active":"Inactive";
+  const actions=document.createElement("div");
+  actions.className="actions";
+  const edit=document.createElement("button");
+  edit.className="green";edit.textContent="EDIT";
+  edit.onclick=()=>{
+   editingNotice=d.id;
+   $("noticeText").value=n.text||"";
+   $("noticeActive").checked=!!n.active;
+   $("addNotice").textContent="UPDATE NOTICE";
+   $("noticeText").scrollIntoView({behavior:"smooth"});
+  };
+  const toggle=document.createElement("button");
+  toggle.className="orange";toggle.textContent=n.active?"TURN OFF":"TURN ON";
+  toggle.onclick=async()=>{
+   await updateDoc(doc(db,"storeNotices",d.id),{active:!n.active,updatedAt:serverTimestamp()});
+   await loadNotices();
+  };
+  const del=document.createElement("button");
+  del.className="danger";del.textContent="DELETE";
+  del.onclick=async()=>{
+   if(confirm("Notice Delete করবেন?")){
+    await deleteDoc(doc(db,"storeNotices",d.id));await loadNotices();
+   }
+  };
+  actions.append(edit,toggle,del);
+  box.append(p,state,actions);$("notices").append(box);
+ });
+ if(s.empty)$("notices").textContent="এখনো কোনো Notice নেই।";
 }
 
-/* ORDERS */
-const statuses=["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled"];
+const orderStatuses=["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled"];
+const orderTabNames=["All",...orderStatuses];
 
-function updateCounts(){
- $("newCount").textContent=allOrders.filter(o=>o.adminSeen!==true).length;
- $("pendingCount").textContent=allOrders.filter(o=>(o.status||"Pending")==="Pending").length;
- $("confirmedCount").textContent=allOrders.filter(o=>o.status==="Confirmed").length;
- $("cancelledCount").textContent=allOrders.filter(o=>o.status==="Cancelled").length;
+function renderOrderTabs(){
+ $("orderTabs").innerHTML=orderTabNames.map(t=>
+  `<button class="${activeOrderTab===t?'green':'gray'}" data-tab="${t}">${t}</button>`
+ ).join("");
+ $("orderTabs").querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{
+  activeOrderTab=b.dataset.tab;renderOrderTabs();renderOrders();
+ });
 }
 
 function renderOrders(){
- updateCounts();
-
- document.querySelectorAll("[data-filter]").forEach(b=>{
-  b.classList.toggle("active",b.dataset.filter===currentFilter);
- });
-
- let list=allOrders;
-
- if(currentFilter==="new"){
-  list=allOrders.filter(o=>o.adminSeen!==true);
- }else if(currentFilter!=="all"){
-  list=allOrders.filter(o=>(o.status||"Pending")===currentFilter);
- }
-
- if(!list.length){
-  $("orderList").innerHTML="<p>এই মেনুতে কোনো অর্ডার নেই।</p>";
-  return;
- }
-
- $("orderList").innerHTML=list.map(o=>{
-  const id=o.orderId||o.id;
-  const status=o.status||"Pending";
-  const items=Array.isArray(o.products)
-   ?o.products.map(p=>`${safe(p.productName)} × ${safe(p.quantity)}`).join("<br>")
-   :safe(o.productName||"");
-
-  const email=o.email||"";
-  const paymentInfo=o.transactionId||o.trxId||"";
-
-  return `<div class="order">
-   <div class="order-top">
-    <h4>Order ID: ${safe(id)}</h4>
-    <span class="order-badge">${safe(status)}</span>
-   </div>
-
-   <p><b>Customer:</b> ${safe(o.customerName)}</p>
-   <p><b>Phone:</b> ${safe(o.phone)}</p>
-   ${email?`<p><b>Email:</b> ${safe(email)}</p>`:""}
-   <p><b>Address:</b> ${safe(o.address)}</p>
-   <p><b>Products:</b><br>${items}</p>
-   ${o.subtotal!==undefined?`<p><b>Subtotal:</b> ৳${safe(o.subtotal)}</p>`:""}
-   ${o.deliveryCharge!==undefined?`<p><b>Delivery Charge:</b> ৳${safe(o.deliveryCharge)}</p>`:""}
-   <p><b>Total:</b> ৳${safe(o.totalPrice)}</p>
-   <p><b>Payment:</b> ${safe(o.paymentMethod)}</p>
-   <p><b>Payment Status:</b> ${safe(o.paymentStatus||"Pending")}</p>
-   ${paymentInfo?`<p><b>Transaction ID:</b> ${safe(paymentInfo)}</p>`:""}
-   <p><b>Order Time:</b> ${safe(formatDate(o.createdAt))}</p>
-
-   ${o.adminSeen!==true?`
-    <button class="blue" data-seen="${safe(o.id)}">MARK AS SEEN</button>
-   `:""}
-
-   <label>Update Order Status</label>
-   <select data-status="${safe(o.id)}">
-    ${statuses.map(s=>`<option value="${s}" ${s===status?"selected":""}>${s}</option>`).join("")}
-   </select>
-   <button class="green" data-update="${safe(o.id)}" data-orderid="${safe(id)}">UPDATE STATUS</button>
-  </div>`;
- }).join("");
-
- $("orderList").querySelectorAll("[data-seen]").forEach(b=>{
-  b.onclick=async()=>{
-   b.disabled=true;
+ const list=allOrders.filter(o=>activeOrderTab==="All"||o.status===activeOrderTab);
+ $("orders").innerHTML="";
+ list.forEach(o=>{
+  const box=document.createElement("div");box.className="order";
+  const details=document.createElement("p");
+  details.textContent=(o.orderId||o.id)+" | "+(o.customerName||"Customer")+" | "+(o.phone||"")+" | Total "+money(o.totalPrice);
+  const email=document.createElement("p");email.textContent="Email: "+(o.email||"");
+  const products=document.createElement("p");
+  products.textContent="Products: "+(o.productName||"");
+  const address=document.createElement("p");
+  address.textContent="Address: "+[o.address,o.upazila,o.district,o.division].filter(Boolean).join(", ");
+  const payment=document.createElement("p");
+  payment.textContent="Payment: "+(o.paymentMethod||"")+" | Payment Status: "+(o.paymentStatus||"")+" | Sender: "+(o.senderNumber||"")+" | TrxID: "+(o.trxId||"");
+  const cancellation=document.createElement("p");
+  cancellation.textContent=o.cancellationReason?"Cancellation Reason: "+o.cancellationReason:"";
+  const status=document.createElement("select");
+  orderStatuses.forEach(v=>{
+   const op=document.createElement("option");op.value=v;op.textContent=v;status.append(op);
+  });
+  status.value=orderStatuses.includes(o.status)?o.status:"Pending";
+  const save=document.createElement("button");
+  save.className="green";save.textContent="UPDATE ORDER STATUS";
+  save.onclick=async()=>{
    try{
-    await updateDoc(doc(db,"orders",b.dataset.seen),{adminSeen:true});
-    await loadOrders();
-   }catch(e){
-    alert("Could not mark as seen: "+e.message);
-    b.disabled=false;
-   }
-  };
- });
-
- $("orderList").querySelectorAll("[data-update]").forEach(b=>{
-  b.onclick=async()=>{
-   const orderDocId=b.dataset.update;
-   const orderId=b.dataset.orderid;
-   const order=allOrders.find(o=>o.id===orderDocId);
-   const select=$("orderList").querySelector(`[data-status="${CSS.escape(orderDocId)}"]`);
-   const newStatus=select.value;
-
-   if(!order)return;
-
-   if(newStatus===(order.status||"Pending")){
-    alert("এই অর্ডারের স্ট্যাটাস আগে থেকেই "+newStatus);
-    return;
-   }
-
-   if(!confirm("Order status "+newStatus+" করতে চাও?"))return;
-
-   b.disabled=true;
-   try{
-    await updateDoc(doc(db,"orders",orderDocId),{
-     status:newStatus,adminSeen:true
-    });
-
-    await setDoc(doc(db,"orderTracking",orderId),{
-     orderId,status:newStatus,updatedAt:serverTimestamp()
+    await updateDoc(doc(db,"orders",o.id),{status:status.value});
+    await setDoc(doc(db,"orderTracking",o.orderId||o.id),{
+     orderId:o.orderId||o.id,status:status.value,statusUpdatedAt:serverTimestamp()
     },{merge:true});
-
-    alert("Order status updated.");
+    alert("Order Status Updated");
     await loadOrders();
-   }catch(e){
-    console.error(e);
-    alert("Status update failed: "+e.message);
-   }finally{
-    b.disabled=false;
-   }
+   }catch(e){alert("Update হয়নি: "+e.message);}
   };
+  box.append(details,email,products,address,payment,cancellation,status,save);
+  $("orders").append(box);
  });
+ if(!list.length)$("orders").textContent="কোনো Order পাওয়া যায়নি।";
 }
 
 async function loadOrders(){
- $("orderList").textContent="Loading...";
+ const s=await getDocs(collection(db,"orders"));
+ allOrders=s.docs.map(d=>({id:d.id,...d.data()}));
+ allOrders.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+ $("orderCount").textContent=allOrders.length;
+ $("pendingCount").textContent=allOrders.filter(o=>o.status==="Pending").length;
+ renderOrderTabs();renderOrders();
+}
+
+async function loadCustomers(){
+ const s=await getDocs(collection(db,"customerProfiles"));
+ allCustomers=s.docs.map(d=>({id:d.id,...d.data()}));
+ $("customerCount").textContent=allCustomers.length;
+ renderCustomers();
+ renderAnalytics();
+}
+
+function renderCustomers(){
+ const q=$("customerSearch").value.trim().toLowerCase();
+ const list=allCustomers.filter(c=>
+  [c.name,c.email,c.phone,c.uid].some(v=>String(v||"").toLowerCase().includes(q))
+ );
+ $("customers").innerHTML="";
+ list.forEach(c=>{
+  const box=document.createElement("div");box.className="customer";
+  const name=document.createElement("b");name.textContent=c.name||"Customer";
+  const info=document.createElement("p");
+  info.textContent="Email: "+(c.email||"")+" | Phone: "+(c.phone||"")+" | UID: "+(c.uid||c.id);
+  const status=document.createElement("p");
+  status.textContent=c.banned?"Account: BANNED":"Account: ACTIVE";
+  const actions=document.createElement("div");actions.className="actions";
+  const ban=document.createElement("button");
+  ban.className=c.banned?"green":"danger";
+  ban.textContent=c.banned?"UNBAN CUSTOMER":"BAN CUSTOMER";
+  ban.onclick=async()=>{
+   if(!confirm(c.banned?"এই Customer-কে Unban করবেন?":"এই Customer-কে Ban করবেন?"))return;
+   try{
+    await updateDoc(doc(db,"customerProfiles",c.id),{banned:!c.banned,updatedAt:serverTimestamp()});
+    await loadCustomers();
+   }catch(e){alert("পরিবর্তন হয়নি: "+e.message);}
+  };
+  const reset=document.createElement("button");
+  reset.className="gray";reset.textContent="SEND PASSWORD RESET";
+  reset.onclick=async()=>{
+   if(!c.email){alert("Customer Email পাওয়া যায়নি।");return;}
+   try{
+    await sendPasswordResetEmail(auth,c.email);
+    alert("Password Reset Email পাঠানো হয়েছে।");
+   }catch(e){alert("Email পাঠানো যায়নি: "+e.message);}
+  };
+  actions.append(ban,reset);
+  box.append(name,info,status,actions);
+  $("customers").append(box);
+ });
+ if(!list.length)$("customers").textContent="কোনো Customer পাওয়া যায়নি।";
+}
+
+$("customerSearch").oninput=renderCustomers;
+
+function renderAnalytics(){
+ const active=allCustomers.map(c=>{
+  const orders=allOrders.filter(o=>o.uid===c.id);
+  const valid=orders.filter(o=>o.status!=="Cancelled");
+  const delivered=orders.filter(o=>o.status==="Delivered");
+  const pending=orders.filter(o=>o.status==="Pending");
+  const cancelled=orders.filter(o=>o.status==="Cancelled");
+  const spent=delivered.reduce((s,o)=>s+Number(o.totalPrice||0),0);
+  const bought=valid.flatMap(o=>(o.products||[]).map(p=>p.productName+" × "+p.quantity));
+  const latest=orders.reduce((m,o)=>Math.max(m,o.createdAt?.seconds||0),0);
+  return {...c,orders:orders.length,totalOrders:valid.length,delivered:delivered.length,
+   pending:pending.length,cancelled:cancelled.length,spent,bought,latest};
+ }).sort((a,b)=>b.spent-a.spent);
+
+ $("analytics").innerHTML="";
+ active.forEach(c=>{
+  const box=document.createElement("div");box.className="customer";
+  const title=document.createElement("b");title.textContent=c.name||c.email||c.id;
+  const detail=document.createElement("p");
+  detail.textContent="Orders: "+c.totalOrders+" | Delivered: "+c.delivered+" | Pending: "+c.pending+" | Cancelled: "+c.cancelled+" | Delivered Total: "+money(c.spent);
+  const bought=document.createElement("p");
+  bought.textContent="Products: "+(c.bought.length?c.bought.join(", "):"No products");
+  box.append(title,detail,bought);
+  $("analytics").append(box);
+ });
+ if(!active.length)$("analytics").textContent="এখনো কোনো Customer নেই।";
+}
+
+async function loadData(){
  try{
-  const snap=await getDocs(collection(db,"orders"));
-  allOrders=snap.docs.map(d=>({id:d.id,...d.data()}));
-
-  allOrders.sort((a,b)=>{
-   const ta=a.createdAt?.toMillis?.()||0;
-   const tb=b.createdAt?.toMillis?.()||0;
-   return tb-ta;
-  });
-
-  renderOrders();
+  await Promise.all([loadProducts(),loadPayment(),loadNotices(),loadOrders(),loadCustomers()]);
  }catch(e){
-  console.error(e);
-  $("orderList").textContent="Orders load failed: "+e.message;
+  alert("Data load হয়নি: "+e.message);
  }
 }
 
-$("orderTabs").querySelectorAll("[data-filter]").forEach(b=>{
- b.onclick=()=>{
-  currentFilter=b.dataset.filter;
-  renderOrders();
- };
-});
-
-$("refreshOrders").onclick=()=>{
- loadOrders();
- loadProducts();
+/* TEST ORDER RESET */
+$("resetOrders").onclick=async()=>{
+ const phrase=prompt("সব Test Order ও Tracking মুছতে লিখুন: DELETE TEST ORDERS");
+ if(phrase!=="DELETE TEST ORDERS"){
+  msg("resetMsg","Reset বাতিল করা হয়েছে।");
+  return;
+ }
+ if(!confirm("সতর্কতা: orders ও orderTracking-এর সব ডকুমেন্ট স্থায়ীভাবে মুছে যাবে। নিশ্চিত?"))return;
+ $("resetOrders").disabled=true;
+ try{
+  const [ordersSnap,trackingSnap]=await Promise.all([
+   getDocs(collection(db,"orders")),
+   getDocs(collection(db,"orderTracking"))
+  ]);
+  const refs=[
+   ...ordersSnap.docs.map(d=>d.ref),
+   ...trackingSnap.docs.map(d=>d.ref)
+  ];
+  for(let i=0;i<refs.length;i+=400){
+   const batch=writeBatch(db);
+   refs.slice(i,i+400).forEach(r=>batch.delete(r));
+   await batch.commit();
+  }
+  await setDoc(doc(db,"counters","orderSequence"),{lastNumber:0});
+  msg("resetMsg","সব Test Order ও Tracking মুছে গেছে। পরবর্তী Order ID হবে MS-0001।");
+  await loadOrders();
+ }catch(e){
+  msg("resetMsg","Reset হয়নি: "+e.message);
+ }finally{$("resetOrders").disabled=false;}
 };
+
 </script>
 </body>
- </html>
+</html>
