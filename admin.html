@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -10,26 +10,42 @@
 body{margin:0;background:#f1f5f9;font-family:Arial,sans-serif;color:#1e293b}
 header{background:#111827;color:white;padding:18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
 header h2{margin:0;color:#f59e0b}
-main{max-width:950px;margin:20px auto;padding:12px}
-.card{background:white;padding:18px;border-radius:12px;margin-bottom:18px;box-shadow:0 3px 12px #0000000b}
+main{max-width:1000px;margin:20px auto;padding:12px}
+.card{background:white;padding:18px;border-radius:14px;margin-bottom:18px;box-shadow:0 3px 12px #0000000b}
 h3{margin-top:0}
 input,select,textarea{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:7px;font-size:15px}
-textarea{min-height:70px}
-button{padding:11px 15px;border:0;border-radius:7px;background:#111827;color:white;font-weight:bold;cursor:pointer}
+button{padding:11px 15px;border:0;border-radius:8px;background:#111827;color:white;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.5}
 .orange{background:#f59e0b;color:#111827}
 .red{background:#dc2626}
 .green{background:#15803d}
+.blue{background:#2563eb}
 .hidden{display:none!important}
 .msg{font-size:14px;line-height:1.5;margin:8px 0}
-.product,.order{border:1px solid #e2e8f0;border-radius:9px;padding:13px;margin:10px 0;overflow-wrap:anywhere}
+.product,.order{border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin:10px 0;overflow-wrap:anywhere}
 .product img{width:75px;height:75px;object-fit:cover;border-radius:7px}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.order select{margin-top:8px}
 .small{font-size:12px;color:#64748b}
 #logout{background:#dc2626}
-@media(max-width:500px){.row{grid-template-columns:1fr}main{padding:9px}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:13px}
+.stat b{display:block;font-size:25px;margin-top:5px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding:5px 0 12px}
+.tab{white-space:nowrap;background:#e2e8f0;color:#1e293b}
+.tab.active{background:#111827;color:white}
+.tab span{background:#f59e0b;color:#111827;border-radius:20px;padding:2px 7px;margin-left:4px}
+.order h4{margin:0 0 10px;font-size:18px}
+.order p{margin:7px 0;line-height:1.45}
+.order label{display:block;margin-top:12px;font-weight:bold}
+.order-badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#e2e8f0;font-size:12px;font-weight:bold}
+.order-top{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+@media(max-width:650px){
+ .stats{grid-template-columns:repeat(2,1fr)}
+ .row{grid-template-columns:1fr}
+ main{padding:9px}
+ .card{padding:14px}
+}
 </style>
 </head>
 <body>
@@ -51,6 +67,16 @@ button:disabled{opacity:.5}
 <div id="adminArea" class="hidden">
 
 <section class="card">
+<h3>Dashboard Overview</h3>
+<div class="stats">
+<div class="stat">New Orders<b id="newCount">0</b></div>
+<div class="stat">Pending<b id="pendingCount">0</b></div>
+<div class="stat">Confirmed<b id="confirmedCount">0</b></div>
+<div class="stat">Cancelled<b id="cancelledCount">0</b></div>
+</div>
+</section>
+
+<section class="card">
 <h3 id="formTitle">Add New Product</h3>
 <input id="productName" placeholder="Product Name">
 <div class="row">
@@ -59,7 +85,7 @@ button:disabled{opacity:.5}
 </div>
 <input id="productCategory" placeholder="Category">
 <input id="productImage" type="url" placeholder="Image URL (optional)">
-<p class="small">ছবির সরাসরি URL দিতে হবে। Firebase Storage আপলোড এখানে ব্যবহার করা হচ্ছে না।</p>
+<p class="small">ছবির সরাসরি URL দিতে হবে। Firebase Storage এখানে ব্যবহার করা হচ্ছে না।</p>
 <div class="actions">
 <button id="saveProduct" class="orange">SAVE PRODUCT</button>
 <button id="cancelEdit" class="hidden">CANCEL</button>
@@ -73,8 +99,23 @@ button:disabled{opacity:.5}
 </section>
 
 <section class="card">
+<div class="order-top">
 <h3>Customer Orders</h3>
-<button id="refreshOrders" class="orange">REFRESH ORDERS</button>
+<button id="refreshOrders" class="orange">REFRESH</button>
+</div>
+
+<div class="tabs" id="orderTabs">
+<button class="tab active" data-filter="new">New Orders</button>
+<button class="tab" data-filter="Pending">Pending</button>
+<button class="tab" data-filter="Confirmed">Confirmed</button>
+<button class="tab" data-filter="Processing">Processing</button>
+<button class="tab" data-filter="Shipped">Shipped</button>
+<button class="tab" data-filter="Delivered">Delivered</button>
+<button class="tab" data-filter="Cancelled">Cancelled</button>
+<button class="tab" data-filter="all">All Orders</button>
+</div>
+
+<p class="small" id="orderHelp">নতুন অর্ডারগুলো এখানে দেখানো হবে। দেখে নিলে Mark as Seen চাপবে।</p>
 <div id="orderList">Loading...</div>
 </section>
 
@@ -94,12 +135,12 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
-  authDomain: "ms-store-admin-26416.firebaseapp.com",
-  projectId: "ms-store-admin-26416",
-  storageBucket: "ms-store-admin-26416.firebasestorage.app",
-  messagingSenderId: "968008425065",
-  appId: "1:968008425065:web:1e0904dcab96d4d003ccf8"
+ apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+ authDomain:"ms-store-admin-26416.firebaseapp.com",
+ projectId:"ms-store-admin-26416",
+ storageBucket:"ms-store-admin-26416.firebasestorage.app",
+ messagingSenderId:"968008425065",
+ appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
 const app=initializeApp(firebaseConfig);
@@ -108,11 +149,22 @@ const db=getFirestore(app);
 const $=id=>document.getElementById(id);
 
 let editingId=null;
+let allOrders=[];
+let currentFilter="new";
 
 function safe(v){
  return String(v??"").replace(/[&<>"']/g,c=>({
  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
  }[c]));
+}
+
+function formatDate(value){
+ try{
+  if(!value)return "সময় পাওয়া যায়নি";
+  const d=value.toDate?value.toDate():new Date(value);
+  if(Number.isNaN(d.getTime()))return "সময় পাওয়া যায়নি";
+  return d.toLocaleString("en-GB");
+ }catch(e){return "সময় পাওয়া যায়নি";}
 }
 
 $("loginBtn").onclick=async()=>{
@@ -155,7 +207,6 @@ function clearForm(){
  $("saveProduct").textContent="SAVE PRODUCT";
  $("cancelEdit").classList.add("hidden");
 }
-
 $("cancelEdit").onclick=clearForm;
 
 $("saveProduct").onclick=async()=>{
@@ -166,14 +217,13 @@ $("saveProduct").onclick=async()=>{
  const imageUrl=$("productImage").value.trim();
 
  if(!name||$("productPrice").value===""||$("productStock").value===""||
-    !Number.isFinite(price)||price<0||!Number.isInteger(stock)||stock<0){
+ !Number.isFinite(price)||price<0||!Number.isInteger(stock)||stock<0){
   $("productMsg").textContent="সঠিক Product Name, Price ও Stock দিন।";
   return;
  }
 
  $("saveProduct").disabled=true;
  $("productMsg").textContent="Saving...";
-
  const data={name,price,stock,category,active:true,imageUrl};
 
  try{
@@ -258,75 +308,152 @@ async function loadProducts(){
 
 const statuses=["Pending","Confirmed","Processing","Shipped","Delivered","Cancelled"];
 
+function updateCounts(){
+ $("newCount").textContent=allOrders.filter(o=>o.adminSeen!==true).length;
+ $("pendingCount").textContent=allOrders.filter(o=>(o.status||"Pending")==="Pending").length;
+ $("confirmedCount").textContent=allOrders.filter(o=>o.status==="Confirmed").length;
+ $("cancelledCount").textContent=allOrders.filter(o=>o.status==="Cancelled").length;
+}
+
+function renderOrders(){
+ updateCounts();
+
+ document.querySelectorAll("[data-filter]").forEach(b=>{
+  b.classList.toggle("active",b.dataset.filter===currentFilter);
+ });
+
+ let list=allOrders;
+ if(currentFilter==="new"){
+  list=allOrders.filter(o=>o.adminSeen!==true);
+ }else if(currentFilter!=="all"){
+  list=allOrders.filter(o=>(o.status||"Pending")===currentFilter);
+ }
+
+ if(!list.length){
+  $("orderList").innerHTML="<p>এই মেনুতে কোনো অর্ডার নেই।</p>";
+  return;
+ }
+
+ $("orderList").innerHTML=list.map(o=>{
+  const id=o.orderId||o.id;
+  const status=o.status||"Pending";
+  const items=Array.isArray(o.products)
+   ?o.products.map(p=>`${safe(p.productName)} × ${safe(p.quantity)}`).join("<br>")
+   :safe(o.productName||"");
+
+  const email=o.email||"";
+  const paymentInfo=o.transactionId||o.trxId||"";
+  const subtotal=o.subtotal;
+  const delivery=o.deliveryCharge;
+
+  return `<div class="order">
+   <div class="order-top">
+    <h4>Order ID: ${safe(id)}</h4>
+    <span class="order-badge">${safe(status)}</span>
+   </div>
+
+   <p><b>Customer:</b> ${safe(o.customerName)}</p>
+   <p><b>Phone:</b> ${safe(o.phone)}</p>
+   ${email?`<p><b>Email:</b> ${safe(email)}</p>`:""}
+   <p><b>Address:</b> ${safe(o.address)}</p>
+   <p><b>Products:</b><br>${items}</p>
+   ${subtotal!==undefined?`<p><b>Subtotal:</b> ৳${safe(subtotal)}</p>`:""}
+   ${delivery!==undefined?`<p><b>Delivery Charge:</b> ৳${safe(delivery)}</p>`:""}
+   <p><b>Total:</b> ৳${safe(o.totalPrice)}</p>
+   <p><b>Payment:</b> ${safe(o.paymentMethod)}</p>
+   <p><b>Payment Status:</b> ${safe(o.paymentStatus||"Pending")}</p>
+   ${paymentInfo?`<p><b>Transaction ID:</b> ${safe(paymentInfo)}</p>`:""}
+   <p><b>Order Time:</b> ${safe(formatDate(o.createdAt))}</p>
+
+   ${o.adminSeen!==true?`
+    <button class="blue" data-seen="${safe(o.id)}">MARK AS SEEN</button>
+   `:""}
+
+   <label>Update Order Status</label>
+   <select data-status="${safe(o.id)}">
+    ${statuses.map(s=>`<option value="${s}" ${s===status?"selected":""}>${s}</option>`).join("")}
+   </select>
+   <button class="green" data-update="${safe(o.id)}" data-orderid="${safe(id)}">UPDATE STATUS</button>
+  </div>`;
+ }).join("");
+
+ $("orderList").querySelectorAll("[data-seen]").forEach(b=>{
+  b.onclick=async()=>{
+   b.disabled=true;
+   try{
+    await updateDoc(doc(db,"orders",b.dataset.seen),{adminSeen:true});
+    await loadOrders();
+   }catch(e){
+    console.error(e);
+    alert("Could not mark as seen: "+e.message);
+    b.disabled=false;
+   }
+  };
+ });
+
+ $("orderList").querySelectorAll("[data-update]").forEach(b=>{
+  b.onclick=async()=>{
+   const orderDocId=b.dataset.update;
+   const orderId=b.dataset.orderid;
+   const order=allOrders.find(o=>o.id===orderDocId);
+   const select=$("orderList").querySelector(`[data-status="${CSS.escape(orderDocId)}"]`);
+   const newStatus=select.value;
+
+   if(!order)return;
+   if(newStatus=== (order.status||"Pending")){
+    alert("এই অর্ডারের স্ট্যাটাস আগে থেকেই "+newStatus);
+    return;
+   }
+
+   if(!confirm("Order status "+newStatus+" করতে চাও?"))return;
+
+   b.disabled=true;
+   try{
+    await updateDoc(doc(db,"orders",orderDocId),{
+     status:newStatus,
+     adminSeen:true
+    });
+    await setDoc(doc(db,"orderTracking",orderId),{
+     orderId,status:newStatus,updatedAt:serverTimestamp()
+    },{merge:true});
+
+    alert("Order status updated.");
+    await loadOrders();
+   }catch(e){
+    console.error(e);
+    alert("Status update failed: "+e.message);
+   }finally{
+    b.disabled=false;
+   }
+  };
+ });
+}
+
 async function loadOrders(){
  $("orderList").textContent="Loading...";
  try{
   const snap=await getDocs(collection(db,"orders"));
-  if(snap.empty){
-   $("orderList").textContent="No orders yet.";
-   return;
-  }
+  allOrders=snap.docs.map(d=>({id:d.id,...d.data()}));
 
-  const orders=snap.docs.map(d=>({id:d.id,...d.data()}));
-  orders.sort((a,b)=>{
+  allOrders.sort((a,b)=>{
    const ta=a.createdAt?.toMillis?.()||0;
    const tb=b.createdAt?.toMillis?.()||0;
    return tb-ta;
   });
 
-  $("orderList").innerHTML=orders.map(o=>{
-   const id=o.orderId||o.id;
-   const items=Array.isArray(o.products)
-    ?o.products.map(p=>`${safe(p.productName)} × ${safe(p.quantity)}`).join("<br>")
-    :safe(o.productName||"");
-   const status=o.status||"Pending";
-
-   return `<div class="order">
-    <b>Order ID: ${safe(id)}</b><br>
-    Customer: ${safe(o.customerName)}<br>
-    Phone: ${safe(o.phone)}<br>
-    Address: ${safe(o.address)}<br>
-    Products: ${items}<br>
-    Total: <b>৳${safe(o.totalPrice)}</b><br>
-    Payment: ${safe(o.paymentMethod)}<br>
-    Payment status: ${safe(o.paymentStatus||"Pending")}<br>
-    Current status: <b>${safe(status)}</b>
-
-    <label>Update Order Status</label>
-    <select data-status="${safe(o.id)}">
-     ${statuses.map(s=>`<option value="${s}" ${s===status?"selected":""}>${s}</option>`).join("")}
-    </select>
-    <button class="green" data-update="${safe(o.id)}" data-orderid="${safe(id)}">UPDATE STATUS</button>
-   </div>`;
-  }).join("");
-
-  $("orderList").querySelectorAll("[data-update]").forEach(b=>{
-   b.onclick=async()=>{
-    const orderDocId=b.dataset.update;
-    const orderId=b.dataset.orderid;
-    const select=$("orderList").querySelector(`[data-status="${CSS.escape(orderDocId)}"]`);
-    const newStatus=select.value;
-    b.disabled=true;
-    try{
-     await updateDoc(doc(db,"orders",orderDocId),{status:newStatus});
-     await setDoc(doc(db,"orderTracking",orderId),{
-      orderId,status:newStatus,updatedAt:serverTimestamp()
-     },{merge:true});
-     alert("Order status updated.");
-     await loadOrders();
-    }catch(e){
-     console.error(e);
-     alert("Status update failed: "+e.message);
-    }finally{
-     b.disabled=false;
-    }
-   };
-  });
+  renderOrders();
  }catch(e){
   console.error(e);
   $("orderList").textContent="Orders load failed: "+e.message;
  }
 }
+
+$("orderTabs").querySelectorAll("[data-filter]").forEach(b=>{
+ b.onclick=()=>{
+  currentFilter=b.dataset.filter;
+  renderOrders();
+ };
+});
 
 $("refreshOrders").onclick=loadOrders;
 </script>
