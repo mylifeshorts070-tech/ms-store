@@ -1,24 +1,21 @@
+
 {
   "id": "/ms-store/admin-app/",
   "name": "MS STORE Admin",
   "short_name": "MS Admin",
-  "description": "MS STORE Admin Panel",
-  "start_url": "/ms-store/admin.html?source=admin-app",
+  "description": "MS STORE Admin Panel - Manage Products, Orders and Customers",
+  "start_url": "/ms-store/admin.html?source=pwa",
   "scope": "/ms-store/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#111827",
-  "theme_color": "#7C3AED",
+  "background_color": "#101d3d",
+  "theme_color": "#7c3aed",
   "icons": [
     {
-      "src": "/ms-store/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/ms-store/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "src": "/ms-store/admin-icon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
