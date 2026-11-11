@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -51,6 +52,8 @@ button{cursor:pointer}
 .order-button:disabled{opacity:.6}
 .note{font-size:12px;color:#64748b;line-height:1.5}
 #checkoutMsg{font-size:14px;line-height:1.5}
+.payment-info{display:none;grid-column:1/-1;padding:13px;background:#fff7e6;border:1px solid #f3d28b;border-radius:9px;line-height:1.7;font-size:14px}
+.copy-btn{border:0;background:var(--navy);color:white;padding:8px 12px;border-radius:6px;margin-top:7px}
 .success-notice{display:none;position:fixed;top:12px;left:4%;width:92%;z-index:1000;background:#15803d;color:white;padding:22px 16px;border-radius:14px;box-shadow:0 8px 30px #0004;text-align:center}
 .success-notice.show{display:block;animation:pop .25s ease-out}
 .success-notice h2{font-size:23px;margin:0 0 10px}
@@ -77,7 +80,7 @@ footer p{color:#cbd5e1;font-size:13px}
 }
 </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <body>
 <header>
  <div class="logo">MS <span>STORE</span></div>
@@ -132,11 +135,12 @@ footer p{color:#cbd5e1;font-size:13px}
 
 <section class="checkout-section" id="checkout">
  <h2 class="section-title">Checkout / অর্ডার করুন</h2>
+
  <div class="checkout-grid">
-  <input id="customerName" placeholder="আপনার নাম *" autocomplete="name">
-  <input id="phone" type="tel" placeholder="মোবাইল নম্বর *" autocomplete="tel">
-  <input id="email" type="email" placeholder="ইমেইল (ঐচ্ছিক)">
-  <select id="division">
+  <input id="customerName" placeholder="আপনার নাম *" autocomplete="name" required>
+  <input id="phone" type="tel" placeholder="মোবাইল নম্বর *" autocomplete="tel" required>
+  <input id="email" type="email" placeholder="ইমেইল * (বাধ্যতামূলক)" autocomplete="email" required>
+  <select id="division" required>
    <option value="">বিভাগ নির্বাচন করুন *</option>
    <option value="Dhaka">Dhaka</option>
    <option value="Chattogram">Chattogram</option>
@@ -147,19 +151,32 @@ footer p{color:#cbd5e1;font-size:13px}
    <option value="Rangpur">Rangpur</option>
    <option value="Mymensingh">Mymensingh</option>
   </select>
-  <input id="district" placeholder="জেলা *">
-  <input id="upazila" placeholder="উপজেলা / থানা *">
-  <textarea class="full" id="address" placeholder="বিস্তারিত ঠিকানা *"></textarea>
+  <input id="district" placeholder="জেলা *" required>
+  <input id="upazila" placeholder="উপজেলা / থানা *" required>
+  <textarea class="full" id="address" placeholder="বিস্তারিত ঠিকানা *" required></textarea>
+
   <select class="full" id="paymentMethod">
    <option value="Cash on Delivery">Cash on Delivery</option>
-   <option value="bKash Manual">bKash (ম্যানুয়াল পেমেন্ট)</option>
+   <option value="bKash Personal">bKash Personal</option>
+   <option value="Nagad Personal">Nagad Personal</option>
   </select>
-  <input class="full" id="trxId" placeholder="bKash Transaction ID">
+
+  <div class="payment-info" id="paymentInfo">
+   <b id="paymentTitle"></b><br>
+   পেমেন্ট নম্বর: <b id="paymentNumber">লোড হচ্ছে...</b><br>
+   <button type="button" class="copy-btn" id="copyPayment">নম্বর কপি করুন</button>
+   <p class="note">উপরের নম্বরে পেমেন্ট করার পর নিচে আপনার Sender Number ও Transaction ID দিন।</p>
+  </div>
+
+  <input class="full" id="senderNumber" type="tel" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন (Sender Number)">
+  <input class="full" id="trxId" placeholder="Transaction ID (TrxID)">
  </div>
+
  <div class="total-line"><span>Delivery Charge</span><span id="deliveryCharge">৳0</span></div>
  <div class="total-line"><span>Total</span><span id="grandTotal">৳0</span></div>
+
  <button class="order-button" id="placeOrder">PLACE ORDER</button>
- <p class="note">bKash নির্বাচন করলে Transaction ID দিন। পেমেন্ট কর্তৃপক্ষ যাচাই করবে।</p>
+ <p class="note">ডিজিটাল পেমেন্টের তথ্য Admin ম্যানুয়ালি যাচাই করবেন। Personal bKash/Nagad পেমেন্ট স্বয়ংক্রিয়ভাবে যাচাই হয় না।</p>
  <p id="checkoutMsg"></p>
 </section>
 
@@ -168,7 +185,9 @@ footer p{color:#cbd5e1;font-size:13px}
  <p>Your Trusted Online Shopping Store</p>
  <p>© 2026 MS STORE. All Rights Reserved.</p>
 </footer>
+
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
@@ -187,16 +206,18 @@ const firebaseConfig={
 
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
- emailjs.init({
-  publicKey: "4gQjk5EWAQ7tk-stZ"
-});
 
-const EMAIL_SERVICE_ID = "service_9ck9kob";
-const EMAIL_TEMPLATE_ID = "template_rbe08jk";
+emailjs.init({publicKey:"4gQjk5EWAQ7tk-stZ"});
+
+const EMAIL_SERVICE_ID="service_9ck9kob";
+const EMAIL_TEMPLATE_ID="template_rbe08jk";
+
 const $=id=>document.getElementById(id);
 let products=[];
 let cart={};
 let activeCategory="All";
+let paymentSettings={bkashNumber:"",nagadNumber:""};
+
 const money=n=>"৳"+Number(n||0).toLocaleString("en-BD");
 
 function safe(v){
@@ -205,6 +226,60 @@ function safe(v){
  }[c]));
 }
 
+/* Payment settings */
+async function loadPaymentSettings(){
+ try{
+  const snap=await getDoc(doc(db,"storeSettings","paymentMethods"));
+  if(snap.exists()){
+   paymentSettings=snap.data();
+  }
+ }catch(error){
+  console.error("Payment settings load failed:",error);
+ }
+ updatePaymentInfo();
+}
+
+function updatePaymentInfo(){
+ const method=$("paymentMethod").value;
+ const info=$("paymentInfo");
+ const sender=$("senderNumber");
+ const trx=$("trxId");
+
+ const isDigital=method!=="Cash on Delivery";
+
+ info.style.display=isDigital?"block":"none";
+ sender.style.display=isDigital?"block":"none";
+ trx.style.display=isDigital?"block":"none";
+
+ sender.required=isDigital;
+ trx.required=isDigital;
+
+ if(method==="bKash Personal"){
+  $("paymentTitle").textContent="bKash Personal Payment";
+  $("paymentNumber").textContent=paymentSettings.bkashNumber||"Admin Panel থেকে নম্বর সেট করুন";
+ }else if(method==="Nagad Personal"){
+  $("paymentTitle").textContent="Nagad Personal Payment";
+  $("paymentNumber").textContent=paymentSettings.nagadNumber||"Admin Panel থেকে নম্বর সেট করুন";
+ }
+}
+
+$("paymentMethod").onchange=updatePaymentInfo;
+
+$("copyPayment").onclick=async()=>{
+ const number=$("paymentNumber").textContent.trim();
+ if(!number||number.includes("সেট করুন")){
+  alert("এখনো পেমেন্ট নম্বর সেট করা হয়নি।");
+  return;
+ }
+ try{
+  await navigator.clipboard.writeText(number);
+  alert("পেমেন্ট নম্বর কপি হয়েছে।");
+ }catch(e){
+  alert("নম্বরটি কপি করা যায়নি।");
+ }
+};
+
+/* Products */
 async function loadProducts(){
  try{
   const snap=await getDocs(collection(db,"storeProducts"));
@@ -223,24 +298,33 @@ function renderCategories(){
  $("categoryList").innerHTML=cats.map(c=>
   `<button class="${c===activeCategory?"active":""}" data-cat="${safe(c)}">${safe(c)}</button>`
  ).join("");
+
  $("categoryList").querySelectorAll("[data-cat]").forEach(b=>{
-  b.onclick=()=>{activeCategory=b.dataset.cat;renderCategories();renderProducts();};
+  b.onclick=()=>{
+   activeCategory=b.dataset.cat;
+   renderCategories();
+   renderProducts();
+  };
  });
 }
 
 function renderProducts(){
  const q=$("search").value.trim().toLowerCase();
+
  const list=products.filter(p=>
   (activeCategory==="All"||(p.category||"General")===activeCategory)&&
   String(p.name||"").toLowerCase().includes(q)
  );
+
  if(!list.length){
   $("productGrid").innerHTML='<div class="empty">কোনো পণ্য পাওয়া যায়নি।</div>';
   return;
  }
+
  $("productGrid").innerHTML=list.map(p=>{
   const image=p.imageUrl?`<img src="${safe(p.imageUrl)}" alt="${safe(p.name)}">`:"🛍️";
   const stock=Number(p.stock||0);
+
   return `<article class="product-card">
    <div class="product-photo">${image}</div>
    <div class="product-info">
@@ -251,13 +335,21 @@ function renderProducts(){
    </div>
   </article>`;
  }).join("");
- $("productGrid").querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>addToCart(b.dataset.add));
+
+ $("productGrid").querySelectorAll("[data-add]").forEach(b=>{
+  b.onclick=()=>addToCart(b.dataset.add);
+ });
 }
 
 function addToCart(id){
  const p=products.find(x=>x.id===id);
  if(!p)return;
- if((cart[id]||0)>=Number(p.stock||0)){alert("এই পরিমাণ পণ্য স্টকে নেই।");return;}
+
+ if((cart[id]||0)>=Number(p.stock||0)){
+  alert("এই পরিমাণ পণ্য স্টকে নেই।");
+  return;
+ }
+
  cart[id]=(cart[id]||0)+1;
  renderCart();
 }
@@ -265,9 +357,12 @@ function addToCart(id){
 function changeQty(id,delta){
  const p=products.find(x=>x.id===id);
  if(!p)return;
+
  const next=(cart[id]||0)+delta;
+
  if(next<=0)delete cart[id];
  else if(next<=Number(p.stock||0))cart[id]=next;
+
  renderCart();
 }
 
@@ -284,7 +379,9 @@ function getDelivery(){
 }
 
 function updateTotals(){
- const sub=getSubtotal(),charge=getDelivery();
+ const sub=getSubtotal();
+ const charge=getDelivery();
+
  $("subtotal").textContent=money(sub);
  $("deliveryCharge").textContent=money(charge);
  $("grandTotal").textContent=money(sub+charge);
@@ -292,10 +389,13 @@ function updateTotals(){
 
 function renderCart(){
  const entries=Object.entries(cart);
+
  $("cartCount").textContent=entries.reduce((s,[,q])=>s+q,0);
+
  $("cartItems").innerHTML=entries.length?entries.map(([id,q])=>{
   const p=products.find(x=>x.id===id);
   if(!p)return "";
+
   return `<div class="cart-row">
    <span>${safe(p.name)}<br>${money(p.price)} × ${q}</span>
    <span class="qty-controls">
@@ -305,39 +405,60 @@ function renderCart(){
   </div>`;
  }).join(""):'<div class="empty">আপনার Cart এখন খালি।</div>';
 
- $("cartItems").querySelectorAll("[data-minus]").forEach(b=>b.onclick=()=>changeQty(b.dataset.minus,-1));
- $("cartItems").querySelectorAll("[data-plus]").forEach(b=>b.onclick=()=>changeQty(b.dataset.plus,1));
+ $("cartItems").querySelectorAll("[data-minus]").forEach(b=>{
+  b.onclick=()=>changeQty(b.dataset.minus,-1);
+ });
+
+ $("cartItems").querySelectorAll("[data-plus]").forEach(b=>{
+  b.onclick=()=>changeQty(b.dataset.plus,1);
+ });
 
  $("goCheckout").style.display=entries.length?"block":"none";
+
  if(!entries.length)$("checkout").classList.remove("open");
+
  updateTotals();
 }
 
+/* Checkout */
 $("goCheckout").onclick=()=>{
  if(!Object.keys(cart).length)return;
+
  $("checkout").classList.add("open");
  $("checkout").scrollIntoView({behavior:"smooth",block:"start"});
 };
 
-$("closeSuccess").onclick=()=>$("successNotice").classList.remove("show");
+$("closeSuccess").onclick=()=>{
+ $("successNotice").classList.remove("show");
+};
+
 $("search").oninput=renderProducts;
 $("division").onchange=updateTotals;
 
-$("paymentMethod").onchange=()=>{
- $("trxId").style.display=$("paymentMethod").value==="bKash Manual"?"block":"none";
-};
-$("trxId").style.display="none";
-
+/* Order tracking */
 $("trackBtn").onclick=async()=>{
  const orderId=$("trackId").value.trim().toUpperCase();
  const result=$("trackResult");
- if(!orderId){result.style.display="block";result.textContent="Order ID লিখুন।";return;}
+
+ if(!orderId){
+  result.style.display="block";
+  result.textContent="Order ID লিখুন।";
+  return;
+ }
+
  result.style.display="block";
  result.textContent="অর্ডারের তথ্য খোঁজা হচ্ছে...";
+
  try{
   const snap=await getDoc(doc(db,"orderTracking",orderId));
-  if(!snap.exists()){result.textContent="এই Order ID পাওয়া যায়নি।";return;}
+
+  if(!snap.exists()){
+   result.textContent="এই Order ID পাওয়া যায়নি।";
+   return;
+  }
+
   const status=snap.data().status||"Pending";
+
   const labels={
    Pending:"অর্ডার গ্রহণ করা হয়েছে — Pending",
    Confirmed:"আপনার অর্ডার Confirmed হয়েছে",
@@ -346,112 +467,191 @@ $("trackBtn").onclick=async()=>{
    Delivered:"আপনার অর্ডার Delivered হয়েছে",
    Cancelled:"অর্ডারটি বাতিল করা হয়েছে — Cancelled"
   };
-  result.innerHTML="<b>Order ID:</b> "+safe(orderId)+"<br><b>অবস্থা:</b> "+safe(labels[status]||status);
+
+  result.innerHTML="<b>Order ID:</b> "+safe(orderId)+
+   "<br><b>অবস্থা:</b> "+safe(labels[status]||status);
+
  }catch(e){
   console.error(e);
   result.textContent="Tracking কাজ করছে না। Firebase Rules পরীক্ষা করুন।";
  }
 };
 
+/* Place order */
 $("placeOrder").onclick=async()=>{
  const entries=Object.entries(cart);
- if(!entries.length){$("checkoutMsg").textContent="আগে Cart-এ পণ্য যোগ করুন।";return;}
+
+ if(!entries.length){
+  $("checkoutMsg").textContent="আগে Cart-এ পণ্য যোগ করুন।";
+  return;
+ }
 
  const customerName=$("customerName").value.trim();
  const phone=$("phone").value.trim();
+ const email=$("email").value.trim();
  const address=$("address").value.trim();
  const division=$("division").value;
  const district=$("district").value.trim();
  const upazila=$("upazila").value.trim();
  const paymentMethod=$("paymentMethod").value;
+ const senderNumber=$("senderNumber").value.trim();
  const trxId=$("trxId").value.trim();
 
- if(!customerName||!phone||!address||!division||!district||!upazila){
-  $("checkoutMsg").textContent="নাম, ফোন, বিভাগ, জেলা, উপজেলা ও ঠিকানা পূরণ করুন।";
+ if(!customerName||!phone||!email||!address||!division||!district||!upazila){
+  $("checkoutMsg").textContent="সব প্রয়োজনীয় তথ্য পূরণ করুন।";
   return;
  }
- if(paymentMethod==="bKash Manual"&&!trxId){
-  $("checkoutMsg").textContent="bKash Transaction ID লিখুন।";
+
+ if(!$("email").checkValidity()){
+  $("checkoutMsg").textContent="সঠিক Email Address দিন।";
+  $("email").focus();
+  return;
+ }
+
+ if(paymentMethod!=="Cash on Delivery"&&(!senderNumber||!trxId)){
+  $("checkoutMsg").textContent="Sender Number এবং Transaction ID দুটোই লিখুন।";
+  return;
+ }
+
+ if(paymentMethod==="bKash Personal"&&!paymentSettings.bkashNumber){
+  $("checkoutMsg").textContent="Admin Panel থেকে bKash নম্বর সেট করা হয়নি।";
+  return;
+ }
+
+ if(paymentMethod==="Nagad Personal"&&!paymentSettings.nagadNumber){
+  $("checkoutMsg").textContent="Admin Panel থেকে Nagad নম্বর সেট করা হয়নি।";
   return;
  }
 
  const orderProducts=entries.map(([id,quantity])=>{
   const p=products.find(x=>x.id===id);
-  return {productId:id,productName:p?.name||"Product",price:Number(p?.price)||0,quantity};
+
+  return {
+   productId:id,
+   productName:p?.name||"Product",
+   price:Number(p?.price)||0,
+   quantity
+  };
  });
+
  const subtotal=getSubtotal();
  const deliveryCharge=getDelivery();
  const totalPrice=subtotal+deliveryCharge;
 
  $("placeOrder").disabled=true;
  $("placeOrder").textContent="PROCESSING...";
+ $("checkoutMsg").textContent="আপনার অর্ডার জমা হচ্ছে...";
 
  try{
   const counterRef=doc(db,"counters","orderSequence");
 
   const orderId=await runTransaction(db,async(transaction)=>{
    const counterSnap=await transaction.get(counterRef);
-   const nextNumber=(counterSnap.exists()?Number(counterSnap.data().lastNumber)||0:0)+1;
+
+   const nextNumber=
+    (counterSnap.exists()?Number(counterSnap.data().lastNumber)||0:0)+1;
+
    const newOrderId="MS-"+String(nextNumber).padStart(4,"0");
 
    transaction.set(counterRef,{lastNumber:nextNumber});
+
    transaction.set(doc(db,"orders",newOrderId),{
-    customerName,phone,email:$("email").value.trim(),address,
-    division,district,upazila,
-    productName:orderProducts.map(p=>p.productName+" x"+p.quantity).join(", "),
+    customerName,
+    phone,
+    email,
+    address,
+    division,
+    district,
+    upazila,
+
+    productName:orderProducts.map(p=>
+     p.productName+" x"+p.quantity
+    ).join(", "),
+
     products:orderProducts,
     quantity:entries.reduce((s,[,q])=>s+q,0),
-    subtotal,deliveryCharge,totalPrice,paymentMethod,trxId,
-    paymentStatus:paymentMethod==="Cash on Delivery"?"Pending":"Unverified",
-    orderId:newOrderId,status:"Pending",createdAt:serverTimestamp()
+
+    subtotal,
+    deliveryCharge,
+    totalPrice,
+
+    paymentMethod,
+    senderNumber:paymentMethod==="Cash on Delivery"?"":senderNumber,
+    trxId:paymentMethod==="Cash on Delivery"?"":trxId,
+
+    paymentStatus:
+     paymentMethod==="Cash on Delivery"?"Pending":"Unverified",
+
+    orderId:newOrderId,
+    status:"Pending",
+    createdAt:serverTimestamp()
    });
+
    transaction.set(doc(db,"orderTracking",newOrderId),{
-    orderId:newOrderId,status:"Pending",createdAt:serverTimestamp()
+    orderId:newOrderId,
+    status:"Pending",
+    createdAt:serverTimestamp()
    });
+
    return newOrderId;
   });
 
-  cart={};
-  renderCart();
-  $("checkoutMsg").textContent="অর্ডার সফলভাবে জমা হয়েছে। Order ID: "+orderId;
-  try {
-  await emailjs.send(
+  /* Email confirmation */
+  try{
+   await emailjs.send(
     EMAIL_SERVICE_ID,
     EMAIL_TEMPLATE_ID,
     {
-      email: $("email").value.trim(),
-      customer_name: customerName,
-      order_id: orderId,
-      product_name: orderProducts.map(p =>
-        p.productName + " x" + p.quantity
-      ).join(", "),
-      subtotal: subtotal,
-      delivery_charge: deliveryCharge,
-      total_price: totalPrice,
-      order_status: "Pending",
-      tracking_link: "https://mylifeshorts070-tech.github.io/ms-store/"
+     email:email,
+     customer_name:customerName,
+     order_id:orderId,
+     product_name:orderProducts.map(p=>
+      p.productName+" x"+p.quantity
+     ).join(", "),
+     subtotal:subtotal,
+     delivery_charge:deliveryCharge,
+     total_price:totalPrice,
+     order_status:"Pending",
+     tracking_link:"https://mylifeshorts070-tech.github.io/ms-store/"
     }
-  );
-} catch (emailError) {
-  console.error("Email sending failed:", emailError);
+   );
+  }catch(emailError){
+   console.error("Email sending failed:",emailError);
   }
+
+  cart={};
+  renderCart();
+
+  $("checkoutMsg").textContent=
+   "অর্ডার সফলভাবে জমা হয়েছে। Order ID: "+orderId;
+
   $("successOrderId").textContent=orderId;
   $("successNotice").classList.add("show");
   $("trackId").value=orderId;
 
-  ["customerName","phone","email","district","upazila","address","trxId"].forEach(id=>$(id).value="");
+  [
+   "customerName","phone","email","district",
+   "upazila","address","trxId","senderNumber"
+  ].forEach(id=>$(id).value="");
+
+  $("paymentMethod").value="Cash on Delivery";
+  updatePaymentInfo();
+
   $("checkout").classList.remove("open");
 
  }catch(error){
   console.error(error);
-  $("checkoutMsg").textContent="অর্ডার জমা হয়নি। Firebase Rules পরীক্ষা করুন।";
+  $("checkoutMsg").textContent=
+   "অর্ডার জমা হয়নি। Firebase Rules পরীক্ষা করুন।";
  }finally{
   $("placeOrder").disabled=false;
   $("placeOrder").textContent="PLACE ORDER";
  }
 };
 
+/* Start */
 loadProducts();
+loadPaymentSettings();
 </script>
 </body>
 </html>
