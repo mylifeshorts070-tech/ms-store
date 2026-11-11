@@ -165,18 +165,55 @@ footer p{color:#bbb;margin-top:8px;font-size:13px}
 <div id="cartItems"><div class="empty">আপনার Cart এখন খালি</div></div>
 <div class="total" id="total">Total: ৳0</div>
 </section>
+
 <section class="cart-box" id="checkout">
-<h2>🛍️ Checkout</h2>
-<input id="customerName" placeholder="আপনার নাম">
-<input id="customerPhone" type="tel" placeholder="মোবাইল নম্বর">
-<textarea id="customerAddress" placeholder="সম্পূর্ণ ঠিকানা"></textarea>
-<h3>Payment Method</h3>
-<label><input type="radio" name="payment" value="bKash" checked> bKash</label>
-<label><input type="radio" name="payment" value="COD"> Cash on Delivery</label>
-<input id="bkashTrx" placeholder="bKash Transaction ID">
-<button onclick="placeOrder()">Place Order</button>
-<p id="orderMessage"></p>
+  <h2>🛍️ Checkout</h2>
+
+  <input id="customerName" placeholder="আপনার নাম">
+  <input id="customerPhone" type="tel" placeholder="মোবাইল নম্বর">
+
+  <h3>Delivery Address</h3>
+
+  <input id="customerDivision" list="divisionList"
+    placeholder="বিভাগ লিখে নির্বাচন করুন">
+  <datalist id="divisionList"></datalist>
+
+  <input id="customerDistrict" list="districtList"
+    placeholder="জেলা লিখে নির্বাচন করুন">
+  <datalist id="districtList"></datalist>
+
+  <input id="customerUpazila" list="upazilaList"
+    placeholder="থানা / উপজেলা লিখে নির্বাচন করুন">
+  <datalist id="upazilaList"></datalist>
+
+  <textarea id="customerAddress"
+    placeholder="বাড়ি, রোড, এলাকা ও বিস্তারিত ঠিকানা"></textarea>
+
+  <h3>Payment Method</h3>
+
+  <label>
+    <input type="radio" name="payment" value="bKash" checked>
+    bKash
+  </label>
+
+  <label>
+    <input type="radio" name="payment" value="COD">
+    Cash on Delivery
+  </label>
+
+  <input id="bkashTrx"
+    placeholder="bKash Transaction ID">
+
+  <div id="deliveryInfo">
+    পণ্যের দাম: ৳0<br>
+    ডেলিভারি চার্জ: ৳0<br>
+    মোট: ৳0
+  </div>
+
+  <button onclick="placeOrder()">Place Order</button>
+  <p id="orderMessage"></p>
 </section>
+
 <footer>
 <h2>MS STORE</h2>
 <p>Your Trusted Online Shopping Store</p>
@@ -271,6 +308,9 @@ ${cart[id]}
 async function placeOrder() {
   const name = document.getElementById("customerName").value.trim();
   const phone = document.getElementById("customerPhone").value.trim();
+  const division = divisionInput.value.trim();
+  const district = districtInput.value.trim();
+  const upazila = upazilaInput.value.trim();
   const address = document.getElementById("customerAddress").value.trim();
   const trxId = document.getElementById("bkashTrx").value.trim();
   const payment = document.querySelector('input[name="payment"]:checked').value;
@@ -282,8 +322,21 @@ async function placeOrder() {
     return;
   }
 
-  if (!name || !phone || !address) {
-    message.textContent = "সব তথ্য পূরণ করুন।";
+  const validDivision = bdLocations.find(d =>
+    d.bn_name === division || d.name === division
+  );
+
+  const validDistrict = validDivision?.districts.find(d =>
+    d.bn_name === district || d.name === district
+  );
+
+  const validUpazila = validDistrict?.upazilas.find(u =>
+    u.bn_name === upazila || u.name === upazila
+  );
+
+  if (!name || !phone || !validDivision ||
+      !validDistrict || !validUpazila || !address) {
+    message.textContent = "সব তথ্য সঠিকভাবে নির্বাচন ও পূরণ করুন।";
     return;
   }
 
@@ -292,11 +345,17 @@ async function placeOrder() {
     return;
   }
 
-  const quantity = ids.reduce((sum, id) => sum + cart[id], 0);
-  const totalPrice = ids.reduce((sum, id) => {
+  const subtotal = ids.reduce((sum, id) => {
     const p = products.find(item => item.id == id);
     return sum + (p ? p.price * cart[id] : 0);
   }, 0);
+
+  const deliveryCharge =
+    validDivision.name.toLowerCase() === "dhaka" ||
+    validDivision.bn_name === "ঢাকা" ? 60 : 80;
+
+  const totalPrice = subtotal + deliveryCharge;
+  const quantity = ids.reduce((sum, id) => sum + cart[id], 0);
 
   const productName = ids.map(id => {
     const p = products.find(item => item.id == id);
@@ -309,9 +368,14 @@ async function placeOrder() {
     await db.collection("orders").add({
       customerName: name,
       phone: phone,
+      division: validDivision.bn_name,
+      district: validDistrict.bn_name,
+      upazila: validUpazila.bn_name,
       address: address,
       productName: productName,
       quantity: quantity,
+      subtotal: subtotal,
+      deliveryCharge: deliveryCharge,
       totalPrice: totalPrice,
       status: "Pending",
       paymentMethod: payment,
@@ -323,10 +387,49 @@ async function placeOrder() {
     message.textContent = "অর্ডার সফলভাবে জমা হয়েছে!";
     cart = {};
     renderCart();
+    updateDeliveryInfo();
 
   } catch (error) {
     message.textContent = "অর্ডার জমা হয়নি: " + error.message;
   }
+  }
+  updateDeliveryInfo();
+
+  if (!selectedDistrict) return;
+
+  document.getElementById("upazilaList").innerHTML =
+    selectedDistrict.upazilas.map(u =>
+      `<option value="${u.bn_name}">${u.name}</option>`
+    ).join("");
+});
+
+function updateDeliveryInfo() {
+  const ids = Object.keys(cart);
+
+  const subtotal = ids.reduce((sum, id) => {
+    const p = products.find(item => item.id == id);
+    return sum + (p ? p.price * cart[id] : 0);
+  }, 0);
+
+  const division = bdLocations.find(d =>
+    d.bn_name === divisionInput.value || d.name === divisionInput.value
+  );
+
+  const delivery = !division ? 0 :
+    (division.name.toLowerCase() === "dhaka" ||
+     division.bn_name === "ঢাকা" ? 60 : 80);
+
+  document.getElementById("deliveryInfo").innerHTML =
+    `পণ্যের দাম: ৳${subtotal}<br>
+     ডেলিভারি চার্জ: ৳${delivery}<br>
+     <strong>সর্বমোট: ৳${subtotal + delivery}</strong>`;
+}
+
+divisionInput.addEventListener("change", updateDeliveryInfo);
+districtInput.addEventListener("change", updateDeliveryInfo);
+
+loadLocations();
+
 }
 renderCategories();
 renderProducts();
