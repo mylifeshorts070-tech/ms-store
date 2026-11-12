@@ -110,6 +110,7 @@ padding:11px 5px;border-bottom:1px solid #e2e8f0;font-size:14px
 .toast{
 position:fixed;left:50%;bottom:95px;transform:translateX(-50%);
 width:calc(100% - 28px);max-width:470px;
+max-height:65vh;overflow-y:auto;
 background:var(--navy);color:white;border:3px solid var(--orange);
 border-radius:16px;padding:14px;z-index:50;box-shadow:0 5px 22px #0004;
 display:none
@@ -212,6 +213,10 @@ font-size:20px;font-weight:900;color:#166534;
 border-top:1px dashed #cbd5e1;margin-top:8px;padding-top:11px
 }
 .order-card select{margin:5px 0}
+.notification-product{
+background:#ffffff18;padding:9px;border-radius:9px;
+margin-top:7px;line-height:1.7
+}
 @media(min-width:700px){
 body{padding-bottom:20px}
 main{padding:24px}
@@ -422,7 +427,6 @@ messagingSenderId:'968008425065',
 appId:'1:968008425065:web:1e0904dcab96d4d003ccf8'
 };
 
-/* IMPORTANT: তোমার দেওয়া admin.html-এর UID অপরিবর্তিত রাখা হয়েছে */
 const ADMIN_UID='WFvsYeqyZfgvnd8LVtCdT42gzjU2';
 
 const app=initializeApp(firebaseConfig);
@@ -446,6 +450,7 @@ return String(v??'').replace(/[&<>"']/g,c=>({
 }
 function money(n){return'৳'+Number(n||0).toLocaleString('en-BD')}
 function msg(id,t){$(id).textContent=t}
+
 function showView(view){
 document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
 $('login').classList.add('hidden');
@@ -456,20 +461,33 @@ b.classList.toggle('active',b.dataset.view===view);
 if(view==='customers')loadCustomers();
 if(view==='orders')renderOrders();
 if(view==='products')loadProducts();
-if(view==='more'){loadNotices();loadAdminReviews();loadGlobalVariantSetting();}
+if(view==='more'){
+loadNotices();loadAdminReviews();loadGlobalVariantSetting();
 }
+}
+
 document.querySelectorAll('.bottom-nav button').forEach(b=>b.onclick=()=>showView(b.dataset.view));
 $('goOrders').onclick=$('quickOrders').onclick=()=>showView('orders');
 $('quickProducts').onclick=()=>showView('products');
 $('quickCustomers').onclick=()=>showView('customers');
 $('quickMore').onclick=()=>showView('more');
-$('quickNotice').onclick=()=>{showView('more');$('noticeCard').scrollIntoView({behavior:'smooth'});};
-$('quickAdd').onclick=()=>{showView('products');$('productForm').scrollIntoView({behavior:'smooth'});};
+$('quickNotice').onclick=()=>{
+showView('more');
+$('noticeCard').scrollIntoView({behavior:'smooth'});
+};
+$('quickAdd').onclick=()=>{
+showView('products');
+$('productForm').scrollIntoView({behavior:'smooth'});
+};
 $('headerLogout').onclick=$('logoutBtn').onclick=()=>signOut(auth);
 
 $('loginBtn').onclick=async()=>{
-try{await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value);msg('loginMsg','');}
-catch(e){msg('loginMsg','Login failed: '+e.message);}
+try{
+await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value);
+msg('loginMsg','');
+}catch(e){
+msg('loginMsg','Login failed: '+e.message);
+}
 };
 
 onAuthStateChanged(auth,async u=>{
@@ -477,11 +495,16 @@ if(!u){
 $('login').classList.remove('hidden');
 $('bottomNav').classList.add('hidden');
 document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-if(ordersUnsubscribe){ordersUnsubscribe();ordersUnsubscribe=null;}
+if(ordersUnsubscribe){
+ordersUnsubscribe();
+ordersUnsubscribe=null;
+}
 return;
 }
 if(u.uid!==ADMIN_UID){
-await signOut(auth);msg('loginMsg','এই অ্যাকাউন্টের Admin access নেই।');return;
+await signOut(auth);
+msg('loginMsg','এই অ্যাকাউন্টের Admin access নেই।');
+return;
 }
 $('bottomNav').classList.remove('hidden');
 showView('dashboard');
@@ -496,37 +519,90 @@ $('quickBadge').textContent=newOrderCount?'('+newOrderCount+')':'';
 $('navBadge').textContent=newOrderCount;
 $('navBadge').classList.toggle('hidden',newOrderCount===0);
 }
+
 function playAlert(){
 if(!soundEnabled)return;
 try{
 const AudioCtx=window.AudioContext||window.webkitAudioContext;
-const ctx=new AudioCtx(),osc=ctx.createOscillator(),gain=ctx.createGain();
-osc.connect(gain);gain.connect(ctx.destination);
-osc.frequency.value=880;gain.gain.value=.12;
-osc.start();osc.stop(ctx.currentTime+.22);
+const ctx=new AudioCtx();
+const osc=ctx.createOscillator();
+const gain=ctx.createGain();
+osc.connect(gain);
+gain.connect(ctx.destination);
+osc.frequency.value=880;
+gain.gain.value=.12;
+osc.start();
+osc.stop(ctx.currentTime+.22);
 osc.onended=()=>ctx.close();
 }catch(e){console.log(e);}
 }
+
 $('enableNotifications').onclick=async()=>{
 soundEnabled=true;
 if('Notification'in window){
 const permission=await Notification.requestPermission();
-alert(permission==='granted'?'Browser Notification চালু হয়েছে।':'Browser Notification অনুমতি দেওয়া হয়নি।');
-}else alert('এই Browser-এ Notification সমর্থিত নয়।');
+alert(permission==='granted'
+?'Browser Notification চালু হয়েছে।'
+:'Browser Notification অনুমতি দেওয়া হয়নি।');
+}else{
+alert('এই Browser-এ Notification সমর্থিত নয়।');
+}
 };
+
 function announceNewOrder(o){
-newOrderCount++;updateBadges();
+newOrderCount++;
+updateBadges();
+
 const id=o.orderId||o.id;
-$('toastText').textContent='Order ID: '+id+' | মোট: '+money(o.totalPrice);
-$('newOrderToast').classList.add('show');playAlert();
+const products=Array.isArray(o.products)?o.products:[];
+
+const productDetails=products.map(p=>{
+const variant=p.variantLabel
+?`${p.variantLabel}: ${p.variantValue||''}`
+:'';
+
+return `
+<div class="notification-product">
+<b>${esc(p.productName||p.name||'Product')}</b>
+${variant?`<br>${esc(variant)}`:''}
+<br>পরিমাণ: ${esc(p.quantity||1)}
+<br>দাম: ${money(p.price)}
+</div>`;
+}).join('');
+
+$('toastText').innerHTML=`
+<div style="margin-top:10px;line-height:1.8">
+<div>🧾 Order ID: <b>${esc(id)}</b></div>
+<div>👤 Customer: <b>${esc(o.customerName||'Customer')}</b></div>
+<div>📞 Phone: <b>${esc(o.phone||'Not provided')}</b></div>
+<div>💰 Total: <b>${money(o.totalPrice)}</b></div>
+<div>💳 Payment: <b>${esc(o.paymentMethod||'Not specified')}</b></div>
+<div style="margin-top:10px"><b>📦 Products:</b></div>
+${productDetails||'<div>Product details unavailable</div>'}
+</div>`;
+
+$('newOrderToast').classList.add('show');
+playAlert();
+
 if('Notification'in window&&Notification.permission==='granted'){
-try{new Notification('MS STORE - নতুন অর্ডার!',{body:'Order ID: '+id+' | '+money(o.totalPrice)});}catch(e){}
+try{
+new Notification('MS STORE - নতুন অর্ডার!',{
+body:`${o.customerName||'Customer'} | ${money(o.totalPrice)} | Order: ${id}`
+});
+}catch(e){}
 }
-$('recentActivity').innerHTML=`🛒 নতুন অর্ডার এসেছে: <b>${esc(id)}</b> (${money(o.totalPrice)})`;
+
+$('recentActivity').innerHTML=
+`🛒 নতুন অর্ডার এসেছে: <b>${esc(id)}</b> (${money(o.totalPrice)})`;
 }
+
 $('closeToast').onclick=()=>$('newOrderToast').classList.remove('show');
+
 $('toastOpen').onclick=()=>{
-$('newOrderToast').classList.remove('show');newOrderCount=0;updateBadges();showView('orders');
+$('newOrderToast').classList.remove('show');
+newOrderCount=0;
+updateBadges();
+showView('orders');
 };
 
 /* Images */
@@ -538,33 +614,65 @@ const scale=Math.min(1,480/Math.max(bmp.width,bmp.height));
 const c=document.createElement('canvas');
 c.width=Math.max(1,Math.round(bmp.width*scale));
 c.height=Math.max(1,Math.round(bmp.height*scale));
-c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);bmp.close();
-let quality=.55,data=c.toDataURL('image/jpeg',quality);
-while(data.length>190000&&quality>.2){quality-=.07;data=c.toDataURL('image/jpeg',quality);}
+c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);
+bmp.close();
+let quality=.55;
+let data=c.toDataURL('image/jpeg',quality);
+while(data.length>190000&&quality>.2){
+quality-=.07;
+data=c.toDataURL('image/jpeg',quality);
+}
 if(data.length>190000)throw Error('ছবিটি Compress করা যাচ্ছে না।');
 return data;
 }
+
 $('imageFiles').onchange=async()=>{
-$('newImagePreview').innerHTML='';selectedNewImages=[];
+$('newImagePreview').innerHTML='';
+selectedNewImages=[];
 const files=Array.from($('imageFiles').files||[]);
-if(files.length>4){msg('productMsg','একবারে সর্বোচ্চ ৪টি ছবি নির্বাচন করুন।');$('imageFiles').value='';return;}
+if(files.length>4){
+msg('productMsg','একবারে সর্বোচ্চ ৪টি ছবি নির্বাচন করুন।');
+$('imageFiles').value='';
+return;
+}
 try{
 for(const f of files)selectedNewImages.push(await compressImage(f));
-renderNewImagePreview();msg('productMsg',selectedNewImages.length+'টি ছবি প্রস্তুত।');
-}catch(e){selectedNewImages=[];$('imageFiles').value='';msg('productMsg',e.message);}
+renderNewImagePreview();
+msg('productMsg',selectedNewImages.length+'টি ছবি প্রস্তুত।');
+}catch(e){
+selectedNewImages=[];
+$('imageFiles').value='';
+msg('productMsg',e.message);
+}
 };
+
 function renderNewImagePreview(){
 $('newImagePreview').innerHTML=selectedNewImages.map((img,i)=>`
-<div class="preview-box"><img src="${img}"><button class="danger" data-remove-new="${i}">Remove</button></div>`).join('');
-$('newImagePreview').querySelectorAll('[data-remove-new]').forEach(b=>b.onclick=()=>{
-selectedNewImages.splice(Number(b.dataset.removeNew),1);renderNewImagePreview();
+<div class="preview-box">
+<img src="${img}">
+<button class="danger" data-remove-new="${i}">Remove</button>
+</div>`).join('');
+
+$('newImagePreview').querySelectorAll('[data-remove-new]').forEach(b=>{
+b.onclick=()=>{
+selectedNewImages.splice(Number(b.dataset.removeNew),1);
+renderNewImagePreview();
+};
 });
 }
+
 function renderExistingImages(){
 $('existingImages').innerHTML=existingImages.map((img,i)=>`
-<div class="preview-box"><img src="${esc(img)}"><button class="danger" data-remove-existing="${i}">Remove</button></div>`).join('');
-$('existingImages').querySelectorAll('[data-remove-existing]').forEach(b=>b.onclick=()=>{
-existingImages.splice(Number(b.dataset.removeExisting),1);renderExistingImages();
+<div class="preview-box">
+<img src="${esc(img)}">
+<button class="danger" data-remove-existing="${i}">Remove</button>
+</div>`).join('');
+
+$('existingImages').querySelectorAll('[data-remove-existing]').forEach(b=>{
+b.onclick=()=>{
+existingImages.splice(Number(b.dataset.removeExisting),1);
+renderExistingImages();
+};
 });
 }
 
@@ -572,190 +680,382 @@ existingImages.splice(Number(b.dataset.removeExisting),1);renderExistingImages()
 function makeVariantRow(v={}){
 const row=document.createElement('div');
 row.className='variant-row';
+
+/* Edit করার সময় পুরোনো Variant ID সংরক্ষণ */
+row.dataset.variantId=v.id||crypto.randomUUID();
+
 row.innerHTML=`
-<div class="variant-heading"><b>Variant</b><button type="button" class="danger removeVariant" style="padding:7px 10px">Remove</button></div>
+<div class="variant-heading">
+<b>Variant</b>
+<button type="button" class="danger removeVariant" style="padding:7px 10px">Remove</button>
+</div>
 <div class="grid2">
-<div><label>Variant Name</label><input class="vlabel" placeholder="যেমন Size / Color / Model" value="${esc(v.label||'')}"></div>
-<div><label>Option / Value</label><input class="vvalue" placeholder="যেমন M / Red / Model A" value="${esc(v.value||'')}"></div>
-<div><label>Price (খালি রাখলে মূল দাম)</label><input class="vprice" type="number" min="0" placeholder="Optional" value="${v.price==null?'':esc(v.price)}"></div>
-<div><label>Stock</label><input class="vstock" type="number" min="0" step="1" placeholder="Stock" value="${v.stock??0}"></div>
+<div>
+<label>Variant Name</label>
+<input class="vlabel" placeholder="যেমন Size / Color / Model" value="${esc(v.label||'')}">
+</div>
+<div>
+<label>Option / Value</label>
+<input class="vvalue" placeholder="যেমন M / Red / Model A" value="${esc(v.value||'')}">
+</div>
+<div>
+<label>Price (খালি রাখলে মূল দাম)</label>
+<input class="vprice" type="number" min="0" placeholder="Optional" value="${v.price==null?'':esc(v.price)}">
+</div>
+<div>
+<label>Stock</label>
+<input class="vstock" type="number" min="0" step="1" placeholder="Stock" value="${v.stock??0}">
+</div>
 </div>`;
+
 row.querySelector('.removeVariant').onclick=()=>row.remove();
 $('variantRows').appendChild(row);
 }
+
 $('pHasVariants').onchange=()=>{
 $('variantEditor').classList.toggle('hidden',!$('pHasVariants').checked);
-if($('pHasVariants').checked&&!$('variantRows').children.length)makeVariantRow();
+if($('pHasVariants').checked&&!$('variantRows').children.length){
+makeVariantRow();
+}
 };
+
 $('addVariantRow').onclick=()=>makeVariantRow();
 
 function collectVariants(){
 const rows=[...$('variantRows').querySelectorAll('.variant-row')];
+
 const variants=rows.map(row=>{
 const label=row.querySelector('.vlabel').value.trim();
 const value=row.querySelector('.vvalue').value.trim();
 const priceText=row.querySelector('.vprice').value;
 const stockText=row.querySelector('.vstock').value;
-if(!label||!value||stockText==='')throw Error('প্রতিটি Variant-এর নাম, Value ও Stock পূরণ করুন।');
+
+if(!label||!value||stockText===''){
+throw Error('প্রতিটি Variant-এর নাম, Value ও Stock পূরণ করুন।');
+}
+
 const stock=Number(stockText);
 const price=priceText===''?null:Number(priceText);
-if(!Number.isInteger(stock)||stock<0)throw Error('Variant Stock পূর্ণসংখ্যা হতে হবে।');
-if(price!==null&&(!Number.isFinite(price)||price<0))throw Error('Variant Price সঠিক নয়।');
-return {id:crypto.randomUUID(),label,value,price,stock,active:true};
+
+if(!Number.isInteger(stock)||stock<0){
+throw Error('Variant Stock পূর্ণসংখ্যা হতে হবে।');
+}
+
+if(price!==null&&(!Number.isFinite(price)||price<0)){
+throw Error('Variant Price সঠিক নয়।');
+}
+
+return{
+id:row.dataset.variantId||crypto.randomUUID(),
+label,
+value,
+price,
+stock,
+active:true
+};
 });
-if($('pHasVariants').checked&&!variants.length)throw Error('কমপক্ষে একটি Variant যোগ করুন।');
+
+if($('pHasVariants').checked&&!variants.length){
+throw Error('কমপক্ষে একটি Variant যোগ করুন।');
+}
+
 return variants;
 }
 
 function resetProductForm(){
-editingProductId=null;selectedNewImages=[];existingImages=[];
-['pname','price','stock','category','description'].forEach(id=>$(id).value='');
-$('imageFiles').value='';$('newImagePreview').innerHTML='';
-$('existingImages').innerHTML='';$('existingImageSection').classList.add('hidden');
-$('cancelEdit').classList.add('hidden');$('productFormTitle').textContent='Add New Product';
-$('addBtn').textContent='ADD PRODUCT';$('pHasVariants').checked=false;
-$('variantEditor').classList.add('hidden');$('variantRows').innerHTML='';
+editingProductId=null;
+selectedNewImages=[];
+existingImages=[];
+
+['pname','price','stock','category','description'].forEach(id=>{
+$(id).value='';
+});
+
+$('imageFiles').value='';
+$('newImagePreview').innerHTML='';
+$('existingImages').innerHTML='';
+$('existingImageSection').classList.add('hidden');
+$('cancelEdit').classList.add('hidden');
+$('productFormTitle').textContent='Add New Product';
+$('addBtn').textContent='ADD PRODUCT';
+$('pHasVariants').checked=false;
+$('variantEditor').classList.add('hidden');
+$('variantRows').innerHTML='';
 msg('productMsg','');
 }
+
 $('cancelEdit').onclick=resetProductForm;
 
 $('addBtn').onclick=async()=>{
-const name=$('pname').value.trim(),price=Number($('price').value),stock=Number($('stock').value);
+const name=$('pname').value.trim();
+const price=Number($('price').value);
+const stock=Number($('stock').value);
 const category=$('category').value.trim()||'General';
 const description=$('description').value.trim();
-if(!name||$('price').value===''||$('stock').value===''||!Number.isFinite(price)||!Number.isInteger(stock)||price<0||stock<0){
-msg('productMsg','সঠিক নাম, দাম ও পূর্ণসংখ্যা Stock লিখুন।');return;
+
+if(!name||$('price').value===''||$('stock').value===''||
+!Number.isFinite(price)||!Number.isInteger(stock)||price<0||stock<0){
+msg('productMsg','সঠিক নাম, দাম ও পূর্ণসংখ্যা Stock লিখুন।');
+return;
 }
+
 $('addBtn').disabled=true;
+
 try{
 const images=[...existingImages,...selectedNewImages];
+
 if(images.length>4)throw Error('একটি পণ্যে সর্বোচ্চ ৪টি ছবি রাখা যাবে।');
-if(images.reduce((s,x)=>s+x.length,0)>750000)throw Error('সব ছবি মিলিয়ে Size বেশি।');
+if(images.reduce((s,x)=>s+x.length,0)>750000){
+throw Error('সব ছবি মিলিয়ে Size বেশি।');
+}
+
 const hasVariants=$('pHasVariants').checked;
 const variants=hasVariants?collectVariants():[];
 const totalVariantStock=variants.reduce((s,v)=>s+v.stock,0);
+
 const data={
-name,price,stock:hasVariants?totalVariantStock:stock,
-category,description,images,imageUrl:images[0]||'',
-hasVariants,variants,active:true
+name,
+price,
+stock:hasVariants?totalVariantStock:stock,
+category,
+description,
+images,
+imageUrl:images[0]||'',
+hasVariants,
+variants,
+active:true
 };
+
 if(editingProductId){
-await updateDoc(doc(db,'storeProducts',editingProductId),{...data,updatedAt:serverTimestamp()});
+await updateDoc(doc(db,'storeProducts',editingProductId),{
+...data,
+updatedAt:serverTimestamp()
+});
 msg('productMsg','পণ্য Update হয়েছে।');
 }else{
-await addDoc(collection(db,'storeProducts'),{...data,createdAt:serverTimestamp()});
+await addDoc(collection(db,'storeProducts'),{
+...data,
+createdAt:serverTimestamp()
+});
 msg('productMsg','নতুন পণ্য যোগ হয়েছে।');
 $('recentActivity').textContent='📦 নতুন পণ্য যোগ করা হয়েছে: '+name;
 }
-resetProductForm();await loadProducts();
-}catch(e){msg('productMsg','সমস্যা: '+e.message);}
-finally{$('addBtn').disabled=false;}
+
+resetProductForm();
+await loadProducts();
+
+}catch(e){
+msg('productMsg','সমস্যা: '+e.message);
+}finally{
+$('addBtn').disabled=false;
+}
 };
 
 /* Products */
 async function loadProducts(){
 const s=await getDocs(collection(db,'storeProducts'));
-productDocs=s.docs;$('productCount').textContent=s.size;renderProducts();
+productDocs=s.docs;
+$('productCount').textContent=s.size;
+renderProducts();
 }
+
 function renderProducts(){
 const term=$('productSearch').value.trim().toLowerCase();
+
 const docs=productDocs.filter(d=>{
-const p=d.data();return(p.name||'').toLowerCase().includes(term)||(p.category||'').toLowerCase().includes(term);
+const p=d.data();
+return(p.name||'').toLowerCase().includes(term)||
+(p.category||'').toLowerCase().includes(term);
 });
+
 $('products').innerHTML='';
+
 docs.forEach(d=>{
-const p=d.data(),images=Array.isArray(p.images)?p.images:(p.imageUrl?[p.imageUrl]:[]);
-const box=document.createElement('div');box.className='item';
+const p=d.data();
+const images=Array.isArray(p.images)?p.images:(p.imageUrl?[p.imageUrl]:[]);
+const box=document.createElement('div');
+box.className='item';
+
 box.innerHTML=`
 <div class="productline">
 ${images.length?`<img src="${esc(images[0])}">`:'<div>🛍️</div>'}
-<div class="productinfo"><b>${esc(p.name)}</b>
+<div class="productinfo">
+<b>${esc(p.name)}</b>
 <div>${money(p.price)} | Stock ${esc(p.stock)} | ${esc(p.category)}</div>
 <small>${images.length}টি ছবি</small><br>
-${p.hasVariants?'<span class="variant-pill">Variants ON</span>':'<span class="variant-pill">Variants OFF</span>'}
-</div></div>
+${p.hasVariants
+?'<span class="variant-pill">Variants ON</span>'
+:'<span class="variant-pill">Variants OFF</span>'}
+</div>
+</div>
 <p>${esc(p.description||'Description দেওয়া হয়নি।')}</p>
 ${p.hasVariants&&Array.isArray(p.variants)?p.variants.map(v=>`
-<div class="hint">${esc(v.label)}: ${esc(v.value)} | ${money(v.price==null?p.price:v.price)} | Stock ${esc(v.stock)}</div>`).join(''):''}
-<div class="actions"><button class="green" data-edit="${d.id}">Edit</button><button class="danger" data-del="${d.id}">Delete</button></div>`;
+<div class="hint">
+${esc(v.label)}: ${esc(v.value)} |
+${money(v.price==null?p.price:v.price)} |
+Stock ${esc(v.stock)}
+</div>`).join(''):''}
+<div class="actions">
+<button class="green" data-edit="${d.id}">Edit</button>
+<button class="danger" data-del="${d.id}">Delete</button>
+</div>`;
+
 $('products').append(box);
 });
-if(!docs.length)$('products').textContent='কোনো পণ্য পাওয়া যায়নি।';
 
-$('products').querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>{
-const d=productDocs.find(x=>x.id===b.dataset.edit),p=d.data();
+if(!docs.length){
+$('products').textContent='কোনো পণ্য পাওয়া যায়নি।';
+}
+
+$('products').querySelectorAll('[data-edit]').forEach(b=>{
+b.onclick=()=>{
+const d=productDocs.find(x=>x.id===b.dataset.edit);
+const p=d.data();
+
 editingProductId=d.id;
-$('pname').value=p.name||'';$('price').value=p.price??0;
-$('stock').value=p.stock??0;$('category').value=p.category||'';
+$('pname').value=p.name||'';
+$('price').value=p.price??0;
+$('stock').value=p.stock??0;
+$('category').value=p.category||'';
 $('description').value=p.description||'';
-existingImages=Array.isArray(p.images)?[...p.images]:(p.imageUrl?[p.imageUrl]:[]);
-selectedNewImages=[];$('imageFiles').value='';
+
+existingImages=Array.isArray(p.images)
+?[...p.images]
+:(p.imageUrl?[p.imageUrl]:[]);
+
+selectedNewImages=[];
+$('imageFiles').value='';
 $('existingImageSection').classList.remove('hidden');
 $('cancelEdit').classList.remove('hidden');
-$('productFormTitle').textContent='Edit Product';$('addBtn').textContent='UPDATE PRODUCT';
+$('productFormTitle').textContent='Edit Product';
+$('addBtn').textContent='UPDATE PRODUCT';
 $('pHasVariants').checked=p.hasVariants===true;
 $('variantEditor').classList.toggle('hidden',!p.hasVariants);
 $('variantRows').innerHTML='';
-if(Array.isArray(p.variants))p.variants.forEach(v=>makeVariantRow(v));
-if(p.hasVariants&&!p.variants?.length)makeVariantRow();
-renderExistingImages();$('productForm').scrollIntoView({behavior:'smooth'});
+
+if(Array.isArray(p.variants)){
+p.variants.forEach(v=>makeVariantRow(v));
+}
+
+if(p.hasVariants&&!p.variants?.length){
+makeVariantRow();
+}
+
+renderExistingImages();
+$('productForm').scrollIntoView({behavior:'smooth'});
+};
 });
-$('products').querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{
+
+$('products').querySelectorAll('[data-del]').forEach(b=>{
+b.onclick=async()=>{
 if(!confirm('এই পণ্য Delete করবেন?'))return;
-try{await deleteDoc(doc(db,'storeProducts',b.dataset.del));await loadProducts();await loadAdminReviews();}
-catch(e){alert('Delete হয়নি: '+e.message);}
+try{
+await deleteDoc(doc(db,'storeProducts',b.dataset.del));
+await loadProducts();
+await loadAdminReviews();
+}catch(e){
+alert('Delete হয়নি: '+e.message);
+}
+};
 });
 }
+
 $('productSearch').oninput=renderProducts;
 
 /* Live Orders */
 function startLiveOrders(){
 if(ordersUnsubscribe)ordersUnsubscribe();
+
 ordersUnsubscribe=onSnapshot(collection(db,'orders'),snap=>{
 const incoming=snap.docs.map(d=>({id:d.id,...d.data()}));
-if(firstOrderSnapshot){knownOrderIds=new Set(incoming.map(o=>o.id));firstOrderSnapshot=false;}
-else{
+
+if(firstOrderSnapshot){
+knownOrderIds=new Set(incoming.map(o=>o.id));
+firstOrderSnapshot=false;
+}else{
 const added=incoming.filter(o=>!knownOrderIds.has(o.id));
-incoming.forEach(o=>knownOrderIds.add(o.id));added.forEach(announceNewOrder);
+incoming.forEach(o=>knownOrderIds.add(o.id));
+added.forEach(announceNewOrder);
 }
-allOrders=incoming.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-updateOrderStats();renderOrders();renderLatestOrders();
-},e=>{$('orders').textContent='Orders load হয়নি: '+e.message;});
+
+allOrders=incoming.sort((a,b)=>
+(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)
+);
+
+updateOrderStats();
+renderOrders();
+renderLatestOrders();
+
+},e=>{
+$('orders').textContent='Orders load হয়নি: '+e.message;
+});
 }
+
 function updateOrderStats(){
 $('orderCount').textContent=allOrders.length;
-$('salesCount').textContent=money(allOrders.filter(o=>o.status==='Delivered').reduce((a,o)=>a+Number(o.totalPrice||0),0));
+$('salesCount').textContent=money(
+allOrders
+.filter(o=>o.status==='Delivered')
+.reduce((a,o)=>a+Number(o.totalPrice||0),0)
+);
 }
+
 function renderLatestOrders(){
 $('latestOrders').innerHTML=allOrders.slice(0,3).map(o=>`
-<div class="latest-row"><span>📦</span>
-<div class="grow"><b>${esc(o.orderId||o.id)}</b><br>${esc(o.customerName||'Customer')}</div>
-<b>${money(o.totalPrice)}</b></div>`).join('')||'এখনো কোনো অর্ডার নেই।';
+<div class="latest-row">
+<span>📦</span>
+<div class="grow">
+<b>${esc(o.orderId||o.id)}</b><br>
+${esc(o.customerName||'Customer')}
+</div>
+<b>${money(o.totalPrice)}</b>
+</div>`).join('')||'এখনো কোনো অর্ডার নেই।';
 }
+
 function statusClass(status){
 if(status==='Delivered')return'delivered';
 if(status==='Cancelled')return'cancelled';
 if(['Confirmed','Processing','Shipped'].includes(status))return'processing';
 return'';
 }
+
 function copyText(value){
 if(!value)return;
+
 if(navigator.clipboard?.writeText){
-navigator.clipboard.writeText(String(value)).then(()=>alert('কপি হয়েছে!')).catch(()=>prompt('কপি করুন:',value));
-}else prompt('কপি করুন:',value);
+navigator.clipboard.writeText(String(value))
+.then(()=>alert('কপি হয়েছে!'))
+.catch(()=>prompt('কপি করুন:',value));
+}else{
+prompt('কপি করুন:',value);
 }
+}
+
 function renderOrders(){
-const list=allOrders.filter(o=>activeOrderTab==='All'||
-(activeOrderTab==='New'?o.status==='Pending':o.status===activeOrderTab));
+const list=allOrders.filter(o=>
+activeOrderTab==='All'||
+(activeOrderTab==='New'?o.status==='Pending':o.status===activeOrderTab)
+);
+
 $('orderTabs').innerHTML=statuses.map(x=>
-`<button data-tab="${x}" class="${x===activeOrderTab?'green':'gray'}">${x}</button>`).join('');
-$('orderTabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{activeOrderTab=b.dataset.tab;renderOrders();});
+`<button data-tab="${x}" class="${x===activeOrderTab?'green':'gray'}">${x}</button>`
+).join('');
+
+$('orderTabs').querySelectorAll('[data-tab]').forEach(b=>{
+b.onclick=()=>{
+activeOrderTab=b.dataset.tab;
+renderOrders();
+};
+});
+
 $('orders').innerHTML='';
+
 list.forEach(o=>{
 const box=document.createElement('div');
 box.className='order-card'+(o.status==='Pending'?' new-order':'');
 const orderId=o.orderId||o.id;
 const products=Array.isArray(o.products)?o.products:[];
+
 const productHtml=products.length?products.map(p=>`
 <div class="order-product">
 <b>${esc(p.productName||p.name||'Product')}</b><br>
@@ -763,9 +1063,11 @@ ${p.variantLabel?esc(p.variantLabel)+': ':''}${esc(p.variantValue||'')}
 ${p.variantValue?'<br>':''}
 দাম: ${money(p.price)} × ${esc(p.quantity||1)}
 = <b>${money(Number(p.price||0)*Number(p.quantity||1))}</b>
-</div>`).join(''):`<div class="order-product">${esc(o.productName||'Product information unavailable')}</div>`;
+</div>`).join(''):
+`<div class="order-product">${esc(o.productName||'Product information unavailable')}</div>`;
+
 const paymentMethod=o.paymentMethod||'Not specified';
-const isCOD=paymentMethod==='Cash on Delivery';
+
 box.innerHTML=`
 <div class="order-top">
 <div class="order-id">🧾 ${esc(orderId)}</div>
@@ -804,11 +1106,15 @@ ${productHtml}
 Payment Method: <b>${esc(paymentMethod)}</b><br>
 Payment Status: <b>${esc(o.paymentStatus||'Pending')}</b><br>
 Sender Number:
-<div class="copy-row"><span class="copy-value">${esc(o.senderNumber||'Not applicable (COD)')}</span>
-${o.senderNumber?`<button data-copy="${esc(o.senderNumber)}">COPY</button>`:''}</div>
+<div class="copy-row">
+<span class="copy-value">${esc(o.senderNumber||'Not applicable (COD)')}</span>
+${o.senderNumber?`<button data-copy="${esc(o.senderNumber)}">COPY</button>`:''}
+</div>
 Transaction ID:
-<div class="copy-row"><span class="copy-value">${esc(o.trxId||'Not applicable (COD)')}</span>
-${o.trxId?`<button data-copy="${esc(o.trxId)}">COPY</button>`:''}</div>
+<div class="copy-row">
+<span class="copy-value">${esc(o.trxId||'Not applicable (COD)')}</span>
+${o.trxId?`<button data-copy="${esc(o.trxId)}">COPY</button>`:''}
+</div>
 </div>
 </div>
 </div>
@@ -825,26 +1131,45 @@ ${esc([o.upazila,o.district,o.division].filter(Boolean).join(', '))}
 <h4>⚙ ORDER STATUS</h4>
 <select data-status="${esc(o.id)}">
 ${['Pending','Confirmed','Processing','Shipped','Delivered','Cancelled'].map(x=>
-`<option ${x===(o.status||'Pending')?'selected':''}>${x}</option>`).join('')}
+`<option ${x===(o.status||'Pending')?'selected':''}>${x}</option>`
+).join('')}
 </select>
 <button class="green" data-saveorder="${esc(o.id)}" style="width:100%">✓ Update Order Status</button>
 </div>`;
+
 $('orders').append(box);
 });
-if(!list.length)$('orders').textContent='কোনো অর্ডার নেই।';
 
-$('orders').querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copyText(b.dataset.copy));
-$('orders').querySelectorAll('[data-saveorder]').forEach(b=>b.onclick=async()=>{
+if(!list.length){
+$('orders').textContent='কোনো অর্ডার নেই।';
+}
+
+$('orders').querySelectorAll('[data-copy]').forEach(b=>{
+b.onclick=()=>copyText(b.dataset.copy);
+});
+
+$('orders').querySelectorAll('[data-saveorder]').forEach(b=>{
+b.onclick=async()=>{
 const id=b.dataset.saveorder;
 const select=b.closest('.order-card').querySelector('[data-status]');
-const status=select.value,o=allOrders.find(x=>x.id===id);
+const status=select.value;
+const o=allOrders.find(x=>x.id===id);
+
 try{
 await updateDoc(doc(db,'orders',id),{status});
+
 await setDoc(doc(db,'orderTracking',o.orderId||id),{
-orderId:o.orderId||id,status,updatedAt:serverTimestamp()
+orderId:o.orderId||id,
+status,
+updatedAt:serverTimestamp()
 },{merge:true});
+
 alert('Order status update হয়েছে।');
-}catch(e){alert('Update হয়নি: '+e.message);}
+
+}catch(e){
+alert('Update হয়নি: '+e.message);
+}
+};
 });
 }
 
@@ -852,35 +1177,69 @@ alert('Order status update হয়েছে।');
 async function loadCustomers(){
 const s=await getDocs(collection(db,'customerProfiles'));
 allCustomers=s.docs.map(d=>({id:d.id,...d.data()}));
-$('customerCount').textContent=allCustomers.length;renderCustomers();
+$('customerCount').textContent=allCustomers.length;
+renderCustomers();
 }
+
 function renderCustomers(){
 const term=($('customerSearch').value||'').toLowerCase();
-const html=allCustomers.filter(c=>(c.name||'').toLowerCase().includes(term)||(c.email||'').toLowerCase().includes(term)).map(c=>{
+
+const html=allCustomers
+.filter(c=>
+(c.name||'').toLowerCase().includes(term)||
+(c.email||'').toLowerCase().includes(term)
+)
+.map(c=>{
 const os=allOrders.filter(o=>o.uid===c.id);
 const valid=os.filter(o=>o.status!=='Cancelled');
 const spent=valid.reduce((a,o)=>a+Number(o.totalPrice||0),0);
 const del=os.filter(o=>o.status==='Delivered').length;
 const pending=os.filter(o=>o.status==='Pending').length;
 const cancel=os.filter(o=>o.status==='Cancelled').length;
-const items=valid.flatMap(o=>(o.products||[]).map(p=>`${p.productName} × ${p.quantity}`));
-return `<div class="customer"><b>${esc(c.name||'Customer')}</b><br>
+const items=valid.flatMap(o=>
+(o.products||[]).map(p=>`${p.productName} × ${p.quantity}`)
+);
+
+return `
+<div class="customer">
+<b>${esc(c.name||'Customer')}</b><br>
 ${esc(c.email||'')} | ${esc(c.phone||'')}<br>
 UID: ${esc(c.id)}<br>
-Total Orders: ${os.length} | Delivered: ${del} | Pending: ${pending} | Cancelled: ${cancel}<br>
-Total Purchase: ${money(spent)}<br>Products: ${esc([...new Set(items)].join(', ')||'None')}<br>
+Total Orders: ${os.length} |
+Delivered: ${del} |
+Pending: ${pending} |
+Cancelled: ${cancel}<br>
+Total Purchase: ${money(spent)}<br>
+Products: ${esc([...new Set(items)].join(', ')||'None')}<br>
 Created: ${c.createdAt?.toDate?c.createdAt.toDate().toLocaleString('en-BD'):'—'}<br>
 Status: ${c.banned?'BANNED':'Active'}
-<button class="${c.banned?'green':'danger'}" data-ban="${c.id}" data-banned="${c.banned?'1':'0'}">${c.banned?'UNBAN CUSTOMER':'BAN CUSTOMER'}</button></div>`;
+<button class="${c.banned?'green':'danger'}"
+data-ban="${c.id}" data-banned="${c.banned?'1':'0'}">
+${c.banned?'UNBAN CUSTOMER':'BAN CUSTOMER'}
+</button>
+</div>`;
 }).join('');
+
 $('customers').innerHTML=html||'কোনো Customer পাওয়া যায়নি।';
-$('customers').querySelectorAll('[data-ban]').forEach(b=>b.onclick=async()=>{
+
+$('customers').querySelectorAll('[data-ban]').forEach(b=>{
+b.onclick=async()=>{
 const banned=b.dataset.banned!=='1';
-if(!confirm(banned?'এই Customer Ban করবেন?':'Customer Unban করবেন?'))return;
-try{await updateDoc(doc(db,'customerProfiles',b.dataset.ban),{banned});await loadCustomers();}
-catch(e){alert('Update হয়নি: '+e.message);}
+
+if(!confirm(banned?'এই Customer Ban করবেন?':'Customer Unban করবেন?')){
+return;
+}
+
+try{
+await updateDoc(doc(db,'customerProfiles',b.dataset.ban),{banned});
+await loadCustomers();
+}catch(e){
+alert('Update হয়নি: '+e.message);
+}
+};
 });
 }
+
 $('customerSearch').oninput=renderCustomers;
 
 /* Payment */
@@ -891,114 +1250,258 @@ bkashNumber:$('bkashNumber').value.trim(),
 nagadNumber:$('nagadNumber').value.trim(),
 updatedAt:serverTimestamp()
 },{merge:true});
+
 msg('paymentMsg','Payment settings saved.');
-}catch(e){msg('paymentMsg',e.message);}
+
+}catch(e){
+msg('paymentMsg',e.message);
+}
 };
 
 /* Global variants */
 async function loadGlobalVariantSetting(){
 try{
 const s=await getDoc(doc(db,'storeSettings','variantSettings'));
-globalVariantEnabled=s.exists()?s.data().enabled!==false:true;
+
+globalVariantEnabled=s.exists()
+?s.data().enabled!==false
+:true;
+
 $('globalVariants').checked=globalVariantEnabled;
-}catch(e){msg('variantSettingMsg','Settings লোড হয়নি: '+e.message);}
+
+}catch(e){
+msg('variantSettingMsg','Settings লোড হয়নি: '+e.message);
 }
+}
+
 $('saveVariantSetting').onclick=async()=>{
 try{
 await setDoc(doc(db,'storeSettings','variantSettings'),{
-enabled:$('globalVariants').checked,updatedAt:serverTimestamp()
+enabled:$('globalVariants').checked,
+updatedAt:serverTimestamp()
 },{merge:true});
+
 globalVariantEnabled=$('globalVariants').checked;
-msg('variantSettingMsg',globalVariantEnabled?'Variant System ON করা হয়েছে।':'Variant System OFF করা হয়েছে।');
-}catch(e){msg('variantSettingMsg','Save হয়নি: '+e.message);}
+
+msg(
+'variantSettingMsg',
+globalVariantEnabled
+?'Variant System ON করা হয়েছে।'
+:'Variant System OFF করা হয়েছে।'
+);
+
+}catch(e){
+msg('variantSettingMsg','Save হয়নি: '+e.message);
+}
 };
 
 /* Notices */
 async function loadNotices(){
 const s=await getDocs(collection(db,'storeNotices'));
 $('notices').innerHTML='';
+
 s.forEach(d=>{
-const n=d.data(),el=document.createElement('div');el.className='notice-item';
-el.innerHTML=`<b>${esc(n.text)}</b><p>Status: ${n.active?'Active':'Off'}</p>
-<div class="actions"><button class="gray" data-toggle="${d.id}">${n.active?'Turn Off':'Turn On'}</button>
+const n=d.data();
+const el=document.createElement('div');
+el.className='notice-item';
+
+el.innerHTML=`
+<b>${esc(n.text)}</b>
+<p>Status: ${n.active?'Active':'Off'}</p>
+<div class="actions">
+<button class="gray" data-toggle="${d.id}">${n.active?'Turn Off':'Turn On'}</button>
 <button class="green" data-editnotice="${d.id}">Edit</button>
-<button class="danger" data-delnotice="${d.id}">Delete</button></div>`;
+<button class="danger" data-delnotice="${d.id}">Delete</button>
+</div>`;
+
 $('notices').append(el);
 });
-$('notices').querySelectorAll('[data-toggle]').forEach(b=>b.onclick=async()=>{
+
+$('notices').querySelectorAll('[data-toggle]').forEach(b=>{
+b.onclick=async()=>{
 const d=s.docs.find(x=>x.id===b.dataset.toggle);
-await updateDoc(doc(db,'storeNotices',b.dataset.toggle),{active:!d.data().active,updatedAt:serverTimestamp()});
+
+await updateDoc(doc(db,'storeNotices',b.dataset.toggle),{
+active:!d.data().active,
+updatedAt:serverTimestamp()
+});
+
 loadNotices();
+};
 });
-$('notices').querySelectorAll('[data-editnotice]').forEach(b=>b.onclick=async()=>{
-const d=s.docs.find(x=>x.id===b.dataset.editnotice),text=prompt('Notice text',d.data().text);
+
+$('notices').querySelectorAll('[data-editnotice]').forEach(b=>{
+b.onclick=async()=>{
+const d=s.docs.find(x=>x.id===b.dataset.editnotice);
+const text=prompt('Notice text',d.data().text);
+
 if(text===null||!text.trim())return;
-await updateDoc(doc(db,'storeNotices',b.dataset.editnotice),{text:text.trim(),updatedAt:serverTimestamp()});loadNotices();
+
+await updateDoc(doc(db,'storeNotices',b.dataset.editnotice),{
+text:text.trim(),
+updatedAt:serverTimestamp()
 });
-$('notices').querySelectorAll('[data-delnotice]').forEach(b=>b.onclick=async()=>{
+
+loadNotices();
+};
+});
+
+$('notices').querySelectorAll('[data-delnotice]').forEach(b=>{
+b.onclick=async()=>{
 if(!confirm('Notice delete করবেন?'))return;
-await deleteDoc(doc(db,'storeNotices',b.dataset.delnotice));loadNotices();
+
+await deleteDoc(doc(db,'storeNotices',b.dataset.delnotice));
+loadNotices();
+};
 });
 }
+
 $('addNotice').onclick=async()=>{
-const text=$('noticeText').value.trim();if(!text)return;
+const text=$('noticeText').value.trim();
+if(!text)return;
+
 try{
-await addDoc(collection(db,'storeNotices'),{text,active:true,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
-$('noticeText').value='';loadNotices();
-}catch(e){alert('Notice যোগ হয়নি: '+e.message);}
+await addDoc(collection(db,'storeNotices'),{
+text,
+active:true,
+createdAt:serverTimestamp(),
+updatedAt:serverTimestamp()
+});
+
+$('noticeText').value='';
+loadNotices();
+
+}catch(e){
+alert('Notice যোগ হয়নি: '+e.message);
+}
 };
 
 /* Reviews */
 async function loadAdminReviews(){
 $('adminReviews').textContent='Loading Reviews...';
+
 try{
-const productsSnap=await getDocs(collection(db,'storeProducts'));let html='';
+const productsSnap=await getDocs(collection(db,'storeProducts'));
+let html='';
+
 for(const pDoc of productsSnap.docs){
-const p=pDoc.data(),reviewSnap=await getDocs(collection(db,'storeProducts',pDoc.id,'reviews'));
+const p=pDoc.data();
+const reviewSnap=await getDocs(
+collection(db,'storeProducts',pDoc.id,'reviews')
+);
+
 if(reviewSnap.empty)continue;
+
 html+=`<div class="review-item"><b>${esc(p.name||'Product')}</b>`;
+
 reviewSnap.forEach(rDoc=>{
 const r=rDoc.data();
-html+=`<div style="background:white;padding:10px;border-radius:8px;margin:9px 0">
-<b>${esc(r.name||'Customer')}</b><div class="star">${'★'.repeat(Math.min(5,Math.max(0,Number(r.rating)||0)))}</div>
-<p>${esc(r.comment||'')}</p><small>UID: ${esc(r.uid||'')}</small>
-<button class="danger" data-review-delete="${esc(pDoc.id)}" data-review-id="${esc(rDoc.id)}">Delete Review</button></div>`;
+
+html+=`
+<div style="background:white;padding:10px;border-radius:8px;margin:9px 0">
+<b>${esc(r.name||'Customer')}</b>
+<div class="star">${'★'.repeat(Math.min(5,Math.max(0,Number(r.rating)||0)))}</div>
+<p>${esc(r.comment||'')}</p>
+<small>UID: ${esc(r.uid||'')}</small>
+<button class="danger" data-review-delete="${esc(pDoc.id)}" data-review-id="${esc(rDoc.id)}">Delete Review</button>
+</div>`;
 });
+
 html+='</div>';
 }
+
 $('adminReviews').innerHTML=html||'এখনো কোনো Review নেই।';
-$('adminReviews').querySelectorAll('[data-review-delete]').forEach(b=>b.onclick=async()=>{
+
+$('adminReviews').querySelectorAll('[data-review-delete]').forEach(b=>{
+b.onclick=async()=>{
 if(!confirm('এই Review মুছে ফেলবেন?'))return;
-try{await deleteDoc(doc(db,'storeProducts',b.dataset.reviewDelete,'reviews',b.dataset.reviewId));await loadAdminReviews();}
-catch(e){alert('Review Delete হয়নি: '+e.message);}
+
+try{
+await deleteDoc(doc(
+db,
+'storeProducts',
+b.dataset.reviewDelete,
+'reviews',
+b.dataset.reviewId
+));
+
+await loadAdminReviews();
+
+}catch(e){
+alert('Review Delete হয়নি: '+e.message);
+}
+};
 });
-}catch(e){$('adminReviews').textContent='Reviews লোড হয়নি: '+e.message;}
+
+}catch(e){
+$('adminReviews').textContent='Reviews লোড হয়নি: '+e.message;
+}
 }
 
 /* Load */
 async function loadData(){
 try{
-await Promise.all([loadProducts(),loadNotices(),loadAdminReviews(),loadGlobalVariantSetting()]);
+await Promise.all([
+loadProducts(),
+loadNotices(),
+loadAdminReviews(),
+loadGlobalVariantSetting()
+]);
+
 const p=await getDoc(doc(db,'storeSettings','paymentMethods'));
-if(p.exists()){$('bkashNumber').value=p.data().bkashNumber||'';$('nagadNumber').value=p.data().nagadNumber||'';}
-}catch(e){alert('ডেটা লোড হয়নি: '+e.message);}
+
+if(p.exists()){
+$('bkashNumber').value=p.data().bkashNumber||'';
+$('nagadNumber').value=p.data().nagadNumber||'';
+}
+
+}catch(e){
+alert('ডেটা লোড হয়নি: '+e.message);
+}
 }
 
 /* Reset orders */
 $('resetOrders').onclick=async()=>{
-if(!confirm('সব orders ও tracking data স্থায়ীভাবে মুছে যাবে। এগোবেন?'))return;
-if(prompt('নিশ্চিত করতে RESET লিখুন')!=='RESET')return;
-$('resetOrders').disabled=true;
-try{
-const [os,ts]=await Promise.all([getDocs(collection(db,'orders')),getDocs(collection(db,'orderTracking'))]);
-const refs=[...os.docs,...ts.docs];
-for(let i=0;i<refs.length;i+=400){
-const batch=writeBatch(db);refs.slice(i,i+400).forEach(d=>batch.delete(d.ref));await batch.commit();
+if(!confirm('সব orders ও tracking data স্থায়ীভাবে মুছে যাবে। এগোবেন?')){
+return;
 }
-await setDoc(doc(db,'counters','orderSequence'),{lastNumber:0});
-msg('resetMsg',`${os.size} orders এবং ${ts.size} tracking records মুছে ফেলা হয়েছে।`);
-}catch(e){msg('resetMsg','Reset হয়নি: '+e.message);}
-finally{$('resetOrders').disabled=false;}
+
+if(prompt('নিশ্চিত করতে RESET লিখুন')!=='RESET'){
+return;
+}
+
+$('resetOrders').disabled=true;
+
+try{
+const [os,ts]=await Promise.all([
+getDocs(collection(db,'orders')),
+getDocs(collection(db,'orderTracking'))
+]);
+
+const refs=[...os.docs,...ts.docs];
+
+for(let i=0;i<refs.length;i+=400){
+const batch=writeBatch(db);
+
+refs.slice(i,i+400).forEach(d=>batch.delete(d.ref));
+
+await batch.commit();
+}
+
+await setDoc(doc(db,'counters','orderSequence'),{
+lastNumber:0
+});
+
+msg(
+'resetMsg',
+`${os.size} orders এবং ${ts.size} tracking records মুছে ফেলা হয়েছে।`
+);
+
+}catch(e){
+msg('resetMsg','Reset হয়নি: '+e.message);
+}finally{
+$('resetOrders').disabled=false;
+}
 };
 </script>
 
