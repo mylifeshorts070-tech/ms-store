@@ -247,11 +247,15 @@ if(variantProduct&&!variant){
 invalid=true;
 }
 
+if(variant&&!globalVariantEnabled){
+invalid=true;
+}
+
 const stock=variant?Math.max(0,Number(variant.stock)||0):Math.max(0,Number(p.stock)||0);
 const price=objectItem?Number(item.price??(variant?.price??p.price)):Number(p.price)||0;
 const label=objectItem&&item.variantLabel?item.variantLabel+': '+(item.variantValue||''):'';
 
-if(qty>stock|| (variantProduct&&!variant))invalid=true;
+if(qty>stock||(variantProduct&&!variant))invalid=true;
 sub+=price*qty;
 
 return `<div class="cart-product">
@@ -268,7 +272,7 @@ $('delivery').textContent=money(delivery);
 $('total').textContent=money(sub+delivery);
 
 if(invalid){
-$('orderMsg').textContent='Cart-এর কোনো পণ্যের Variant বা Stock সমস্যা আছে।';
+$('orderMsg').textContent='Cart-এর কোনো পণ্যের Variant বা Stock সমস্যা আছে। পণ্যটি আবার Cart-এ যোগ করুন।';
 }
 }
 
@@ -435,9 +439,21 @@ $('placeOrder').textContent='PROCESSING...';
 
 try{
 const counterRef=doc(db,'counters','orderSequence');
+const variantSettingsRef=doc(db,'storeSettings','variantSettings');
 
 const result=await runTransaction(db,async tx=>{
-const counterSnap=await tx.get(counterRef);
+
+/* সব প্রয়োজনীয় তথ্য আগে Read করা হচ্ছে */
+const [counterSnap,variantSettingsSnap]=await Promise.all([
+tx.get(counterRef),
+tx.get(variantSettingsRef)
+]);
+
+/* Transaction-এর সময়কার সর্বশেষ Variant Setting */
+const transactionVariantEnabled=variantSettingsSnap.exists()
+?variantSettingsSnap.data().enabled!==false
+:true;
+
 const freshProducts=[];
 
 for(const [key,item] of entries){
@@ -447,18 +463,23 @@ const quantity=objectItem?Number(item.quantity):Number(item);
 
 const productRef=doc(db,'storeProducts',productId);
 const productSnap=await tx.get(productRef);
+
 if(!productSnap.exists())throw Error('একটি পণ্য আর পাওয়া যাচ্ছে না।');
 
 const data=productSnap.data();
+
 if(data.active===false)throw Error((data.name||'পণ্য')+' বর্তমানে বিক্রির জন্য নেই।');
 
 if(!Number.isInteger(quantity)||quantity<=0)throw Error('পণ্যের পরিমাণ সঠিক নয়।');
 
-const variantId=objectItem?item.variantId:'';
+const variantId=objectItem?item.variantId||'':'';
 const variantLabel=objectItem?item.variantLabel||'':'';
 const variantValue=objectItem?item.variantValue||'':'';
 
-const variantMode=globalVariantEnabled&&data.hasVariants===true&&Array.isArray(data.variants);
+const variantMode=transactionVariantEnabled&&
+data.hasVariants===true&&
+Array.isArray(data.variants)&&
+data.variants.some(v=>v.active!==false);
 
 let variant=null;
 let stock=Number(data.stock)||0;
@@ -466,10 +487,16 @@ let price=Number(data.price)||0;
 
 if(variantMode){
 if(!variantId)throw Error((data.name||'পণ্য')+' এর Variant নির্বাচন করা নেই।');
+
 variant=(data.variants||[]).find(v=>v.id===variantId);
-if(!variant||variant.active===false)throw Error('নির্বাচিত Variant আর পাওয়া যাচ্ছে না।');
+
+if(!variant||variant.active===false){
+throw Error('নির্বাচিত Variant আর পাওয়া যাচ্ছে না।');
+}
+
 stock=Math.max(0,Number(variant.stock)||0);
 price=Number(variant.price??data.price)||0;
+
 }else if(variantId){
 throw Error('Variant System বর্তমানে বন্ধ। Cart থেকে পণ্য আবার যোগ করুন।');
 }
@@ -479,13 +506,21 @@ throw Error((data.name||'পণ্য')+' এর পর্যাপ্ত Stock 
 }
 
 freshProducts.push({
-id:productId,ref:productRef,name:data.name||'Product',
-quantity,price,stock,variantId,variantLabel,variantValue,
-variantMode,variants:data.variants||[]
+id:productId,
+ref:productRef,
+name:data.name||'Product',
+quantity,
+price,
+stock,
+variantId,
+variantLabel,
+variantValue,
+variantMode,
+variants:data.variants||[]
 });
 }
 
-/* সব পণ্য যাচাই শেষে হিসাব */
+/* Order-এর Product Lines */
 const lines=freshProducts.map(p=>({
 productId:p.id,
 productName:p.name,
@@ -501,66 +536,148 @@ variantValue:p.variantValue
 const sub=lines.reduce((s,p)=>s+p.price*p.quantity,0);
 const del=division==='Dhaka'?60:80;
 const total=sub+del;
-const num=(counterSnap.exists()?Number(counterSnap.data().lastNumber)||0:0)+1;
+
+const num=(counterSnap.exists()
+?Number(counterSnap.data().lastNumber)||0
+:0)+1;
+
 const newOrderId='MS-'+String(num).padStart(4,'0');
 
 const orderRef=doc(db,'orders',newOrderId);
 const trackingRef=doc(db,'orderTracking',newOrderId);
+
+/*
+একই Product-এর একাধিক Variant থাকলে
+সব Stock পরিবর্তন একসঙ্গে হিসাব করা হবে।
+*/
+
+const productGroups=new Map();
+
+freshProducts.forEach(p=>{
+if(!productGroups.has(p.id)){
+productGroups.set(p.id,{
+ref:p.ref,
+variantMode:p.variantMode,
+variants:p.variants,
+normalStock:p.stock,
+normalQuantity:0,
+variantQuantities:new Map()
+});
+}
+
+const group=productGroups.get(p.id);
+
+if(p.variantMode){
+const oldQty=group.variantQuantities.get(p.variantId)||0;
+group.variantQuantities.set(p.variantId,oldQty+p.quantity);
+}else{
+group.normalQuantity+=p.quantity;
+}
+});
+
+/* একই Variant একাধিকবার থাকলেও মোট পরিমাণ যাচাই */
+for(const group of productGroups.values()){
+if(group.variantMode){
+for(const [variantId,quantity] of group.variantQuantities){
+const v=group.variants.find(x=>x.id===variantId);
+if(!v||v.active===false)throw Error('একটি Variant আর পাওয়া যাচ্ছে না।');
+if(Number(v.stock||0)<quantity){
+throw Error('একটি Variant-এর পর্যাপ্ত Stock নেই।');
+}
+}
+}else if(group.normalQuantity>group.normalStock){
+throw Error('একটি পণ্যের পর্যাপ্ত Stock নেই।');
+}
+}
+
 const stockChanges={};
 
 freshProducts.forEach(p=>{
 const stockKey=p.variantId?p.id+'__'+p.variantId:p.id;
-stockChanges[stockKey]=p.quantity;
+stockChanges[stockKey]=(stockChanges[stockKey]||0)+p.quantity;
 });
 
+/* Counter ও Order তৈরি */
 tx.set(counterRef,{lastNumber:num});
 
 tx.set(orderRef,{
 uid:currentUser.uid,
-customerName:name,phone,email:orderEmail,
+customerName:name,
+phone,
+email:orderEmail,
 accountEmail:currentUser.email,
-address,division,district,upazila,
+address,
+division,
+district,
+upazila,
 productName:lines.map(p=>
 p.productName+(p.variantValue?' ('+p.variantValue+')':'')+' x'+p.quantity
 ).join(', '),
-products:lines,stockChanges,
+products:lines,
+stockChanges,
 quantity:lines.reduce((s,p)=>s+p.quantity,0),
-subtotal:sub,deliveryCharge:del,totalPrice:total,
-paymentMethod:method,senderNumber,trxId,
+subtotal:sub,
+deliveryCharge:del,
+totalPrice:total,
+paymentMethod:method,
+senderNumber,
+trxId,
 paymentStatus:method==='Cash on Delivery'?'Pending':'Unverified',
-orderId:newOrderId,status:'Pending',
+orderId:newOrderId,
+status:'Pending',
 createdAt:serverTimestamp()
 });
 
 tx.set(trackingRef,{
-orderId:newOrderId,status:'Pending',createdAt:serverTimestamp()
+orderId:newOrderId,
+status:'Pending',
+createdAt:serverTimestamp()
 });
 
-/* Variant Stock অথবা Normal Stock কমানো */
-freshProducts.forEach(p=>{
-if(p.variantMode){
-const updatedVariants=p.variants.map(v=>{
-if(v.id!==p.variantId)return v;
-return {...v,stock:Math.max(0,Number(v.stock)||0)-p.quantity};
+/* প্রতিটি Product-এর Stock একবার করে Update */
+for(const [productId,group] of productGroups){
+
+if(group.variantMode){
+
+const updatedVariants=group.variants.map(v=>{
+const quantity=group.variantQuantities.get(v.id)||0;
+
+if(quantity<=0)return v;
+
+return{
+...v,
+stock:Math.max(0,Number(v.stock||0)-quantity)
+};
 });
+
 const totalStock=updatedVariants
 .filter(v=>v.active!==false)
 .reduce((s,v)=>s+(Number(v.stock)||0),0);
 
-tx.update(p.ref,{
+tx.update(group.ref,{
 variants:updatedVariants,
 stock:totalStock,
 lastStockOrderId:newOrderId
 });
+
 }else{
-tx.update(p.ref,{
-stock:p.stock-p.quantity,
+
+tx.update(group.ref,{
+stock:group.normalStock-group.normalQuantity,
 lastStockOrderId:newOrderId
 });
-}
-});
 
-return{orderId:newOrderId,lines,subtotal:sub,delivery:del,total};
+}
+}
+
+return{
+orderId:newOrderId,
+lines,
+subtotal:sub,
+delivery:del,
+total
+};
+
 });
 
 /* সফল অর্ডার */
@@ -568,9 +685,11 @@ cart={};
 localStorage.removeItem('msCart');
 localStorage.removeItem('msBuyNowMode');
 localStorage.removeItem('msCartBackup');
+
 renderCart();
 
 let emailSent=false;
+
 try{
 await emailjs.send(
 EMAILJS_SERVICE_ID,
@@ -592,7 +711,9 @@ tracking_link:'https://mylifeshorts070-tech.github.io/ms-store/my-account.html'
 },
 EMAILJS_PUBLIC_KEY
 );
+
 emailSent=true;
+
 }catch(emailError){
 console.error('EmailJS Error:',emailError);
 }
@@ -603,14 +724,18 @@ Variant অনুযায়ী Stock স্বয়ংক্রিয়ভাবে �
 ${emailSent?'Confirmation Email পাঠানো হয়েছে।':'অর্ডার হয়েছে, তবে Confirmation Email পাঠানো যায়নি।'}<br>
 <a href="my-account.html">আমার অর্ডার দেখুন</a>`;
 
-showToast(emailSent?'অর্ডার সফল হয়েছে! Confirmation Email পাঠানো হয়েছে।':'অর্ডার সফল হয়েছে! Email পাঠানো যায়নি।');
+showToast(emailSent
+?'অর্ডার সফল হয়েছে! Confirmation Email পাঠানো হয়েছে।'
+:'অর্ডার সফল হয়েছে! Email পাঠানো যায়নি।');
 
 }catch(e){
 console.error(e);
 $('orderMsg').textContent='অর্ডার জমা হয়নি: '+authError(e);
 }finally{
 $('placeOrder').disabled=false;
-$('placeOrder').textContent='CONFIRM ORDER';
+$('placeOrder').textContent=currentUser
+?(currentUser.emailVerified?'CONFIRM ORDER':'VERIFY GMAIL TO ORDER')
+:'LOGIN TO PLACE ORDER';
 }
 };
 
