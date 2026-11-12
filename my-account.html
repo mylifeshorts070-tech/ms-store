@@ -8,143 +8,41 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
- margin:0;
- background:#f5f6fa;
- font-family:Arial,sans-serif;
- color:#202536;
-}
-
-header{
- background:#111827;
- color:white;
- padding:16px 5%;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
-}
-
-header a{
- color:#f59e0b;
- text-decoration:none;
- font-weight:bold;
-}
-
-main{
- max-width:850px;
- margin:25px auto;
- padding:0 14px;
-}
-
-.panel{
- background:white;
- border-radius:13px;
- padding:19px;
- margin-bottom:16px;
-}
-
+body{margin:0;background:#f5f6fa;font-family:Arial,sans-serif;color:#202536}
+header{background:#111827;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:10px}
+header a{color:#f59e0b;text-decoration:none;font-weight:bold}
+main{max-width:850px;margin:25px auto;padding:0 14px}
+.panel{background:white;border-radius:13px;padding:19px;margin-bottom:16px}
 h2{margin-top:0;font-size:21px}
-
-input{
- width:100%;
- padding:12px;
- border:1px solid #d7dce5;
- border-radius:8px;
- margin:5px 0 10px;
- font-size:15px;
-}
-
-button{
- border:0;
- border-radius:8px;
- padding:13px 15px;
- background:#111827;
- color:white;
- font-weight:bold;
- cursor:pointer;
- margin-top:7px;
- font-size:15px;
-}
-
+h3{font-size:17px;margin-bottom:10px}
+input,select{width:100%;padding:12px;border:1px solid #d7dce5;border-radius:8px;margin:5px 0 10px;font-size:15px}
+button{border:0;border-radius:8px;padding:13px 15px;background:#111827;color:white;font-weight:bold;cursor:pointer;margin-top:7px;font-size:15px}
 button:disabled{opacity:.6}
-
-.btn{
- width:100%;
-}
-
+.btn{width:100%}
 .secondary{background:#64748b}
 .orange{background:#f59e0b;color:#111827}
 .red{background:#dc2626}
-
-.order{
- background:#f8fafc;
- border:1px solid #e5e7eb;
- border-radius:10px;
- padding:15px;
- margin:12px 0;
- line-height:1.7;
- overflow-wrap:anywhere;
-}
-
-.order textarea{
- width:100%;
- min-height:75px;
- padding:10px;
- border:1px solid #ddd;
- border-radius:8px;
- margin:8px 0;
-}
-
-.status{
- display:inline-block;
- background:#e2e8f0;
- padding:4px 9px;
- border-radius:15px;
- font-size:12px;
- font-weight:bold;
-}
-
-.msg{
- font-size:14px;
- line-height:1.6;
- overflow-wrap:anywhere;
-}
-
+.green{background:#15803d}
+.order{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:15px;margin:12px 0;line-height:1.7;overflow-wrap:anywhere}
+.order textarea{width:100%;min-height:75px;padding:10px;border:1px solid #ddd;border-radius:8px;margin:8px 0}
+.status{display:inline-block;background:#e2e8f0;padding:4px 9px;border-radius:15px;font-size:12px;font-weight:bold}
+.msg{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
 .hidden{display:none!important}
-
-#toast{
- position:fixed;
- top:15px;
- left:50%;
- transform:translateX(-50%) translateY(-120px);
- width:calc(100% - 30px);
- max-width:500px;
- padding:16px;
- border-radius:12px;
- background:#dcfce7;
- color:#166534;
- font-size:16px;
- font-weight:bold;
- text-align:center;
- box-shadow:0 5px 20px #0002;
- z-index:99999;
- transition:transform .35s ease;
-}
-
-#toast.show{
- transform:translateX(-50%) translateY(0);
-}
-
-@media(max-width:520px){
- .panel{padding:17px}
-}
+#toast{position:fixed;top:15px;left:50%;transform:translateX(-50%) translateY(-120px);width:calc(100% - 30px);max-width:500px;padding:16px;border-radius:12px;background:#dcfce7;color:#166534;font-size:15px;font-weight:bold;text-align:center;box-shadow:0 5px 20px #0002;z-index:99999;transition:transform .35s ease}
+#toast.show{transform:translateX(-50%) translateY(0)}
+.ref-code{background:#f1f5f9;border:1px dashed #94a3b8;padding:14px;border-radius:9px;font-size:21px;font-weight:bold;text-align:center;letter-spacing:2px;overflow-wrap:anywhere}
+.ref-link{font-size:13px;overflow-wrap:anywhere;background:#f8fafc;padding:10px;border-radius:8px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#f8fafc;padding:14px;border-radius:10px;border:1px solid #e5e7eb}
+.stat small{display:block;color:#64748b;margin-bottom:7px}
+.stat b{font-size:20px}
+.ref-item{border:1px solid #e5e7eb;background:#fafafa;padding:12px;border-radius:9px;margin:9px 0;line-height:1.7;overflow-wrap:anywhere}
+hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
+@media(max-width:520px){.panel{padding:17px}.stats{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 
 <body>
-
 <div id="toast"></div>
 
 <header>
@@ -154,87 +52,129 @@ button:disabled{opacity:.6}
 
 <main>
 
-<!-- ACCOUNT -->
-
 <section class="panel">
-
  <h2>My Account / আমার অ্যাকাউন্ট</h2>
 
  <div id="authBox">
-
-  <p id="authStatus" class="msg">
-   Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।
-  </p>
+  <p id="authStatus" class="msg">Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।</p>
 
   <div id="registerFields" class="hidden">
-
    <input id="regName" placeholder="আপনার নাম">
-
    <input id="regPhone" type="tel" placeholder="মোবাইল নম্বর">
-
+   <label>Referral Code (ঐচ্ছিক)</label>
+   <input id="regReferral" placeholder="Referral Code">
   </div>
 
-  <input
-   id="email"
-   type="email"
-   placeholder="Gmail / Email"
-   autocomplete="email"
-  >
+  <input id="email" type="email" placeholder="Gmail / Email" autocomplete="email">
+  <input id="password" type="password" placeholder="Password (কমপক্ষে ৬ অক্ষর)" autocomplete="current-password">
 
-  <input
-   id="password"
-   type="password"
-   placeholder="Password (কমপক্ষে ৬ অক্ষর)"
-   autocomplete="current-password"
-  >
-
-  <button id="authSubmit" class="btn">
-   Login
-  </button>
-
-  <button id="toggle" class="btn secondary">
-   নতুন অ্যাকাউন্ট তৈরি করুন
-  </button>
-
-  <button id="forgot" class="btn secondary">
-   Forgot Password
-  </button>
-
+  <button id="authSubmit" class="btn">Login</button>
+  <button id="toggle" class="btn secondary">নতুন অ্যাকাউন্ট তৈরি করুন</button>
+  <button id="forgot" class="btn secondary">Forgot Password</button>
  </div>
 
  <div id="profile" class="msg hidden"></div>
-
- <button id="logout" class="red hidden">
-  Logout
- </button>
-
+ <button id="logout" class="red hidden">Logout</button>
  <p id="authMsg" class="msg"></p>
-
 </section>
 
+<!-- EMAIL VERIFICATION -->
+<section class="panel hidden" id="verifyPanel">
+ <h3>Email Verification</h3>
+ <p class="msg">Referral Code যুক্ত করা ও অর্ডার করার আগে Email Verify করুন।</p>
+ <button id="resendVerify" class="orange btn">Verification Email আবার পাঠান</button>
+ <button id="checkVerify" class="btn secondary">আমি Email Verify করেছি</button>
+</section>
+
+<!-- REFERRAL DASHBOARD -->
+<section class="panel hidden" id="referralPanel">
+ <h2>MS STORE Refer & Earn</h2>
+ <p class="msg">বন্ধুকে তোমার Referral Link পাঠাও। তার যোগ্য অর্ডার Delivered হয়ে ৭ দিনের Return Period শেষ হলে তুমি ৳৫০ Reward পাবে।</p>
+
+ <div id="referralLoading" class="msg">Referral Dashboard লোড হচ্ছে...</div>
+
+ <div id="referralContent" class="hidden">
+  <h3>তোমার Referral Code</h3>
+  <div class="ref-code" id="refCode">Loading...</div>
+
+  <h3>Referral Link</h3>
+  <div class="ref-link" id="refLink"></div>
+
+  <button id="copyCode" class="btn secondary">Copy Referral Code</button>
+  <button id="copyLink" class="btn secondary">Copy Referral Link</button>
+  <button id="shareLink" class="btn orange">Share Referral Link</button>
+
+  <hr>
+
+  <h3>Referral Wallet</h3>
+  <div class="stats">
+   <div class="stat">
+    <small>Pending Balance</small>
+    <b id="pendingBalance">৳0</b>
+   </div>
+   <div class="stat">
+    <small>Withdrawable Balance</small>
+    <b id="availableBalance">৳0</b>
+   </div>
+   <div class="stat">
+    <small>Reserved Balance</small>
+    <b id="reservedBalance">৳0</b>
+   </div>
+   <div class="stat">
+    <small>Total Earned</small>
+    <b id="totalEarned">৳0</b>
+   </div>
+  </div>
+
+  <p class="msg" id="refStatsNote"></p>
+
+  <hr>
+
+  <h3>Withdrawal Request</h3>
+  <p class="msg">Minimum Withdrawal: ৳২০০</p>
+
+  <label>পরিমাণ (টাকা)</label>
+  <input id="withdrawAmount" type="number" min="200" step="1" placeholder="যেমন ২০০">
+
+  <label>Payment Method</label>
+  <select id="withdrawMethod">
+   <option value="bKash">bKash</option>
+   <option value="Nagad">Nagad</option>
+  </select>
+
+  <label>bKash / Nagad নম্বর</label>
+  <input id="withdrawNumber" type="tel" placeholder="01XXXXXXXXX">
+
+  <button id="withdrawBtn" class="btn orange">Request Withdrawal</button>
+  <p id="withdrawMsg" class="msg"></p>
+
+  <hr>
+
+  <h3>Referral Reward History</h3>
+  <div id="rewardHistory" class="msg">লোড হচ্ছে...</div>
+
+  <hr>
+
+  <h3>Withdrawal History</h3>
+  <div id="withdrawHistory" class="msg">লোড হচ্ছে...</div>
+ </div>
+</section>
 
 <!-- ORDERS -->
-
 <section class="panel">
-
  <h2>My Orders / আমার অর্ডার</h2>
-
- <div id="orders">
-  অর্ডার দেখতে Login করুন।
- </div>
-
+ <div id="orders">অর্ডার দেখতে Login করুন।</div>
 </section>
 
 </main>
 
-
 <script type="module">
 
-import{
+import {
  initializeApp
-}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
 
-import{
+import {
  getAuth,
  onAuthStateChanged,
  createUserWithEmailAndPassword,
@@ -243,10 +183,11 @@ import{
  sendEmailVerification,
  sendPasswordResetEmail,
  setPersistence,
- browserLocalPersistence
-}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+ browserLocalPersistence,
+ reload
+} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
-import{
+import {
  getFirestore,
  doc,
  getDoc,
@@ -257,7 +198,12 @@ import{
  updateDoc,
  setDoc,
  serverTimestamp
-}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+
+import {
+ getFunctions,
+ httpsCallable
+} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-functions.js';
 
 
 /* FIREBASE CONFIG */
@@ -274,47 +220,51 @@ const firebaseConfig={
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
+const functions=getFunctions(app,'asia-south1');
+
+
+/* CLOUD FUNCTIONS */
+
+const createReferralProfile=httpsCallable(
+ functions,'createReferralProfile'
+);
+
+const registerReferral=httpsCallable(
+ functions,'registerReferral'
+);
+
+const requestReferralWithdrawal=httpsCallable(
+ functions,'requestReferralWithdrawal'
+);
 
 
 /* COMMON */
 
 const $=id=>document.getElementById(id);
-
 const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
- '&':'&amp;',
- '<':'&lt;',
- '>':'&gt;',
- '"':'&quot;',
- "'":'&#39;'
+ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
 
 let currentUser=null;
 let isRegister=false;
 let toastTimer;
+let referralSettings=null;
+
+const PENDING_REFERRAL_KEY='ms_store_pending_referral';
 
 
 function showToast(message){
-
  const toast=$('toast');
-
  toast.textContent=message;
  toast.classList.add('show');
-
  clearTimeout(toastTimer);
-
- toastTimer=setTimeout(()=>{
-  toast.classList.remove('show');
- },3500);
-
+ toastTimer=setTimeout(()=>toast.classList.remove('show'),3500);
 }
 
-
 function authError(e){
-
  const m=e.code||e.message;
-
  return ({
   'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
   'auth/invalid-email':'Email ঠিক নয়।',
@@ -324,497 +274,609 @@ function authError(e){
   'auth/wrong-password':'Password ভুল হয়েছে।',
   'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।',
   'auth/network-request-failed':'Internet Connection পরীক্ষা করুন।',
-  'auth/invalid-api-key':'Firebase API Key সঠিক নয়।'
- })[m]||m;
-
+  'auth/invalid-api-key':'Firebase API Key সঠিক নয়।',
+  'functions/not-found':'Referral Function এখনো Deploy করা হয়নি।',
+  'functions/failed-precondition':'Referral Program বন্ধ অথবা শর্ত পূরণ হয়নি।',
+  'functions/permission-denied':'এই কাজের অনুমতি নেই।',
+  'functions/not-found':'Referral Function পাওয়া যায়নি।'
+ })[m]||e.message||m;
 }
-
 
 function dateText(timestamp){
-
- if(!timestamp?.toDate){
-  return 'তারিখ পাওয়া যায়নি';
- }
-
- return timestamp.toDate().toLocaleString(
-  'bn-BD',
-  {dateStyle:'medium',timeStyle:'short'}
- );
-
+ if(!timestamp?.toDate)return 'তারিখ পাওয়া যায়নি';
+ return timestamp.toDate().toLocaleString('bn-BD',{
+  dateStyle:'medium',timeStyle:'short'
+ });
 }
 
 
-/* LOCAL LOGIN SESSION */
+/* SAVE REFERRAL LINK CODE */
+
+const urlParams=new URLSearchParams(location.search);
+const incomingCode=(urlParams.get('ref')||'').trim().toUpperCase();
+
+if(incomingCode && /^[A-Z0-9]{6,20}$/.test(incomingCode)){
+ localStorage.setItem(PENDING_REFERRAL_KEY,incomingCode);
+ $('regReferral').value=incomingCode;
+}
+
+
+/* SESSION */
 
 async function startApp(){
-
  try{
-
   await setPersistence(auth,browserLocalPersistence);
 
   onAuthStateChanged(auth,async user=>{
-
    currentUser=user;
 
    if(!user){
-
     $('authBox').classList.remove('hidden');
     $('profile').classList.add('hidden');
     $('logout').classList.add('hidden');
-
-    $('authStatus').textContent=
-     'Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।';
-
-    $('orders').textContent=
-     'অর্ডার দেখতে Login করুন।';
-
+    $('verifyPanel').classList.add('hidden');
+    $('referralPanel').classList.add('hidden');
+    $('orders').textContent='অর্ডার দেখতে Login করুন।';
     return;
-
    }
 
    await loadAccount(user);
-
   });
 
  }catch(e){
-
   console.error(e);
-
-  $('authMsg').textContent=
-   'Authentication চালু হয়নি: '+authError(e);
-
+  $('authMsg').textContent='Authentication চালু হয়নি: '+authError(e);
  }
-
 }
 
 
-/* TOGGLE REGISTER */
+/* REGISTER TOGGLE */
 
 $('toggle').onclick=()=>{
-
  isRegister=!isRegister;
-
  $('registerFields').classList.toggle('hidden',!isRegister);
-
- $('authSubmit').textContent=
-  isRegister?'Register':'Login';
-
+ $('authSubmit').textContent=isRegister?'Register':'Login';
  $('toggle').textContent=isRegister?
   'আগে থেকেই অ্যাকাউন্ট আছে? Login':
   'নতুন অ্যাকাউন্ট তৈরি করুন';
-
  $('authMsg').textContent='';
-
 };
 
 
 /* LOGIN / REGISTER */
 
 $('authSubmit').onclick=async()=>{
-
  const email=$('email').value.trim().toLowerCase();
  const password=$('password').value;
-
  $('authMsg').textContent='';
 
  if(!email||!password){
-
   $('authMsg').textContent='Email ও Password লিখুন।';
   return;
-
  }
 
  if(password.length<6){
-
-  $('authMsg').textContent=
-   'Password কমপক্ষে ৬ অক্ষরের হতে হবে।';
-
+  $('authMsg').textContent='Password কমপক্ষে ৬ অক্ষরের হতে হবে।';
   return;
-
  }
 
  $('authSubmit').disabled=true;
 
  try{
-
   if(isRegister){
-
    const name=$('regName').value.trim();
    const phone=$('regPhone').value.trim();
+   const referralCode=$('regReferral').value.trim().toUpperCase();
 
-   if(!name||!phone){
+   if(!name||!phone)throw Error('নাম ও মোবাইল নম্বর লিখুন।');
 
-    throw Error('নাম ও মোবাইল নম্বর লিখুন।');
-
+   if(referralCode&&!/^[A-Z0-9]{6,20}$/.test(referralCode)){
+    throw Error('Referral Code সঠিক নয়।');
    }
 
-   const result=await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-   );
+   const result=await createUserWithEmailAndPassword(auth,email,password);
 
-   await setDoc(
-    doc(db,'customerProfiles',result.user.uid),
-    {
-     uid:result.user.uid,
-     name,
-     phone,
-     email,
-     banned:false,
-     createdAt:serverTimestamp()
-    }
-   );
+   await setDoc(doc(db,'customerProfiles',result.user.uid),{
+    uid:result.user.uid,
+    name,
+    phone,
+    email,
+    banned:false,
+    createdAt:serverTimestamp()
+   });
+
+   if(referralCode){
+    localStorage.setItem(PENDING_REFERRAL_KEY,referralCode);
+   }
 
    await sendEmailVerification(result.user);
 
    isRegister=false;
-
    $('registerFields').classList.add('hidden');
-
    $('authSubmit').textContent='Login';
 
    $('authMsg').textContent=
-    'Gmail-এর Inbox/Spam থেকে Verification সম্পন্ন করুন।';
+    'অ্যাকাউন্ট তৈরি হয়েছে। Gmail-এর Inbox/Spam থেকে Email Verify করুন। Referral Code Verify করার পর যুক্ত হবে।';
 
    showToast('আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।');
 
   }else{
-
-   await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-   );
-
+   await signInWithEmailAndPassword(auth,email,password);
    showToast('আপনার লগইন সম্পন্ন হয়েছে।');
-
   }
 
  }catch(e){
-
   console.error(e);
-
   $('authMsg').textContent=authError(e);
-
  }finally{
-
   $('authSubmit').disabled=false;
-
  }
-
 };
 
 
 /* FORGOT PASSWORD */
 
 $('forgot').onclick=async()=>{
-
  const email=$('email').value.trim().toLowerCase();
-
  $('authMsg').textContent='';
 
  if(!email){
-
   $('authMsg').textContent='আগে Email লিখুন।';
-
   return;
-
  }
 
  $('forgot').disabled=true;
 
  try{
-
   await sendPasswordResetEmail(auth,email);
-
-  $('authMsg').textContent=
-   'Password reset email পাঠানো হয়েছে।';
-
+  $('authMsg').textContent='Password reset email পাঠানো হয়েছে।';
   showToast('Password reset email পাঠানো হয়েছে।');
-
  }catch(e){
-
   $('authMsg').textContent=authError(e);
-
  }finally{
-
   $('forgot').disabled=false;
-
  }
-
 };
 
 
 /* LOGOUT */
 
 $('logout').onclick=async()=>{
+ try{
+  await signOut(auth);
+  showToast('আপনি সফলভাবে Logout করেছেন।');
+ }catch(e){
+  $('authMsg').textContent=authError(e);
+ }
+};
+
+
+/* EMAIL VERIFICATION */
+
+$('resendVerify').onclick=async()=>{
+ if(!currentUser)return;
 
  try{
+  await sendEmailVerification(currentUser);
+  showToast('Verification Email পাঠানো হয়েছে।');
+ }catch(e){
+  $('authMsg').textContent=authError(e);
+ }
+};
 
-  await signOut(auth);
+$('checkVerify').onclick=async()=>{
+ if(!currentUser)return;
 
-  showToast('আপনি সফলভাবে Logout করেছেন।');
+ try{
+  await reload(currentUser);
+  await currentUser.getIdToken(true);
+
+  if(!auth.currentUser.emailVerified){
+   $('authMsg').textContent='এখনো Email Verify হয়নি। Gmail-এর Verification Link খুলুন।';
+   return;
+  }
+
+  showToast('Email Verification সফল হয়েছে।');
+  await loadAccount(auth.currentUser);
 
  }catch(e){
-
   $('authMsg').textContent=authError(e);
-
  }
-
 };
+
+
+/* APPLY REFERRAL CODE AFTER EMAIL VERIFICATION */
+
+async function applyPendingReferral(user){
+ const code=localStorage.getItem(PENDING_REFERRAL_KEY);
+
+ if(!code||!user.emailVerified)return;
+
+ try{
+  await registerReferral({referralCode:code});
+  localStorage.removeItem(PENDING_REFERRAL_KEY);
+  showToast('Referral Code সফলভাবে যুক্ত হয়েছে।');
+ }catch(e){
+  console.error('Referral registration:',e);
+  $('authMsg').textContent='Referral Code যুক্ত হয়নি: '+authError(e);
+ }
+}
 
 
 /* ACCOUNT DETAILS */
 
 async function loadAccount(user){
-
  currentUser=user;
 
  try{
-
-  const p=await getDoc(
-   doc(db,'customerProfiles',user.uid)
-  );
+  const p=await getDoc(doc(db,'customerProfiles',user.uid));
 
   if(p.exists()&&p.data().banned){
-
-   $('profile').textContent=
-    'এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।';
-
+   $('profile').textContent='এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।';
    await signOut(auth);
-
    return;
-
   }
 
   const data=p.exists()?p.data():{};
 
   $('authBox').classList.add('hidden');
-
   $('profile').classList.remove('hidden');
 
   $('profile').innerHTML=`
-
    <p><b>নাম:</b> ${esc(data.name||'—')}</p>
-
    <p><b>Email:</b> ${esc(user.email)}</p>
-
    <p><b>মোবাইল:</b> ${esc(data.phone||'—')}</p>
-
    <p><b>Account Created:</b> ${dateText(data.createdAt)}</p>
-
-   <p><b>Email Verification:</b>
-   ${user.emailVerified?'Verified':'Not Verified'}</p>
-
-   ${
-    !user.emailVerified?
-    '<p style="color:#b45309">অর্ডারের আগে Gmail Verification সম্পন্ন করুন।</p>':
-    ''
-   }
-
+   <p><b>Email Verification:</b> ${user.emailVerified?'Verified':'Not Verified'}</p>
   `;
 
   $('logout').classList.remove('hidden');
 
+  if(!user.emailVerified){
+   $('verifyPanel').classList.remove('hidden');
+   $('referralPanel').classList.add('hidden');
+  }else{
+   $('verifyPanel').classList.add('hidden');
+
+   await applyPendingReferral(user);
+   await loadReferralDashboard();
+  }
+
   await loadOrders();
 
  }catch(e){
-
   console.error(e);
+  $('profile').textContent='অ্যাকাউন্ট লোড হয়নি: '+authError(e);
+ }
+}
 
-  $('profile').textContent=
-   'অ্যাকাউন্ট লোড হয়নি: '+authError(e);
 
+/* REFERRAL DASHBOARD */
+
+async function loadReferralDashboard(){
+ if(!currentUser||!currentUser.emailVerified)return;
+
+ $('referralPanel').classList.remove('hidden');
+ $('referralLoading').textContent='Referral Dashboard লোড হচ্ছে...';
+ $('referralContent').classList.add('hidden');
+
+ try{
+  const settingsSnap=await getDoc(doc(db,'storeSettings/referralSettings'));
+
+  referralSettings=settingsSnap.exists()?settingsSnap.data():{};
+
+  if(referralSettings.enabled!==true){
+   $('referralLoading').textContent='Referral Program বর্তমানে বন্ধ আছে।';
+   return;
+  }
+
+  const result=await createReferralProfile();
+  const code=result.data.referralCode;
+
+  if(!code)throw Error('Referral Code তৈরি হয়নি।');
+
+  const link=location.origin+location.pathname+'?ref='+encodeURIComponent(code);
+
+  $('refCode').textContent=code;
+  $('refLink').textContent=link;
+
+  $('pendingBalance').textContent=money(0);
+  $('availableBalance').textContent=money(0);
+  $('reservedBalance').textContent=money(0);
+  $('totalEarned').textContent=money(0);
+
+  const walletSnap=await getDoc(doc(db,'referralWallets',currentUser.uid));
+
+  if(walletSnap.exists()){
+   const w=walletSnap.data();
+   $('pendingBalance').textContent=money(w.pendingBalance);
+   $('availableBalance').textContent=money(w.availableBalance);
+   $('reservedBalance').textContent=money(w.reservedBalance);
+   $('totalEarned').textContent=money(w.totalEarned);
+  }
+
+  await loadRewardHistory();
+  await loadWithdrawalHistory();
+
+  $('refStatsNote').textContent=
+   'Reward কেবল যোগ্য অর্ডার Delivered হওয়া ও Return Period শেষ হওয়ার পর গণনা করা হয়।';
+
+  $('referralLoading').classList.add('hidden');
+  $('referralContent').classList.remove('hidden');
+
+ }catch(e){
+  console.error(e);
+  $('referralLoading').textContent='Referral Dashboard লোড হয়নি: '+authError(e);
+ }
+}
+
+
+/* COPY AND SHARE */
+
+$('copyCode').onclick=async()=>{
+ try{
+  await navigator.clipboard.writeText($('refCode').textContent);
+  showToast('Referral Code Copy হয়েছে।');
+ }catch(e){
+  showToast('Copy করা যায়নি। Code নির্বাচন করে Copy করুন।');
+ }
+};
+
+$('copyLink').onclick=async()=>{
+ try{
+  await navigator.clipboard.writeText($('refLink').textContent);
+  showToast('Referral Link Copy হয়েছে।');
+ }catch(e){
+  showToast('Copy করা যায়নি।');
+ }
+};
+
+$('shareLink').onclick=async()=>{
+ const link=$('refLink').textContent;
+
+ try{
+  if(navigator.share){
+   await navigator.share({
+    title:'MS STORE Refer & Earn',
+    text:'আমার Referral Link দিয়ে MS STORE-এ Shopping করো।',
+    url:link
+   });
+  }else{
+   await navigator.clipboard.writeText(link);
+   showToast('Referral Link Copy হয়েছে।');
+  }
+ }catch(e){
+  if(e.name!=='AbortError')showToast('Share করা যায়নি।');
+ }
+};
+
+
+/* REFERRAL REWARD HISTORY */
+
+async function loadRewardHistory(){
+ const box=$('rewardHistory');
+ box.textContent='লোড হচ্ছে...';
+
+ try{
+  const snap=await getDocs(query(
+   collection(db,'referralRewards'),
+   where('referrerUid','==',currentUser.uid)
+  ));
+
+  const items=snap.docs.map(d=>({id:d.id,...d.data()}));
+
+  if(!items.length){
+   box.textContent='এখনো কোনো যোগ্য Referral Reward নেই।';
+   return;
+  }
+
+  box.innerHTML=items.map(r=>`
+   <div class="ref-item">
+    <b>Reward:</b> ${money(r.rewardAmount)}<br>
+    <b>Order ID:</b> ${esc(r.orderId||'—')}<br>
+    <b>Purchase:</b> ${money(r.purchaseAmount)}<br>
+    <b>Status:</b> <span class="status">${esc(r.status||'Pending')}</span><br>
+    <b>তারিখ:</b> ${dateText(r.createdAt)}
+   </div>
+  `).join('');
+
+ }catch(e){
+  console.error(e);
+  box.textContent='Reward History লোড হয়নি: '+authError(e);
+ }
+}
+
+
+/* WITHDRAWAL HISTORY */
+
+async function loadWithdrawalHistory(){
+ const box=$('withdrawHistory');
+ box.textContent='লোড হচ্ছে...';
+
+ try{
+  const snap=await getDocs(query(
+   collection(db,'referralWithdrawals'),
+   where('uid','==',currentUser.uid)
+  ));
+
+  const items=snap.docs.map(d=>({id:d.id,...d.data()}));
+
+  items.sort((a,b)=>
+   (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)
+  );
+
+  if(!items.length){
+   box.textContent='এখনো কোনো Withdrawal Request নেই।';
+   return;
+  }
+
+  box.innerHTML=items.map(w=>`
+   <div class="ref-item">
+    <b>Amount:</b> ${money(w.amount)}<br>
+    <b>Method:</b> ${esc(w.method)}<br>
+    <b>Account:</b> ${esc(w.accountNumber)}<br>
+    <b>Status:</b> <span class="status">${esc(w.status)}</span><br>
+    <b>তারিখ:</b> ${dateText(w.createdAt)}
+    ${w.rejectionReason?'<br><b>কারণ:</b> '+esc(w.rejectionReason):''}
+   </div>
+  `).join('');
+
+ }catch(e){
+  console.error(e);
+  box.textContent='Withdrawal History লোড হয়নি: '+authError(e);
+ }
+}
+
+
+/* WITHDRAWAL REQUEST */
+
+$('withdrawBtn').onclick=async()=>{
+ if(!currentUser||!currentUser.emailVerified)return;
+
+ const amount=Number($('withdrawAmount').value);
+ const method=$('withdrawMethod').value;
+ const accountNumber=$('withdrawNumber').value.trim();
+
+ $('withdrawMsg').textContent='';
+
+ if(!Number.isInteger(amount)||amount<200){
+  $('withdrawMsg').textContent='সর্বনিম্ন Withdrawal ৳২০০।';
+  return;
  }
 
-}
+ if(!/^01[0-9]{9}$/.test(accountNumber)){
+  $('withdrawMsg').textContent='সঠিক ১১ সংখ্যার মোবাইল নম্বর লিখুন।';
+  return;
+ }
+
+ if(!confirm(money(amount)+' Withdrawal Request করতে চান?')){
+  return;
+ }
+
+ $('withdrawBtn').disabled=true;
+
+ try{
+  await requestReferralWithdrawal({
+   amount,
+   method,
+   accountNumber
+  });
+
+  $('withdrawMsg').textContent='Withdrawal Request জমা হয়েছে।';
+  $('withdrawAmount').value='';
+  $('withdrawNumber').value='';
+
+  showToast('Withdrawal Request সফল হয়েছে।');
+
+  await loadReferralDashboard();
+
+ }catch(e){
+  console.error(e);
+  $('withdrawMsg').textContent=authError(e);
+ }finally{
+  $('withdrawBtn').disabled=false;
+ }
+};
 
 
 /* LOAD ORDERS */
 
 async function loadOrders(){
-
  if(!currentUser)return;
 
  $('orders').textContent='অর্ডার লোড হচ্ছে...';
 
  try{
-
-  const s=await getDocs(
-
-   query(
-    collection(db,'orders'),
-    where('uid','==',currentUser.uid)
-   )
-
-  );
+  const s=await getDocs(query(
+   collection(db,'orders'),
+   where('uid','==',currentUser.uid)
+  ));
 
   const list=s.docs.map(d=>({
    id:d.id,
    ...d.data()
   })).sort((a,b)=>
-   (b.createdAt?.seconds||0)-
-   (a.createdAt?.seconds||0)
+   (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)
   );
 
   if(!list.length){
-
-   $('orders').textContent=
-    'এখনো কোনো অর্ডার করেননি।';
-
+   $('orders').textContent='এখনো কোনো অর্ডার করেননি।';
    return;
-
   }
 
   $('orders').innerHTML=list.map(o=>`
-
    <div class="order">
-
-    <b>Order ID:</b>
-    ${esc(o.orderId||o.id)}<br>
-
-    <b>তারিখ:</b>
-    ${dateText(o.createdAt)}<br>
-
-    <b>পণ্য:</b>
-    ${esc(o.productName||'—')}<br>
-
-    <b>মোট পরিমাণ:</b>
-    ${Number(o.quantity||0)}<br>
-
-    <b>Subtotal:</b>
-    ${money(o.subtotal)}<br>
-
-    <b>Delivery:</b>
-    ${money(o.deliveryCharge)}<br>
-
-    <b>Total:</b>
-    ${money(o.totalPrice)}<br>
-
-    <b>Payment:</b>
-    ${esc(o.paymentMethod||'—')}<br>
-
-    <b>Payment Status:</b>
-    ${esc(o.paymentStatus||'—')}<br>
-
+    <b>Order ID:</b> ${esc(o.orderId||o.id)}<br>
+    <b>তারিখ:</b> ${dateText(o.createdAt)}<br>
+    <b>পণ্য:</b> ${esc(o.productName||'—')}<br>
+    <b>মোট পরিমাণ:</b> ${Number(o.quantity||0)}<br>
+    <b>Subtotal:</b> ${money(o.subtotal)}<br>
+    <b>Delivery:</b> ${money(o.deliveryCharge)}<br>
+    <b>Total:</b> ${money(o.totalPrice)}<br>
+    <b>Payment:</b> ${esc(o.paymentMethod||'—')}<br>
+    <b>Payment Status:</b> ${esc(o.paymentStatus||'—')}<br>
     <b>Order Status:</b>
-
-    <span class="status">
-     ${esc(o.status||'Pending')}
-    </span>
+    <span class="status">${esc(o.status||'Pending')}</span>
 
     ${o.status==='Pending'?`
-
-     <textarea
-      id="reason-${esc(o.id)}"
-      placeholder="অর্ডার বাতিলের কারণ লিখুন"
-     ></textarea>
-
-     <button
-      class="red"
-      data-cancel="${esc(o.id)}"
-     >
-      CONFIRM CANCELLATION
-     </button>
-
+     <textarea id="reason-${esc(o.id)}" placeholder="অর্ডার বাতিলের কারণ লিখুন"></textarea>
+     <button class="red" data-cancel="${esc(o.id)}">CONFIRM CANCELLATION</button>
     `:''}
 
-    ${
-     o.status==='Cancelled'&&o.cancellationReason?
-     `<p><b>বাতিলের কারণ:</b>
-     ${esc(o.cancellationReason)}</p>`:
-     ''
-    }
-
+    ${o.status==='Cancelled'&&o.cancellationReason?`
+     <p><b>বাতিলের কারণ:</b> ${esc(o.cancellationReason)}</p>
+    `:''}
    </div>
-
   `).join('');
 
-
   $('orders').querySelectorAll('[data-cancel]').forEach(b=>{
-
    b.onclick=()=>cancelOrder(b.dataset.cancel);
-
   });
 
  }catch(e){
-
   console.error(e);
-
-  $('orders').textContent=
-   'অর্ডার লোড হয়নি: '+authError(e);
-
+  $('orders').textContent='অর্ডার লোড হয়নি: '+authError(e);
  }
-
 }
 
 
 /* CANCEL ORDER */
 
 async function cancelOrder(id){
-
  const reason=$('reason-'+id)?.value.trim();
 
  if(!reason){
-
   alert('অর্ডার বাতিলের কারণ লিখুন।');
-
   return;
-
  }
 
- if(!confirm('আপনি কি এই Pending অর্ডারটি বাতিল করতে চান?')){
-
-  return;
-
- }
+ if(!confirm('আপনি কি এই Pending অর্ডারটি বাতিল করতে চান?'))return;
 
  try{
-
   const ref=doc(db,'orders',id);
-
   const s=await getDoc(ref);
 
-  if(
-   !s.exists()||
-   s.data().uid!==currentUser.uid||
-   s.data().status!=='Pending'
-  ){
-
-   throw Error(
-    'শুধু নিজের Pending অর্ডার বাতিল করা যাবে।'
-   );
-
+  if(!s.exists()||s.data().uid!==currentUser.uid||s.data().status!=='Pending'){
+   throw Error('শুধু নিজের Pending অর্ডার বাতিল করা যাবে।');
   }
 
   await updateDoc(ref,{
-
    status:'Cancelled',
-
    cancellationReason:reason,
-
    cancelledAt:serverTimestamp()
-
   });
 
   await updateDoc(
    doc(db,'orderTracking',s.data().orderId||id),
-   {
-    status:'Cancelled'
-   }
+   {status:'Cancelled'}
   );
 
   showToast('আপনার অর্ডার বাতিল হয়েছে।');
-
   await loadOrders();
 
  }catch(e){
-
   alert('অর্ডার বাতিল করা যায়নি: '+e.message);
-
  }
-
 }
 
 
@@ -823,6 +885,5 @@ async function cancelOrder(id){
 startApp();
 
 </script>
-
 </body>
 </html>
