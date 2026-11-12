@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MS STORE | Checkout</title>
+<meta name="theme-color" content="#111827">
 
 <style>
 *{box-sizing:border-box}
@@ -26,14 +27,17 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .secondary{background:#64748b}
 .row{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #eee}
 .total{font-weight:bold;font-size:18px}
-.msg{font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.msg{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
 .hidden{display:none!important}
 .variant-info{font-size:12px;color:#64748b;margin-top:5px}
 .cart-product{padding:12px 0;border-bottom:1px solid #eee}
 .cart-product strong{font-size:14px}
-#toast{position:fixed;top:15px;left:50%;transform:translateX(-50%) translateY(-120px);width:calc(100% - 30px);max-width:500px;padding:16px;border-radius:12px;background:#dcfce7;color:#166534;font-size:16px;font-weight:bold;text-align:center;box-shadow:0 5px 20px #0002;z-index:99999;transition:transform .35s ease}
+.cart-error{color:#dc2626;font-size:13px;margin-top:5px}
+.cart-success{color:#15803d}
+#toast{position:fixed;top:15px;left:50%;transform:translateX(-50%) translateY(-120px);width:calc(100% - 30px);max-width:500px;padding:16px;border-radius:12px;background:#dcfce7;color:#166534;font-size:15px;font-weight:bold;text-align:center;box-shadow:0 5px 20px #0002;z-index:99999;transition:transform .35s ease}
 #toast.show{transform:translateX(-50%) translateY(0)}
-@media(max-width:520px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
+a{color:#6d28d9}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.full{grid-column:auto}main{margin:18px auto}.panel{padding:16px}}
 </style>
 </head>
 
@@ -50,40 +54,80 @@ button:disabled{opacity:.6;cursor:not-allowed}
 
 <section class="panel">
 <h2>🛒 Your Order</h2>
+
 <div id="cartList">Cart লোড হচ্ছে...</div>
-<div class="row"><span>Subtotal</span><b id="subtotal">৳0</b></div>
-<div class="row"><span>Delivery Charge</span><b id="delivery">৳0</b></div>
-<div class="row total"><span>Total</span><b id="total">৳0</b></div>
+
+<div class="row">
+<span>Subtotal</span>
+<b id="subtotal">৳0</b>
+</div>
+
+<div class="row">
+<span>Delivery Charge</span>
+<b id="delivery">৳0</b>
+</div>
+
+<div class="row total">
+<span>Total</span>
+<b id="total">৳0</b>
+</div>
+
+<p id="cartMessage" class="msg"></p>
+
+<a href="index.html" style="display:inline-block;margin-top:12px">
+← আরও পণ্য কিনুন
+</a>
 </section>
 
 <section class="panel">
+
 <h2>Customer Login / Register</h2>
-<p id="authStatus" class="msg">অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।</p>
+
+<p id="authStatus" class="msg">
+অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।
+</p>
 
 <div id="authBox">
+
 <div id="registerFields" class="hidden">
 <input id="regName" placeholder="আপনার নাম">
-<input id="regPhone" placeholder="মোবাইল নম্বর">
+<input id="regPhone" type="tel" placeholder="মোবাইল নম্বর">
 </div>
 
 <input id="email" type="email" placeholder="Gmail / Email" autocomplete="email">
+
 <input id="password" type="password" placeholder="Password (কমপক্ষে ৬ অক্ষর)" autocomplete="current-password">
 
 <button id="authSubmit">Login</button>
-<button class="secondary" id="toggle">নতুন অ্যাকাউন্ট তৈরি করুন</button>
-<button class="secondary" id="forgot">Forgot Password</button>
-<button class="red hidden" id="logout">Logout</button>
+
+<button class="secondary" id="toggle" type="button">
+নতুন অ্যাকাউন্ট তৈরি করুন
+</button>
+
+<button class="secondary" id="forgot" type="button">
+Forgot Password
+</button>
+
 </div>
 
+<button class="red hidden" id="logout" type="button">
+Logout
+</button>
+
 <p id="authMsg" class="msg"></p>
+
 </section>
 
 <section class="panel">
+
 <h2>Delivery Information</h2>
 
 <div class="grid">
+
 <input id="customerName" placeholder="আপনার নাম *">
+
 <input id="phone" type="tel" placeholder="মোবাইল নম্বর *">
+
 <input id="orderEmail" class="full" type="email" placeholder="অর্ডার Confirmation-এর Email *">
 
 <select id="division" class="full">
@@ -99,7 +143,9 @@ button:disabled{opacity:.6;cursor:not-allowed}
 </select>
 
 <input id="district" placeholder="জেলা *">
+
 <input id="upazila" placeholder="উপজেলা / থানা *">
+
 <textarea id="address" class="full" placeholder="বিস্তারিত ঠিকানা *"></textarea>
 
 <select id="paymentMethod" class="full">
@@ -109,32 +155,55 @@ button:disabled{opacity:.6;cursor:not-allowed}
 </select>
 
 <div id="paymentInfo" class="full msg"></div>
+
 <input id="senderNumber" class="full hidden" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
+
 <input id="trxId" class="full hidden" placeholder="Transaction ID">
+
 </div>
 
-<button id="placeOrder" class="orange">LOGIN TO PLACE ORDER</button>
+<button id="placeOrder" class="orange">
+LOGIN TO PLACE ORDER
+</button>
+
 <p id="orderMsg" class="msg"></p>
+
 </section>
 
 </main>
 
 <script type="module">
 
-import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+import {
+initializeApp
+} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
 
-import{
-getAuth,onAuthStateChanged,createUserWithEmailAndPassword,
-signInWithEmailAndPassword,signOut,sendEmailVerification,
-sendPasswordResetEmail,setPersistence,browserLocalPersistence
-}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
+import {
+getAuth,
+onAuthStateChanged,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+signOut,
+sendEmailVerification,
+sendPasswordResetEmail,
+setPersistence,
+browserLocalPersistence,
+reload
+} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
-import{
-getFirestore,collection,getDocs,doc,getDoc,setDoc,
-runTransaction,serverTimestamp
-}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+import {
+getFirestore,
+collection,
+getDocs,
+doc,
+getDoc,
+setDoc,
+runTransaction,
+serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
-import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm';
+
+/* FIREBASE CONFIG */
 
 const firebaseConfig={
 apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
@@ -154,27 +223,57 @@ const EMAILJS_TEMPLATE_ID='template_rbe08jk';
 const EMAILJS_PUBLIC_KEY='4gQjk5EWAQ7tk-stZ';
 
 const $=id=>document.getElementById(id);
+
 const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
-'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
 }[c]));
 
-let cart={},products=[],currentUser=null,isRegister=false;
-let payment={bkashNumber:'',nagadNumber:''};
+
+/* APP STATE */
+
+let cart={};
+let products=[];
+let currentUser=null;
+let isRegister=false;
+
+let payment={
+bkashNumber:'',
+nagadNumber:''
+};
+
 let globalVariantEnabled=true;
-let toastTimer;
+let cartInvalid=false;
+let toastTimer=null;
+let cartLoaded=false;
+
+
+/* TOAST */
 
 function showToast(message){
 $('toast').textContent=message;
 $('toast').classList.add('show');
+
 clearTimeout(toastTimer);
-toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3500);
+
+toastTimer=setTimeout(()=>{
+$('toast').classList.remove('show');
+},3500);
 }
 
+
+/* ERROR HANDLER */
+
 function authError(e){
+
 const m=e.code||e.message;
-return({
+
+const errors={
 'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
 'auth/invalid-email':'Email ঠিক নয়।',
 'auth/weak-password':'Password কমপক্ষে ৬ অক্ষরের হতে হবে।',
@@ -182,298 +281,843 @@ return({
 'auth/user-not-found':'এই Email দিয়ে অ্যাকাউন্ট পাওয়া যায়নি।',
 'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।',
 'auth/network-request-failed':'Internet Connection পরীক্ষা করুন।',
-'auth/invalid-api-key':'Firebase API Key সঠিক নয়।'
-})[m]||m;
+'auth/invalid-api-key':'Firebase API Key সঠিক নয়।',
+'permission-denied':'Firebase Firestore Rules পরীক্ষা করুন।',
+'unavailable':'Internet Connection পরীক্ষা করুন।'
+};
+
+return errors[m]||m;
 }
+
+
+/* LOAD CART FROM SHOPPING PAGE */
+
+function readCart(){
 
 try{
-cart=JSON.parse(localStorage.getItem('msCart')||'{}');
-if(!cart||typeof cart!=='object'||Array.isArray(cart))cart={};
-}catch(e){cart={};}
 
-function isVariantProduct(p){
-return globalVariantEnabled&&p.hasVariants===true&&
-Array.isArray(p.variants)&&p.variants.some(v=>v.active!==false);
+const saved=localStorage.getItem('msCart');
+
+if(!saved){
+cart={};
+return;
 }
+
+const parsed=JSON.parse(saved);
+
+if(!parsed||typeof parsed!=='object'||Array.isArray(parsed)){
+cart={};
+return;
+}
+
+cart=parsed;
+
+}catch(e){
+
+console.error('Cart Read Error:',e);
+cart={};
+
+}
+
+}
+
+readCart();
+
+
+/* CART ENTRIES */
 
 function getEntries(){
+
 return Object.entries(cart).filter(([key,item])=>{
+
 if(item&&typeof item==='object'){
+
 const id=item.productId||key.split('__')[0];
-return products.some(p=>p.id===id)&&Number(item.quantity)>0;
+
+return Boolean(id)&&Number.isInteger(Number(item.quantity))&&Number(item.quantity)>0;
+
 }
-return products.some(p=>p.id===key)&&Number.isInteger(Number(item))&&Number(item)>0;
+
+return Number.isInteger(Number(item))&&Number(item)>0;
+
 });
+
 }
+
+
+/* VARIANT CHECK */
+
+function isVariantProduct(p){
+
+return globalVariantEnabled&&
+p.hasVariants===true&&
+Array.isArray(p.variants)&&
+p.variants.some(v=>v.active!==false);
+
+}
+
+
+/* DELIVERY CHARGE */
+
+function getDelivery(){
+
+if(!getEntries().length)return 0;
+
+return $('division').value==='Dhaka'?60:80;
+
+}
+
+
+/* RENDER CART */
+
+function renderCart(){
+
+const entries=getEntries();
+
+let subtotal=0;
+let invalid=false;
+let html='';
+
+if(!entries.length){
+
+$('cartList').innerHTML=
+'আপনার Cart খালি। <a href="index.html">পণ্য বেছে নিন</a>';
+
+}else{
+
+for(const [key,item] of entries){
+
+const objectItem=item&&typeof item==='object';
+
+const id=objectItem
+?(item.productId||key.split('__')[0])
+:key;
+
+const p=products.find(x=>x.id===id);
+
+if(!p){
+
+invalid=true;
+
+html+=`
+<div class="cart-product">
+<strong>পণ্য পাওয়া যাচ্ছে না</strong>
+<div class="cart-error">এই পণ্যটি Store থেকে সরানো হয়েছে।</div>
+</div>`;
+
+continue;
+
+}
+
+const qty=objectItem?Number(item.quantity):Number(item);
+
+const variantId=objectItem?item.variantId||'':'';
+
+const variant=(p.variants||[]).find(v=>v.id===variantId);
+
+const variantProduct=isVariantProduct(p);
+
+let stock=variant
+?Math.max(0,Number(variant.stock)||0)
+:Math.max(0,Number(p.stock)||0);
+
+let price=objectItem
+?Number(item.price??variant?.price??p.price)
+:Number(p.price)||0;
+
+let label=objectItem&&item.variantLabel
+?item.variantLabel+': '+(item.variantValue||'')
+:'';
+
+let error='';
+
+if(p.active===false){
+
+error='এই পণ্যটি বর্তমানে বিক্রির জন্য নেই।';
+
+}
+
+if(variantProduct&&!variant){
+
+error='Variant নির্বাচন সঠিক নয়। পণ্যটি আবার Cart-এ যোগ করুন।';
+
+}
+
+if(variantId&&!globalVariantEnabled){
+
+error='Variant System বর্তমানে বন্ধ। পণ্যটি আবার Cart-এ যোগ করুন।';
+
+}
+
+if(qty>stock){
+
+error='স্টকে পর্যাপ্ত পণ্য নেই।';
+
+}
+
+if(!Number.isFinite(price)||price<0){
+
+error='পণ্যের দাম সঠিক নয়।';
+
+}
+
+if(error)invalid=true;
+
+subtotal+=Math.max(0,price)*qty;
+
+html+=`
+<div class="cart-product">
+
+<strong>${esc(p.name||'Product')}</strong>
+
+${label?`
+<div class="variant-info">${esc(label)}</div>
+`:''}
+
+<div class="variant-info">
+${money(price)} × ${qty} = ${money(price*qty)}
+</div>
+
+${error?`
+<div class="cart-error">${esc(error)}</div>
+`:''}
+
+</div>`;
+
+}
+
+$('cartList').innerHTML=html;
+
+}
+
+const delivery=getDelivery();
+
+$('subtotal').textContent=money(subtotal);
+$('delivery').textContent=money(delivery);
+$('total').textContent=money(subtotal+delivery);
+
+cartInvalid=invalid;
+
+if(invalid){
+
+$('cartMessage').textContent=
+'Cart-এ পণ্য বা Stock সমস্যা রয়েছে। অর্ডারের আগে Shopping পেজ থেকে Cart ঠিক করুন।';
+
+$('cartMessage').className='msg cart-error';
+
+}else{
+
+$('cartMessage').textContent=entries.length
+?'আপনার Cart সফলভাবে লোড হয়েছে।'
+:'';
+
+$('cartMessage').className='msg cart-success';
+
+}
+
+return{
+entries,
+subtotal,
+delivery,
+total:subtotal+delivery,
+invalid
+};
+
+}
+
+
+/* LOAD FIREBASE DATA */
 
 async function loadData(){
-try{
-const [ps,pm,vs]=await Promise.all([
-getDocs(collection(db,'storeProducts')),
-getDoc(doc(db,'storeSettings','paymentMethods')),
-getDoc(doc(db,'storeSettings','variantSettings'))
-]);
 
-products=ps.docs.map(d=>({id:d.id,...d.data()}));
-if(pm.exists())payment=pm.data();
-globalVariantEnabled=vs.exists()?vs.data().enabled!==false:true;
+$('cartList').textContent='পণ্যের তথ্য লোড হচ্ছে...';
+
+try{
+
+/* প্রথমে Products Load */
+
+const ps=await getDocs(collection(db,'storeProducts'));
+
+products=ps.docs.map(d=>({
+id:d.id,
+...d.data()
+}));
+
+cartLoaded=true;
+
+/* Products লোড হলেই Cart Render */
+
+renderCart();
+
+
+}catch(e){
+
+console.error('Product Load Error:',e);
+
+cartLoaded=false;
+
+$('cartList').innerHTML=
+'<span class="cart-error">পণ্যের তথ্য লোড হয়নি: '+esc(authError(e))+'</span>';
+
+$('cartMessage').textContent=
+'Firebase Store Products Collection পরীক্ষা করুন।';
+
+return;
+
+}
+
+
+/* Payment Settings আলাদাভাবে Load */
+
+try{
+
+const pm=await getDoc(doc(db,'storeSettings','paymentMethods'));
+
+if(pm.exists()){
+
+payment={
+...payment,
+...pm.data()
+};
+
+}
+
+}catch(e){
+
+console.error('Payment Settings Error:',e);
+
+}
+
+
+/* Variant Settings আলাদাভাবে Load */
+
+try{
+
+const vs=await getDoc(doc(db,'storeSettings','variantSettings'));
+
+globalVariantEnabled=vs.exists()
+?vs.data().enabled!==false
+:true;
+
+}catch(e){
+
+console.error('Variant Settings Error:',e);
+
+globalVariantEnabled=true;
+
+}
+
+/* Final Render */
 
 renderCart();
 renderPayment();
-}catch(e){
-console.error(e);
-$('cartList').textContent='তথ্য লোড হয়নি: '+authError(e);
-}
+
 }
 
-function renderCart(){
-const entries=getEntries();
-cart=Object.fromEntries(entries);
 
-let sub=0,invalid=false;
-
-$('cartList').innerHTML=entries.length?entries.map(([key,item])=>{
-const objectItem=item&&typeof item==='object';
-const id=objectItem?(item.productId||key.split('__')[0]):key;
-const p=products.find(x=>x.id===id);
-if(!p)return '';
-
-const qty=objectItem?Number(item.quantity):Number(item);
-const variantId=objectItem?item.variantId:'';
-const variant=(p.variants||[]).find(v=>v.id===variantId);
-const variantProduct=isVariantProduct(p);
-
-if(variantProduct&&!variant){
-invalid=true;
-}
-
-if(variant&&!globalVariantEnabled){
-invalid=true;
-}
-
-const stock=variant?Math.max(0,Number(variant.stock)||0):Math.max(0,Number(p.stock)||0);
-const price=objectItem?Number(item.price??(variant?.price??p.price)):Number(p.price)||0;
-const label=objectItem&&item.variantLabel?item.variantLabel+': '+(item.variantValue||''):'';
-
-if(qty>stock||(variantProduct&&!variant))invalid=true;
-sub+=price*qty;
-
-return `<div class="cart-product">
-<strong>${esc(p.name)}</strong>
-${label?`<div class="variant-info">${esc(label)}</div>`:''}
-<div class="variant-info">${money(price)} × ${qty} = ${money(price*qty)}</div>
-${qty>stock?'<div style="color:red;font-size:12px">স্টক পর্যাপ্ত নেই</div>':''}
-</div>`;
-}).join(''):'আপনার Cart খালি। <a href="index.html">পণ্য বেছে নিন</a>';
-
-const delivery=entries.length?($('division').value==='Dhaka'?60:80):0;
-$('subtotal').textContent=money(sub);
-$('delivery').textContent=money(delivery);
-$('total').textContent=money(sub+delivery);
-
-if(invalid){
-$('orderMsg').textContent='Cart-এর কোনো পণ্যের Variant বা Stock সমস্যা আছে। পণ্যটি আবার Cart-এ যোগ করুন।';
-}
-}
+/* PAYMENT SETTINGS */
 
 function renderPayment(){
-const m=$('paymentMethod').value;
-if(m==='Cash on Delivery'){
+
+const method=$('paymentMethod').value;
+
+if(method==='Cash on Delivery'){
+
 $('paymentInfo').textContent='Cash on Delivery';
+
 $('senderNumber').classList.add('hidden');
 $('trxId').classList.add('hidden');
+
+$('senderNumber').required=false;
+$('trxId').required=false;
+
 }else{
-const n=m.startsWith('bKash')?payment.bkashNumber:payment.nagadNumber;
-$('paymentInfo').innerHTML=`${m} নম্বর: <b>${esc(n||'Admin Panel থেকে নম্বর সেট করা হয়নি')}</b>`;
+
+const number=method.startsWith('bKash')
+?payment.bkashNumber
+:payment.nagadNumber;
+
+$('paymentInfo').innerHTML=
+`${esc(method)} নম্বর: <b>${esc(number||'Admin Panel থেকে নম্বর সেট করা হয়নি')}</b>`;
+
 $('senderNumber').classList.remove('hidden');
 $('trxId').classList.remove('hidden');
-}
+
+$('senderNumber').required=true;
+$('trxId').required=true;
+
 }
 
-$('division').onchange=renderCart;
+}
+
 $('paymentMethod').onchange=renderPayment;
 
+
+/* UPDATE DELIVERY */
+
+$('division').onchange=renderCart;
+
+
+/* AUTH MODE */
+
 $('toggle').onclick=()=>{
+
 isRegister=!isRegister;
+
 $('registerFields').classList.toggle('hidden',!isRegister);
+
 $('authSubmit').textContent=isRegister?'Register':'Login';
-$('toggle').textContent=isRegister?'আগে থেকেই অ্যাকাউন্ট আছে? Login':'নতুন অ্যাকাউন্ট তৈরি করুন';
+
+$('toggle').textContent=isRegister
+?'আগে থেকেই অ্যাকাউন্ট আছে? Login'
+:'নতুন অ্যাকাউন্ট তৈরি করুন';
+
+$('forgot').classList.toggle('hidden',isRegister);
+
 $('authMsg').textContent='';
+
 };
 
+
+/* LOGIN / REGISTER */
+
 $('authSubmit').onclick=async()=>{
+
 const email=$('email').value.trim().toLowerCase();
+
 const password=$('password').value;
+
 $('authMsg').textContent='';
 
-if(!email||!password){$('authMsg').textContent='Email ও Password লিখুন।';return;}
-if(password.length<6){$('authMsg').textContent='Password কমপক্ষে ৬ অক্ষরের হতে হবে।';return;}
+if(!email||!password){
+
+$('authMsg').textContent='Email ও Password লিখুন।';
+return;
+
+}
+
+if(password.length<6){
+
+$('authMsg').textContent='Password কমপক্ষে ৬ অক্ষরের হতে হবে।';
+return;
+
+}
 
 $('authSubmit').disabled=true;
-try{
-if(isRegister){
-const name=$('regName').value.trim();
-const phone=$('regPhone').value.trim();
-if(!name||!phone)throw Error('নাম ও মোবাইল নম্বর লিখুন।');
 
-const result=await createUserWithEmailAndPassword(auth,email,password);
+try{
+
+if(isRegister){
+
+const name=$('regName').value.trim();
+
+const phone=$('regPhone').value.trim();
+
+if(!name||!phone){
+
+throw Error('নাম ও মোবাইল নম্বর লিখুন।');
+
+}
+
+const result=await createUserWithEmailAndPassword(
+auth,email,password
+);
+
 await setDoc(doc(db,'customerProfiles',result.user.uid),{
-uid:result.user.uid,name,phone,email,banned:false,createdAt:serverTimestamp()
+
+uid:result.user.uid,
+name,
+phone,
+email:result.user.email,
+banned:false,
+createdAt:serverTimestamp()
+
 });
+
 await sendEmailVerification(result.user);
 
 isRegister=false;
+
 $('registerFields').classList.add('hidden');
+
 $('authSubmit').textContent='Login';
-$('authMsg').textContent='Gmail-এর Inbox/Spam থেকে Verification সম্পন্ন করুন।';
-showToast('আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।');
+
+$('toggle').textContent='নতুন অ্যাকাউন্ট তৈরি করুন';
+
+$('forgot').classList.remove('hidden');
+
+$('authMsg').textContent=
+'অ্যাকাউন্ট তৈরি হয়েছে। Gmail-এর Inbox/Spam থেকে Verification সম্পন্ন করুন।';
+
+showToast('আপনার অ্যাকাউন্ট তৈরি হয়েছে।');
+
 }else{
+
 await signInWithEmailAndPassword(auth,email,password);
+
 showToast('আপনার লগইন সম্পন্ন হয়েছে।');
+
 }
+
 }catch(e){
+
 console.error(e);
+
 $('authMsg').textContent=authError(e);
+
 }finally{
+
 $('authSubmit').disabled=false;
+
 }
+
 };
+
+
+/* FORGOT PASSWORD */
 
 $('forgot').onclick=async()=>{
+
 const email=$('email').value.trim().toLowerCase();
+
 $('authMsg').textContent='';
-if(!email){$('authMsg').textContent='আগে Email লিখুন।';return;}
+
+if(!email){
+
+$('authMsg').textContent='আগে Email লিখুন।';
+return;
+
+}
+
 $('forgot').disabled=true;
+
 try{
+
 await sendPasswordResetEmail(auth,email);
-$('authMsg').textContent='Password reset email পাঠানো হয়েছে।';
+
+$('authMsg').textContent=
+'Password reset email পাঠানো হয়েছে। Inbox/Spam দেখুন।';
+
 showToast('Password reset email পাঠানো হয়েছে।');
-}catch(e){$('authMsg').textContent=authError(e);}
-finally{$('forgot').disabled=false;}
+
+}catch(e){
+
+$('authMsg').textContent=authError(e);
+
+}finally{
+
+$('forgot').disabled=false;
+
+}
+
 };
+
+
+/* LOGOUT */
 
 $('logout').onclick=async()=>{
-try{await signOut(auth);showToast('আপনি সফলভাবে Logout করেছেন।');}
-catch(e){$('authMsg').textContent=authError(e);}
+
+try{
+
+await signOut(auth);
+
+showToast('আপনি সফলভাবে Logout করেছেন।');
+
+}catch(e){
+
+$('authMsg').textContent=authError(e);
+
+}
+
 };
 
+
+/* AUTH STATE */
+
 async function setupAuth(){
+
 try{
+
 await setPersistence(auth,browserLocalPersistence);
-onAuthStateChanged(auth,async u=>{
-currentUser=u;
-if(!u){
-$('authStatus').textContent='অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।';
+
+onAuthStateChanged(auth,async user=>{
+
+currentUser=user;
+
+if(!user){
+
+$('authStatus').textContent=
+'অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।';
+
 $('authBox').classList.remove('hidden');
 $('logout').classList.add('hidden');
+
 $('placeOrder').textContent='LOGIN TO PLACE ORDER';
+
 return;
+
 }
+
 try{
-const p=await getDoc(doc(db,'customerProfiles',u.uid));
-if(p.exists()&&p.data().banned){
+
+const profile=await getDoc(
+doc(db,'customerProfiles',user.uid)
+);
+
+if(profile.exists()&&profile.data().banned){
+
 await signOut(auth);
-alert('এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।');
+
+$('authMsg').textContent='এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।';
+
 return;
+
 }
-$('authStatus').textContent='লগইন করা আছে: '+u.email;
+
+$('authStatus').textContent=
+'লগইন করা আছে: '+user.email;
+
 $('authBox').classList.add('hidden');
 $('logout').classList.remove('hidden');
-$('placeOrder').textContent=u.emailVerified?'CONFIRM ORDER':'VERIFY GMAIL TO ORDER';
-if(p.exists()){
-$('customerName').value=p.data().name||'';
-$('phone').value=p.data().phone||'';
+
+$('placeOrder').textContent=
+user.emailVerified?'CONFIRM ORDER':'VERIFY GMAIL TO ORDER';
+
+if(profile.exists()){
+
+$('customerName').value=profile.data().name||'';
+
+$('phone').value=profile.data().phone||'';
+
 }
-}catch(e){$('authMsg').textContent=authError(e);}
+
+$('orderEmail').value=user.email||'';
+
+}catch(e){
+
+console.error(e);
+
+$('authMsg').textContent=authError(e);
+
+}
+
 });
-}catch(e){$('authMsg').textContent=authError(e);}
+
+}catch(e){
+
+$('authMsg').textContent=authError(e);
+
 }
+
+}
+
+
+/* EMAIL VALIDATION */
 
 function validEmail(email){
+
 return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
 }
 
-/* ORDER PLACEMENT */
+
+/* PLACE ORDER */
 
 $('placeOrder').onclick=async()=>{
+
 $('orderMsg').textContent='';
 
 if(!currentUser){
+
 $('orderMsg').textContent='আগে Login / Register করুন।';
-$('email').focus();return;
-}
-if(!currentUser.emailVerified){
-$('orderMsg').textContent='অর্ডার করার আগে Gmail Verification সম্পন্ন করুন।';
+
+$('email').focus();
+
 return;
+
 }
 
-const entries=getEntries();
-if(!entries.length){
-$('orderMsg').textContent='আপনার Cart খালি।';
-return;
-}
 
-const name=$('customerName').value.trim();
-const phone=$('phone').value.trim();
-const orderEmail=$('orderEmail').value.trim().toLowerCase();
-const division=$('division').value;
-const district=$('district').value.trim();
-const upazila=$('upazila').value.trim();
-const address=$('address').value.trim();
-const method=$('paymentMethod').value;
-const senderNumber=$('senderNumber').value.trim();
-const trxId=$('trxId').value.trim();
-
-if(!name||!phone||!division||!district||!upazila||!address){
-$('orderMsg').textContent='সব ঠিকানার তথ্য পূরণ করুন।';return;
-}
-if(!validEmail(orderEmail)){
-$('orderMsg').textContent='সঠিক Email Address লিখুন।';return;
-}
-if(method!=='Cash on Delivery'&&(!senderNumber||!trxId)){
-$('orderMsg').textContent='Sender Number ও Transaction ID দিন।';return;
-}
-
-$('placeOrder').disabled=true;
-$('placeOrder').textContent='PROCESSING...';
+/* Refresh Verification Status */
 
 try{
+
+await reload(currentUser);
+
+currentUser=auth.currentUser;
+
+}catch(e){
+
+$('orderMsg').textContent=authError(e);
+return;
+
+}
+
+if(!currentUser||!currentUser.emailVerified){
+
+$('orderMsg').textContent=
+'অর্ডার করার আগে Gmail Verification সম্পন্ন করুন। Inbox/Spam দেখুন।';
+
+return;
+
+}
+
+
+/* Cart Check */
+
+if(!cartLoaded){
+
+$('orderMsg').textContent=
+'পণ্যের তথ্য এখনো লোড হয়নি। পেজ Reload করে আবার চেষ্টা করুন।';
+
+return;
+
+}
+
+const cartData=renderCart();
+
+if(!cartData.entries.length){
+
+$('orderMsg').textContent='আপনার Cart খালি।';
+
+return;
+
+}
+
+if(cartData.invalid){
+
+$('orderMsg').textContent=
+'Cart-এ Stock বা Variant সমস্যা আছে। আগে Cart ঠিক করুন।';
+
+return;
+
+}
+
+
+/* Customer Information */
+
+const name=$('customerName').value.trim();
+
+const phone=$('phone').value.trim();
+
+const orderEmail=$('orderEmail').value.trim().toLowerCase();
+
+const division=$('division').value;
+
+const district=$('district').value.trim();
+
+const upazila=$('upazila').value.trim();
+
+const address=$('address').value.trim();
+
+const method=$('paymentMethod').value;
+
+const senderNumber=$('senderNumber').value.trim();
+
+const trxId=$('trxId').value.trim();
+
+
+if(!name||!phone||!division||!district||!upazila||!address){
+
+$('orderMsg').textContent='সব ঠিকানার তথ্য পূরণ করুন।';
+
+return;
+
+}
+
+if(!validEmail(orderEmail)){
+
+$('orderMsg').textContent='সঠিক Email Address লিখুন।';
+
+return;
+
+}
+
+if(method!=='Cash on Delivery'&&(!senderNumber||!trxId)){
+
+$('orderMsg').textContent='Sender Number ও Transaction ID দিন।';
+
+return;
+
+}
+
+
+/* START ORDER */
+
+$('placeOrder').disabled=true;
+
+$('placeOrder').textContent='PROCESSING...';
+
+
+try{
+
 const counterRef=doc(db,'counters','orderSequence');
-const variantSettingsRef=doc(db,'storeSettings','variantSettings');
+
+const variantSettingsRef=doc(
+db,'storeSettings','variantSettings'
+);
+
+
+/* FIRESTORE TRANSACTION */
 
 const result=await runTransaction(db,async tx=>{
 
-/* সব প্রয়োজনীয় তথ্য আগে Read করা হচ্ছে */
-const [counterSnap,variantSettingsSnap]=await Promise.all([
-tx.get(counterRef),
-tx.get(variantSettingsRef)
-]);
+/* সব Read আগে */
 
-/* Transaction-এর সময়কার সর্বশেষ Variant Setting */
-const transactionVariantEnabled=variantSettingsSnap.exists()
+const counterSnap=await tx.get(counterRef);
+
+const variantSettingsSnap=await tx.get(variantSettingsRef);
+
+const transactionVariantEnabled=
+variantSettingsSnap.exists()
 ?variantSettingsSnap.data().enabled!==false
 :true;
 
 const freshProducts=[];
 
-for(const [key,item] of entries){
+
+/* Latest Product Data */
+
+for(const [key,item] of cartData.entries){
+
 const objectItem=item&&typeof item==='object';
-const productId=objectItem?(item.productId||key.split('__')[0]):key;
-const quantity=objectItem?Number(item.quantity):Number(item);
+
+const productId=objectItem
+?(item.productId||key.split('__')[0])
+:key;
+
+const quantity=objectItem
+?Number(item.quantity)
+:Number(item);
 
 const productRef=doc(db,'storeProducts',productId);
+
 const productSnap=await tx.get(productRef);
 
-if(!productSnap.exists())throw Error('একটি পণ্য আর পাওয়া যাচ্ছে না।');
+if(!productSnap.exists()){
+
+throw Error('একটি পণ্য আর পাওয়া যাচ্ছে না।');
+
+}
 
 const data=productSnap.data();
 
-if(data.active===false)throw Error((data.name||'পণ্য')+' বর্তমানে বিক্রির জন্য নেই।');
+if(data.active===false){
 
-if(!Number.isInteger(quantity)||quantity<=0)throw Error('পণ্যের পরিমাণ সঠিক নয়।');
+throw Error((data.name||'পণ্য')+' বর্তমানে বিক্রির জন্য নেই।');
+
+}
+
+if(!Number.isInteger(quantity)||quantity<=0){
+
+throw Error('পণ্যের পরিমাণ সঠিক নয়।');
+
+}
 
 const variantId=objectItem?item.variantId||'':'';
+
 const variantLabel=objectItem?item.variantLabel||'':'';
+
 const variantValue=objectItem?item.variantValue||'':'';
 
 const variantMode=transactionVariantEnabled&&
@@ -482,30 +1126,48 @@ Array.isArray(data.variants)&&
 data.variants.some(v=>v.active!==false);
 
 let variant=null;
-let stock=Number(data.stock)||0;
+
+let stock=Math.max(0,Number(data.stock)||0);
+
 let price=Number(data.price)||0;
 
+
 if(variantMode){
-if(!variantId)throw Error((data.name||'পণ্য')+' এর Variant নির্বাচন করা নেই।');
+
+if(!variantId){
+
+throw Error((data.name||'পণ্য')+' এর Variant নির্বাচন করুন।');
+
+}
 
 variant=(data.variants||[]).find(v=>v.id===variantId);
 
 if(!variant||variant.active===false){
+
 throw Error('নির্বাচিত Variant আর পাওয়া যাচ্ছে না।');
+
 }
 
 stock=Math.max(0,Number(variant.stock)||0);
+
 price=Number(variant.price??data.price)||0;
 
 }else if(variantId){
-throw Error('Variant System বর্তমানে বন্ধ। Cart থেকে পণ্য আবার যোগ করুন।');
+
+throw Error('Variant System বর্তমানে বন্ধ। পণ্যটি আবার Cart-এ যোগ করুন।');
+
 }
+
 
 if(stock<quantity){
-throw Error((data.name||'পণ্য')+' এর পর্যাপ্ত Stock নেই। বর্তমানে: '+stock);
+
+throw Error((data.name||'পণ্য')+' এর পর্যাপ্ত Stock নেই।');
+
 }
 
+
 freshProducts.push({
+
 id:productId,
 ref:productRef,
 name:data.name||'Product',
@@ -517,25 +1179,42 @@ variantLabel,
 variantValue,
 variantMode,
 variants:data.variants||[]
+
 });
+
 }
 
-/* Order-এর Product Lines */
+
+/* Order Lines */
+
 const lines=freshProducts.map(p=>({
+
 productId:p.id,
 productName:p.name,
 price:p.price,
 quantity:p.quantity,
+
 ...(p.variantMode?{
+
 variantId:p.variantId,
 variantLabel:p.variantLabel,
 variantValue:p.variantValue
+
 }:{})
+
 }));
 
-const sub=lines.reduce((s,p)=>s+p.price*p.quantity,0);
+
+const sub=lines.reduce(
+(s,p)=>s+p.price*p.quantity,0
+);
+
 const del=division==='Dhaka'?60:80;
+
 const total=sub+del;
+
+
+/* ORDER NUMBER */
 
 const num=(counterSnap.exists()
 ?Number(counterSnap.data().lastNumber)||0
@@ -543,205 +1222,401 @@ const num=(counterSnap.exists()
 
 const newOrderId='MS-'+String(num).padStart(4,'0');
 
+
 const orderRef=doc(db,'orders',newOrderId);
+
 const trackingRef=doc(db,'orderTracking',newOrderId);
 
-/*
-একই Product-এর একাধিক Variant থাকলে
-সব Stock পরিবর্তন একসঙ্গে হিসাব করা হবে।
-*/
+
+/* GROUP PRODUCTS */
 
 const productGroups=new Map();
 
+
 freshProducts.forEach(p=>{
+
 if(!productGroups.has(p.id)){
+
 productGroups.set(p.id,{
+
 ref:p.ref,
 variantMode:p.variantMode,
 variants:p.variants,
 normalStock:p.stock,
 normalQuantity:0,
 variantQuantities:new Map()
+
 });
+
 }
 
 const group=productGroups.get(p.id);
 
 if(p.variantMode){
+
 const oldQty=group.variantQuantities.get(p.variantId)||0;
-group.variantQuantities.set(p.variantId,oldQty+p.quantity);
+
+group.variantQuantities.set(
+p.variantId,
+oldQty+p.quantity
+);
+
 }else{
+
 group.normalQuantity+=p.quantity;
+
 }
+
 });
 
-/* একই Variant একাধিকবার থাকলেও মোট পরিমাণ যাচাই */
+
+/* VALIDATE TOTAL STOCK */
+
 for(const group of productGroups.values()){
+
 if(group.variantMode){
+
 for(const [variantId,quantity] of group.variantQuantities){
+
 const v=group.variants.find(x=>x.id===variantId);
-if(!v||v.active===false)throw Error('একটি Variant আর পাওয়া যাচ্ছে না।');
+
+if(!v||v.active===false){
+
+throw Error('একটি Variant আর পাওয়া যাচ্ছে না।');
+
+}
+
 if(Number(v.stock||0)<quantity){
+
 throw Error('একটি Variant-এর পর্যাপ্ত Stock নেই।');
+
 }
+
 }
+
 }else if(group.normalQuantity>group.normalStock){
+
 throw Error('একটি পণ্যের পর্যাপ্ত Stock নেই।');
+
 }
+
 }
+
+
+/* STOCK CHANGES */
 
 const stockChanges={};
 
 freshProducts.forEach(p=>{
-const stockKey=p.variantId?p.id+'__'+p.variantId:p.id;
-stockChanges[stockKey]=(stockChanges[stockKey]||0)+p.quantity;
+
+const stockKey=p.variantId
+?p.id+'__'+p.variantId
+:p.id;
+
+stockChanges[stockKey]=
+(stockChanges[stockKey]||0)+p.quantity;
+
 });
 
-/* Counter ও Order তৈরি */
-tx.set(counterRef,{lastNumber:num});
+
+/* WRITE COUNTER */
+
+tx.set(counterRef,{
+
+lastNumber:num
+
+});
+
+
+/* WRITE ORDER */
 
 tx.set(orderRef,{
+
 uid:currentUser.uid,
+
 customerName:name,
+
 phone,
+
 email:orderEmail,
+
 accountEmail:currentUser.email,
+
 address,
+
 division,
+
 district,
+
 upazila,
+
 productName:lines.map(p=>
-p.productName+(p.variantValue?' ('+p.variantValue+')':'')+' x'+p.quantity
+p.productName+
+(p.variantValue?' ('+p.variantValue+')':'')+
+' x'+p.quantity
 ).join(', '),
+
 products:lines,
+
 stockChanges,
+
 quantity:lines.reduce((s,p)=>s+p.quantity,0),
+
 subtotal:sub,
+
 deliveryCharge:del,
+
 totalPrice:total,
+
 paymentMethod:method,
+
 senderNumber,
+
 trxId,
-paymentStatus:method==='Cash on Delivery'?'Pending':'Unverified',
+
+paymentStatus:method==='Cash on Delivery'
+?'Pending':'Unverified',
+
 orderId:newOrderId,
+
 status:'Pending',
+
 createdAt:serverTimestamp()
+
 });
+
+
+/* TRACKING */
 
 tx.set(trackingRef,{
+
 orderId:newOrderId,
+
 status:'Pending',
+
 createdAt:serverTimestamp()
+
 });
 
-/* প্রতিটি Product-এর Stock একবার করে Update */
+
+/* UPDATE STOCK */
+
 for(const [productId,group] of productGroups){
 
 if(group.variantMode){
 
 const updatedVariants=group.variants.map(v=>{
-const quantity=group.variantQuantities.get(v.id)||0;
+
+const quantity=
+group.variantQuantities.get(v.id)||0;
 
 if(quantity<=0)return v;
 
 return{
+
 ...v,
-stock:Math.max(0,Number(v.stock||0)-quantity)
+
+stock:Math.max(
+0,
+Number(v.stock||0)-quantity
+)
+
 };
+
 });
+
 
 const totalStock=updatedVariants
 .filter(v=>v.active!==false)
 .reduce((s,v)=>s+(Number(v.stock)||0),0);
 
+
 tx.update(group.ref,{
+
 variants:updatedVariants,
+
 stock:totalStock,
+
 lastStockOrderId:newOrderId
+
 });
+
 
 }else{
 
 tx.update(group.ref,{
+
 stock:group.normalStock-group.normalQuantity,
+
 lastStockOrderId:newOrderId
+
 });
 
 }
+
 }
 
+
 return{
+
 orderId:newOrderId,
 lines,
 subtotal:sub,
 delivery:del,
 total
+
 };
 
 });
 
-/* সফল অর্ডার */
+
+/* ORDER SUCCESS */
+
+/* Cart Clear only after successful transaction */
+
 cart={};
+
+try{
+
 localStorage.removeItem('msCart');
 localStorage.removeItem('msBuyNowMode');
 localStorage.removeItem('msCartBackup');
 
+}catch(e){
+
+console.error('Cart Clear Error:',e);
+
+}
+
 renderCart();
+
+
+/* EMAIL CONFIRMATION */
+/* EmailJS failure cannot cancel an already placed order */
 
 let emailSent=false;
 
 try{
-await emailjs.send(
+
+const emailjs=await import(
+'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm'
+);
+
+await emailjs.default.send(
+
 EMAILJS_SERVICE_ID,
+
 EMAILJS_TEMPLATE_ID,
+
 {
+
 to_email:orderEmail,
+
 customer_name:name,
+
 order_id:result.orderId,
+
 product_name:result.lines.map(p=>
+
 p.productName+
-(p.variantValue?' ('+p.variantLabel+': '+p.variantValue+')':'')+
+
+(p.variantValue
+?' ('+p.variantLabel+': '+p.variantValue+')'
+:'')+
+
 ' x'+p.quantity
+
 ).join(', '),
+
 subtotal:money(result.subtotal),
+
 delivery_charge:money(result.delivery),
+
 total_price:money(result.total),
+
 order_status:'Pending',
-tracking_link:'https://mylifeshorts070-tech.github.io/ms-store/my-account.html'
+
+tracking_link:
+'https://mylifeshorts070-tech.github.io/ms-store/my-account.html'
+
 },
+
 EMAILJS_PUBLIC_KEY
+
 );
 
 emailSent=true;
 
 }catch(emailError){
+
 console.error('EmailJS Error:',emailError);
+
 }
 
-$('orderMsg').innerHTML=
-`<b style="color:green">অর্ডার সফল হয়েছে! Order ID: ${esc(result.orderId)}</b><br>
-Variant অনুযায়ী Stock স্বয়ংক্রিয়ভাবে আপডেট হয়েছে।<br>
-${emailSent?'Confirmation Email পাঠানো হয়েছে।':'অর্ডার হয়েছে, তবে Confirmation Email পাঠানো যায়নি।'}<br>
-<a href="my-account.html">আমার অর্ডার দেখুন</a>`;
+
+/* SUCCESS MESSAGE */
+
+$('orderMsg').innerHTML=`
+
+<b style="color:green">
+অর্ডার সফল হয়েছে!
+</b>
+
+<br>
+
+Order ID: <b>${esc(result.orderId)}</b>
+
+<br>
+
+পণ্যের Stock স্বয়ংক্রিয়ভাবে আপডেট হয়েছে।
+
+<br>
+
+${emailSent
+?'Confirmation Email পাঠানো হয়েছে।'
+:'অর্ডার হয়েছে, তবে Confirmation Email পাঠানো যায়নি।'}
+
+<br><br>
+
+<a href="my-account.html">আমার অর্ডার দেখুন</a>
+
+`;
+
 
 showToast(emailSent
 ?'অর্ডার সফল হয়েছে! Confirmation Email পাঠানো হয়েছে।'
 :'অর্ডার সফল হয়েছে! Email পাঠানো যায়নি।');
 
+
 }catch(e){
-console.error(e);
-$('orderMsg').textContent='অর্ডার জমা হয়নি: '+authError(e);
+
+console.error('ORDER ERROR:',e);
+
+$('orderMsg').textContent=
+'অর্ডার জমা হয়নি: '+authError(e);
+
+showToast('অর্ডার জমা হয়নি। Error Message দেখুন।');
+
 }finally{
+
 $('placeOrder').disabled=false;
+
 $('placeOrder').textContent=currentUser
 ?(currentUser.emailVerified?'CONFIRM ORDER':'VERIFY GMAIL TO ORDER')
 :'LOGIN TO PLACE ORDER';
+
 }
+
 };
 
+
+/* START APPLICATION */
+
 await setupAuth();
+
 await loadData();
 
 </script>
+
 </body>
 </html>
