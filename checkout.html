@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -27,6 +28,9 @@ button:disabled{opacity:.6;cursor:not-allowed}
 .total{font-weight:bold;font-size:18px}
 .msg{font-size:14px;line-height:1.5;overflow-wrap:anywhere}
 .hidden{display:none!important}
+.variant-info{font-size:12px;color:#64748b;margin-top:5px}
+.cart-product{padding:12px 0;border-bottom:1px solid #eee}
+.cart-product strong{font-size:14px}
 #toast{position:fixed;top:15px;left:50%;transform:translateX(-50%) translateY(-120px);width:calc(100% - 30px);max-width:500px;padding:16px;border-radius:12px;background:#dcfce7;color:#166534;font-size:16px;font-weight:bold;text-align:center;box-shadow:0 5px 20px #0002;z-index:99999;transition:transform .35s ease}
 #toast.show{transform:translateX(-50%) translateY(0)}
 @media(max-width:520px){.grid{grid-template-columns:1fr}.full{grid-column:auto}}
@@ -38,80 +42,79 @@ button:disabled{opacity:.6;cursor:not-allowed}
 <div id="toast"></div>
 
 <header>
- <div class="logo">MS STORE</div>
- <a href="index.html">← SHOPPING</a>
+<div class="logo">MS STORE</div>
+<a href="index.html">← SHOPPING</a>
 </header>
 
 <main>
 
 <section class="panel">
- <h2>🛒 Your Order</h2>
- <div id="cartList">Cart লোড হচ্ছে...</div>
- <div class="row"><span>Subtotal</span><b id="subtotal">৳0</b></div>
- <div class="row"><span>Delivery Charge</span><b id="delivery">৳0</b></div>
- <div class="row total"><span>Total</span><b id="total">৳0</b></div>
+<h2>🛒 Your Order</h2>
+<div id="cartList">Cart লোড হচ্ছে...</div>
+<div class="row"><span>Subtotal</span><b id="subtotal">৳0</b></div>
+<div class="row"><span>Delivery Charge</span><b id="delivery">৳0</b></div>
+<div class="row total"><span>Total</span><b id="total">৳0</b></div>
 </section>
 
 <section class="panel">
- <h2>Customer Login / Register</h2>
- <p id="authStatus" class="msg">অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।</p>
+<h2>Customer Login / Register</h2>
+<p id="authStatus" class="msg">অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।</p>
 
- <div id="authBox">
-  <div id="registerFields" class="hidden">
-   <input id="regName" placeholder="আপনার নাম">
-   <input id="regPhone" placeholder="মোবাইল নম্বর">
-  </div>
+<div id="authBox">
+<div id="registerFields" class="hidden">
+<input id="regName" placeholder="আপনার নাম">
+<input id="regPhone" placeholder="মোবাইল নম্বর">
+</div>
 
-  <input id="email" type="email" placeholder="Gmail / Email" autocomplete="email">
-  <input id="password" type="password" placeholder="Password (কমপক্ষে ৬ অক্ষর)" autocomplete="current-password">
+<input id="email" type="email" placeholder="Gmail / Email" autocomplete="email">
+<input id="password" type="password" placeholder="Password (কমপক্ষে ৬ অক্ষর)" autocomplete="current-password">
 
-  <button id="authSubmit">Login</button>
-  <button class="secondary" id="toggle">নতুন অ্যাকাউন্ট তৈরি করুন</button>
-  <button class="secondary" id="forgot">Forgot Password</button>
-  <button class="red hidden" id="logout">Logout</button>
- </div>
+<button id="authSubmit">Login</button>
+<button class="secondary" id="toggle">নতুন অ্যাকাউন্ট তৈরি করুন</button>
+<button class="secondary" id="forgot">Forgot Password</button>
+<button class="red hidden" id="logout">Logout</button>
+</div>
 
- <p id="authMsg" class="msg"></p>
+<p id="authMsg" class="msg"></p>
 </section>
 
 <section class="panel">
- <h2>Delivery Information</h2>
+<h2>Delivery Information</h2>
 
- <div class="grid">
-  <input id="customerName" placeholder="আপনার নাম *">
-  <input id="phone" type="tel" placeholder="মোবাইল নম্বর *">
+<div class="grid">
+<input id="customerName" placeholder="আপনার নাম *">
+<input id="phone" type="tel" placeholder="মোবাইল নম্বর *">
+<input id="orderEmail" class="full" type="email" placeholder="অর্ডার Confirmation-এর Email *">
 
-  <input id="orderEmail" class="full" type="email" placeholder="অর্ডার Confirmation-এর Email *">
+<select id="division" class="full">
+<option value="">বিভাগ নির্বাচন করুন *</option>
+<option value="Dhaka">ঢাকা</option>
+<option value="Chattogram">চট্টগ্রাম</option>
+<option value="Rajshahi">রাজশাহী</option>
+<option value="Khulna">খুলনা</option>
+<option value="Barishal">বরিশাল</option>
+<option value="Sylhet">সিলেট</option>
+<option value="Rangpur">রংপুর</option>
+<option value="Mymensingh">ময়মনসিংহ</option>
+</select>
 
-  <select id="division" class="full">
-   <option value="">বিভাগ নির্বাচন করুন *</option>
-   <option value="Dhaka">ঢাকা</option>
-   <option value="Chattogram">চট্টগ্রাম</option>
-   <option value="Rajshahi">রাজশাহী</option>
-   <option value="Khulna">খুলনা</option>
-   <option value="Barishal">বরিশাল</option>
-   <option value="Sylhet">সিলেট</option>
-   <option value="Rangpur">রংপুর</option>
-   <option value="Mymensingh">ময়মনসিংহ</option>
-  </select>
+<input id="district" placeholder="জেলা *">
+<input id="upazila" placeholder="উপজেলা / থানা *">
+<textarea id="address" class="full" placeholder="বিস্তারিত ঠিকানা *"></textarea>
 
-  <input id="district" placeholder="জেলা *">
-  <input id="upazila" placeholder="উপজেলা / থানা *">
-  <textarea id="address" class="full" placeholder="বিস্তারিত ঠিকানা *"></textarea>
+<select id="paymentMethod" class="full">
+<option value="Cash on Delivery">Cash on Delivery</option>
+<option value="bKash Manual">bKash (ম্যানুয়াল পেমেন্ট)</option>
+<option value="Nagad Manual">Nagad (ম্যানুয়াল পেমেন্ট)</option>
+</select>
 
-  <select id="paymentMethod" class="full">
-   <option value="Cash on Delivery">Cash on Delivery</option>
-   <option value="bKash Manual">bKash (ম্যানুয়াল পেমেন্ট)</option>
-   <option value="Nagad Manual">Nagad (ম্যানুয়াল পেমেন্ট)</option>
-  </select>
+<div id="paymentInfo" class="full msg"></div>
+<input id="senderNumber" class="full hidden" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
+<input id="trxId" class="full hidden" placeholder="Transaction ID">
+</div>
 
-  <div id="paymentInfo" class="full msg"></div>
-  <input id="senderNumber" class="full hidden" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
-  <input id="trxId" class="full hidden" placeholder="Transaction ID">
- </div>
-
- <button id="placeOrder" class="orange">LOGIN TO PLACE ORDER</button>
- <p id="orderMsg" class="msg"></p>
+<button id="placeOrder" class="orange">LOGIN TO PLACE ORDER</button>
+<p id="orderMsg" class="msg"></p>
 </section>
 
 </main>
@@ -121,571 +124,495 @@ button:disabled{opacity:.6;cursor:not-allowed}
 import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
 
 import{
- getAuth,
- onAuthStateChanged,
- createUserWithEmailAndPassword,
- signInWithEmailAndPassword,
- signOut,
- sendEmailVerification,
- sendPasswordResetEmail,
- setPersistence,
- browserLocalPersistence
+getAuth,onAuthStateChanged,createUserWithEmailAndPassword,
+signInWithEmailAndPassword,signOut,sendEmailVerification,
+sendPasswordResetEmail,setPersistence,browserLocalPersistence
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
 import{
- getFirestore,
- collection,
- getDocs,
- doc,
- getDoc,
- setDoc,
- runTransaction,
- serverTimestamp
+getFirestore,collection,getDocs,doc,getDoc,setDoc,
+runTransaction,serverTimestamp
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
 import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm';
 
-
-/* FIREBASE CONFIG */
-
 const firebaseConfig={
- apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
- authDomain:"ms-store-admin-26416.firebaseapp.com",
- projectId:"ms-store-admin-26416",
- storageBucket:"ms-store-admin-26416.firebasestorage.app",
- messagingSenderId:"968008425065",
- appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
+apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+authDomain:"ms-store-admin-26416.firebaseapp.com",
+projectId:"ms-store-admin-26416",
+storageBucket:"ms-store-admin-26416.firebasestorage.app",
+messagingSenderId:"968008425065",
+appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
 
-
-/* EMAILJS CONFIG */
-
 const EMAILJS_SERVICE_ID='service_9ck9kob';
 const EMAILJS_TEMPLATE_ID='template_rbe08jk';
 const EMAILJS_PUBLIC_KEY='4gQjk5EWAQ7tk-stZ';
-
-
-/* COMMON */
 
 const $=id=>document.getElementById(id);
 const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
- '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
 
-let cart={};
-let products=[];
-let currentUser=null;
-let isRegister=false;
+let cart={},products=[],currentUser=null,isRegister=false;
 let payment={bkashNumber:'',nagadNumber:''};
+let globalVariantEnabled=true;
 let toastTimer;
 
 function showToast(message){
- const toast=$('toast');
- toast.textContent=message;
- toast.classList.add('show');
- clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>toast.classList.remove('show'),3500);
+$('toast').textContent=message;
+$('toast').classList.add('show');
+clearTimeout(toastTimer);
+toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3500);
 }
 
 function authError(e){
- const m=e.code||e.message;
- return ({
- 'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
- 'auth/invalid-email':'Email ঠিক নয়।',
- 'auth/weak-password':'Password কমপক্ষে ৬ অক্ষরের হতে হবে।',
- 'auth/invalid-credential':'Email অথবা Password ভুল।',
- 'auth/user-not-found':'এই Email দিয়ে অ্যাকাউন্ট পাওয়া যায়নি।',
- 'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।',
- 'auth/network-request-failed':'Internet Connection পরীক্ষা করুন।',
- 'auth/invalid-api-key':'Firebase API Key সঠিক নয়।'
- })[m]||m;
+const m=e.code||e.message;
+return({
+'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
+'auth/invalid-email':'Email ঠিক নয়।',
+'auth/weak-password':'Password কমপক্ষে ৬ অক্ষরের হতে হবে।',
+'auth/invalid-credential':'Email অথবা Password ভুল।',
+'auth/user-not-found':'এই Email দিয়ে অ্যাকাউন্ট পাওয়া যায়নি।',
+'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।',
+'auth/network-request-failed':'Internet Connection পরীক্ষা করুন।',
+'auth/invalid-api-key':'Firebase API Key সঠিক নয়।'
+})[m]||m;
 }
-
-
-/* CART */
 
 try{
- cart=JSON.parse(localStorage.getItem('msCart')||'{}');
- if(!cart||typeof cart!=='object'||Array.isArray(cart))cart={};
+cart=JSON.parse(localStorage.getItem('msCart')||'{}');
+if(!cart||typeof cart!=='object'||Array.isArray(cart))cart={};
 }catch(e){cart={};}
 
-
-/* LOAD DATA */
-
-async function loadData(){
- try{
-  const [ps,pm]=await Promise.all([
-   getDocs(collection(db,'storeProducts')),
-   getDoc(doc(db,'storeSettings','paymentMethods'))
-  ]);
-
-  products=ps.docs.map(d=>({id:d.id,...d.data()}));
-
-  if(pm.exists())payment=pm.data();
-
-  renderCart();
-  renderPayment();
-
- }catch(e){
-  console.error(e);
-  $('cartList').textContent='তথ্য লোড হয়নি: '+authError(e);
- }
+function isVariantProduct(p){
+return globalVariantEnabled&&p.hasVariants===true&&
+Array.isArray(p.variants)&&p.variants.some(v=>v.active!==false);
 }
 
+function getEntries(){
+return Object.entries(cart).filter(([key,item])=>{
+if(item&&typeof item==='object'){
+const id=item.productId||key.split('__')[0];
+return products.some(p=>p.id===id)&&Number(item.quantity)>0;
+}
+return products.some(p=>p.id===key)&&Number.isInteger(Number(item))&&Number(item)>0;
+});
+}
 
-/* RENDER CART */
+async function loadData(){
+try{
+const [ps,pm,vs]=await Promise.all([
+getDocs(collection(db,'storeProducts')),
+getDoc(doc(db,'storeSettings','paymentMethods')),
+getDoc(doc(db,'storeSettings','variantSettings'))
+]);
+
+products=ps.docs.map(d=>({id:d.id,...d.data()}));
+if(pm.exists())payment=pm.data();
+globalVariantEnabled=vs.exists()?vs.data().enabled!==false:true;
+
+renderCart();
+renderPayment();
+}catch(e){
+console.error(e);
+$('cartList').textContent='তথ্য লোড হয়নি: '+authError(e);
+}
+}
 
 function renderCart(){
- const entries=Object.entries(cart).filter(([id,q])=>
-  products.some(p=>p.id===id)&&Number.isInteger(Number(q))&&Number(q)>0
- );
+const entries=getEntries();
+cart=Object.fromEntries(entries);
 
- cart=Object.fromEntries(entries);
+let sub=0,invalid=false;
 
- let sub=0;
- let invalid=false;
+$('cartList').innerHTML=entries.length?entries.map(([key,item])=>{
+const objectItem=item&&typeof item==='object';
+const id=objectItem?(item.productId||key.split('__')[0]):key;
+const p=products.find(x=>x.id===id);
+if(!p)return '';
 
- $('cartList').innerHTML=entries.length?entries.map(([id,q])=>{
-  const p=products.find(x=>x.id===id);
-  const stock=Math.max(0,Number(p.stock)||0);
-  const price=Number(p.price)||0;
+const qty=objectItem?Number(item.quantity):Number(item);
+const variantId=objectItem?item.variantId:'';
+const variant=(p.variants||[]).find(v=>v.id===variantId);
+const variantProduct=isVariantProduct(p);
 
-  sub+=price*Number(q);
-  if(Number(q)>stock)invalid=true;
+if(variantProduct&&!variant){
+invalid=true;
+}
 
-  return `<div class="row">
-   <span>${esc(p.name)} × ${q}
-   ${Number(q)>stock?'<br><small style="color:red">স্টক পর্যাপ্ত নেই</small>':''}</span>
-   <b>${money(price*Number(q))}</b>
-  </div>`;
- }).join(''):'আপনার Cart খালি। <a href="index.html">পণ্য বেছে নিন</a>';
+const stock=variant?Math.max(0,Number(variant.stock)||0):Math.max(0,Number(p.stock)||0);
+const price=objectItem?Number(item.price??(variant?.price??p.price)):Number(p.price)||0;
+const label=objectItem&&item.variantLabel?item.variantLabel+': '+(item.variantValue||''):'';
 
- const d=entries.length?
-  ($('division').value==='Dhaka'?60:80):0;
+if(qty>stock|| (variantProduct&&!variant))invalid=true;
+sub+=price*qty;
 
- $('subtotal').textContent=money(sub);
- $('delivery').textContent=money(d);
- $('total').textContent=money(sub+d);
+return `<div class="cart-product">
+<strong>${esc(p.name)}</strong>
+${label?`<div class="variant-info">${esc(label)}</div>`:''}
+<div class="variant-info">${money(price)} × ${qty} = ${money(price*qty)}</div>
+${qty>stock?'<div style="color:red;font-size:12px">স্টক পর্যাপ্ত নেই</div>':''}
+</div>`;
+}).join(''):'আপনার Cart খালি। <a href="index.html">পণ্য বেছে নিন</a>';
 
- if(invalid){
-  $('orderMsg').textContent='Cart-এর কিছু পণ্যের পরিমাণ বর্তমান স্টকের চেয়ে বেশি।';
- }
+const delivery=entries.length?($('division').value==='Dhaka'?60:80):0;
+$('subtotal').textContent=money(sub);
+$('delivery').textContent=money(delivery);
+$('total').textContent=money(sub+delivery);
+
+if(invalid){
+$('orderMsg').textContent='Cart-এর কোনো পণ্যের Variant বা Stock সমস্যা আছে।';
+}
 }
 
 function renderPayment(){
- const m=$('paymentMethod').value;
-
- if(m==='Cash on Delivery'){
-  $('paymentInfo').textContent='Cash on Delivery';
-  $('senderNumber').classList.add('hidden');
-  $('trxId').classList.add('hidden');
- }else{
-  const n=m.startsWith('bKash')?payment.bkashNumber:payment.nagadNumber;
-
-  $('paymentInfo').innerHTML=
-   `${m} নম্বর: <b>${esc(n||'Admin Panel থেকে নম্বর সেট করা হয়নি')}</b>`;
-
-  $('senderNumber').classList.remove('hidden');
-  $('trxId').classList.remove('hidden');
- }
+const m=$('paymentMethod').value;
+if(m==='Cash on Delivery'){
+$('paymentInfo').textContent='Cash on Delivery';
+$('senderNumber').classList.add('hidden');
+$('trxId').classList.add('hidden');
+}else{
+const n=m.startsWith('bKash')?payment.bkashNumber:payment.nagadNumber;
+$('paymentInfo').innerHTML=`${m} নম্বর: <b>${esc(n||'Admin Panel থেকে নম্বর সেট করা হয়নি')}</b>`;
+$('senderNumber').classList.remove('hidden');
+$('trxId').classList.remove('hidden');
+}
 }
 
 $('division').onchange=renderCart;
 $('paymentMethod').onchange=renderPayment;
 
-
-/* REGISTER TOGGLE */
-
 $('toggle').onclick=()=>{
- isRegister=!isRegister;
- $('registerFields').classList.toggle('hidden',!isRegister);
- $('authSubmit').textContent=isRegister?'Register':'Login';
- $('toggle').textContent=isRegister?
-  'আগে থেকেই অ্যাকাউন্ট আছে? Login':
-  'নতুন অ্যাকাউন্ট তৈরি করুন';
- $('authMsg').textContent='';
+isRegister=!isRegister;
+$('registerFields').classList.toggle('hidden',!isRegister);
+$('authSubmit').textContent=isRegister?'Register':'Login';
+$('toggle').textContent=isRegister?'আগে থেকেই অ্যাকাউন্ট আছে? Login':'নতুন অ্যাকাউন্ট তৈরি করুন';
+$('authMsg').textContent='';
 };
-
-
-/* LOGIN AND REGISTER */
 
 $('authSubmit').onclick=async()=>{
- const email=$('email').value.trim().toLowerCase();
- const password=$('password').value;
+const email=$('email').value.trim().toLowerCase();
+const password=$('password').value;
+$('authMsg').textContent='';
 
- $('authMsg').textContent='';
+if(!email||!password){$('authMsg').textContent='Email ও Password লিখুন।';return;}
+if(password.length<6){$('authMsg').textContent='Password কমপক্ষে ৬ অক্ষরের হতে হবে।';return;}
 
- if(!email||!password){
-  $('authMsg').textContent='Email ও Password লিখুন।';
-  return;
- }
+$('authSubmit').disabled=true;
+try{
+if(isRegister){
+const name=$('regName').value.trim();
+const phone=$('regPhone').value.trim();
+if(!name||!phone)throw Error('নাম ও মোবাইল নম্বর লিখুন।');
 
- if(password.length<6){
-  $('authMsg').textContent='Password কমপক্ষে ৬ অক্ষরের হতে হবে।';
-  return;
- }
+const result=await createUserWithEmailAndPassword(auth,email,password);
+await setDoc(doc(db,'customerProfiles',result.user.uid),{
+uid:result.user.uid,name,phone,email,banned:false,createdAt:serverTimestamp()
+});
+await sendEmailVerification(result.user);
 
- $('authSubmit').disabled=true;
-
- try{
-  if(isRegister){
-   const name=$('regName').value.trim();
-   const phone=$('regPhone').value.trim();
-
-   if(!name||!phone)throw Error('নাম ও মোবাইল নম্বর লিখুন।');
-
-   const result=await createUserWithEmailAndPassword(auth,email,password);
-
-   await setDoc(doc(db,'customerProfiles',result.user.uid),{
-    uid:result.user.uid,
-    name,
-    phone,
-    email,
-    banned:false,
-    createdAt:serverTimestamp()
-   });
-
-   await sendEmailVerification(result.user);
-
-   isRegister=false;
-   $('registerFields').classList.add('hidden');
-   $('authSubmit').textContent='Login';
-
-   $('authMsg').textContent='Gmail-এর Inbox/Spam থেকে Verification সম্পন্ন করুন।';
-   showToast('আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।');
-
-  }else{
-   await signInWithEmailAndPassword(auth,email,password);
-   showToast('আপনার লগইন সম্পন্ন হয়েছে।');
-  }
-
- }catch(e){
-  console.error(e);
-  $('authMsg').textContent=authError(e);
- }finally{
-  $('authSubmit').disabled=false;
- }
+isRegister=false;
+$('registerFields').classList.add('hidden');
+$('authSubmit').textContent='Login';
+$('authMsg').textContent='Gmail-এর Inbox/Spam থেকে Verification সম্পন্ন করুন।';
+showToast('আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে।');
+}else{
+await signInWithEmailAndPassword(auth,email,password);
+showToast('আপনার লগইন সম্পন্ন হয়েছে।');
+}
+}catch(e){
+console.error(e);
+$('authMsg').textContent=authError(e);
+}finally{
+$('authSubmit').disabled=false;
+}
 };
-
-
-/* FORGOT PASSWORD */
 
 $('forgot').onclick=async()=>{
- const email=$('email').value.trim().toLowerCase();
- $('authMsg').textContent='';
-
- if(!email){
-  $('authMsg').textContent='আগে Email লিখুন।';
-  return;
- }
-
- $('forgot').disabled=true;
-
- try{
-  await sendPasswordResetEmail(auth,email);
-  $('authMsg').textContent='Password reset email পাঠানো হয়েছে।';
-  showToast('Password reset email পাঠানো হয়েছে।');
- }catch(e){
-  $('authMsg').textContent=authError(e);
- }finally{
-  $('forgot').disabled=false;
- }
+const email=$('email').value.trim().toLowerCase();
+$('authMsg').textContent='';
+if(!email){$('authMsg').textContent='আগে Email লিখুন।';return;}
+$('forgot').disabled=true;
+try{
+await sendPasswordResetEmail(auth,email);
+$('authMsg').textContent='Password reset email পাঠানো হয়েছে।';
+showToast('Password reset email পাঠানো হয়েছে।');
+}catch(e){$('authMsg').textContent=authError(e);}
+finally{$('forgot').disabled=false;}
 };
-
-
-/* LOGOUT */
 
 $('logout').onclick=async()=>{
- try{
-  await signOut(auth);
-  showToast('আপনি সফলভাবে Logout করেছেন।');
- }catch(e){
-  $('authMsg').textContent=authError(e);
- }
+try{await signOut(auth);showToast('আপনি সফলভাবে Logout করেছেন।');}
+catch(e){$('authMsg').textContent=authError(e);}
 };
-
-
-/* AUTH STATE */
 
 async function setupAuth(){
- try{
-  await setPersistence(auth,browserLocalPersistence);
-
-  onAuthStateChanged(auth,async u=>{
-   currentUser=u;
-
-   if(!u){
-    $('authStatus').textContent='অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।';
-    $('authBox').classList.remove('hidden');
-    $('logout').classList.add('hidden');
-    $('placeOrder').textContent='LOGIN TO PLACE ORDER';
-    return;
-   }
-
-   try{
-    const p=await getDoc(doc(db,'customerProfiles',u.uid));
-
-    if(p.exists()&&p.data().banned){
-     await signOut(auth);
-     alert('এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।');
-     return;
-    }
-
-    $('authStatus').textContent='লগইন করা আছে: '+u.email;
-    $('authBox').classList.add('hidden');
-    $('logout').classList.remove('hidden');
-
-    $('placeOrder').textContent=
-     u.emailVerified?'CONFIRM ORDER':'VERIFY GMAIL TO ORDER';
-
-    if(p.exists()){
-     $('customerName').value=p.data().name||'';
-     $('phone').value=p.data().phone||'';
-    }
-
-   }catch(e){
-    $('authMsg').textContent=authError(e);
-   }
-  });
-
- }catch(e){
-  $('authMsg').textContent=authError(e);
- }
+try{
+await setPersistence(auth,browserLocalPersistence);
+onAuthStateChanged(auth,async u=>{
+currentUser=u;
+if(!u){
+$('authStatus').textContent='অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।';
+$('authBox').classList.remove('hidden');
+$('logout').classList.add('hidden');
+$('placeOrder').textContent='LOGIN TO PLACE ORDER';
+return;
 }
-
-
-/* EMAIL VALIDATION */
+try{
+const p=await getDoc(doc(db,'customerProfiles',u.uid));
+if(p.exists()&&p.data().banned){
+await signOut(auth);
+alert('এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।');
+return;
+}
+$('authStatus').textContent='লগইন করা আছে: '+u.email;
+$('authBox').classList.add('hidden');
+$('logout').classList.remove('hidden');
+$('placeOrder').textContent=u.emailVerified?'CONFIRM ORDER':'VERIFY GMAIL TO ORDER';
+if(p.exists()){
+$('customerName').value=p.data().name||'';
+$('phone').value=p.data().phone||'';
+}
+}catch(e){$('authMsg').textContent=authError(e);}
+});
+}catch(e){$('authMsg').textContent=authError(e);}
+}
 
 function validEmail(email){
- return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-
-/* PLACE ORDER */
+/* ORDER PLACEMENT */
 
 $('placeOrder').onclick=async()=>{
- $('orderMsg').textContent='';
+$('orderMsg').textContent='';
 
- if(!currentUser){
-  $('orderMsg').textContent='আগে Login / Register করুন।';
-  $('email').focus();
-  return;
- }
+if(!currentUser){
+$('orderMsg').textContent='আগে Login / Register করুন।';
+$('email').focus();return;
+}
+if(!currentUser.emailVerified){
+$('orderMsg').textContent='অর্ডার করার আগে Gmail Verification সম্পন্ন করুন।';
+return;
+}
 
- if(!currentUser.emailVerified){
-  $('orderMsg').textContent='অর্ডার করার আগে Login করা Gmail Verification সম্পন্ন করুন।';
-  return;
- }
+const entries=getEntries();
+if(!entries.length){
+$('orderMsg').textContent='আপনার Cart খালি।';
+return;
+}
 
- const entries=Object.entries(cart).filter(([id,q])=>
-  products.some(p=>p.id===id)&&Number(q)>0
- );
+const name=$('customerName').value.trim();
+const phone=$('phone').value.trim();
+const orderEmail=$('orderEmail').value.trim().toLowerCase();
+const division=$('division').value;
+const district=$('district').value.trim();
+const upazila=$('upazila').value.trim();
+const address=$('address').value.trim();
+const method=$('paymentMethod').value;
+const senderNumber=$('senderNumber').value.trim();
+const trxId=$('trxId').value.trim();
 
- if(!entries.length){
-  $('orderMsg').textContent='আপনার Cart খালি।';
-  return;
- }
+if(!name||!phone||!division||!district||!upazila||!address){
+$('orderMsg').textContent='সব ঠিকানার তথ্য পূরণ করুন।';return;
+}
+if(!validEmail(orderEmail)){
+$('orderMsg').textContent='সঠিক Email Address লিখুন।';return;
+}
+if(method!=='Cash on Delivery'&&(!senderNumber||!trxId)){
+$('orderMsg').textContent='Sender Number ও Transaction ID দিন।';return;
+}
 
- const name=$('customerName').value.trim();
- const phone=$('phone').value.trim();
- const orderEmail=$('orderEmail').value.trim().toLowerCase();
- const division=$('division').value;
- const district=$('district').value.trim();
- const upazila=$('upazila').value.trim();
- const address=$('address').value.trim();
+$('placeOrder').disabled=true;
+$('placeOrder').textContent='PROCESSING...';
 
- const method=$('paymentMethod').value;
- const senderNumber=$('senderNumber').value.trim();
- const trxId=$('trxId').value.trim();
+try{
+const counterRef=doc(db,'counters','orderSequence');
 
- if(!name||!phone||!division||!district||!upazila||!address){
-  $('orderMsg').textContent='সব ঠিকানার তথ্য পূরণ করুন।';
-  return;
- }
+const result=await runTransaction(db,async tx=>{
+const counterSnap=await tx.get(counterRef);
+const freshProducts=[];
 
- if(!validEmail(orderEmail)){
-  $('orderMsg').textContent='সঠিক Email Address লিখুন।';
-  return;
- }
+for(const [key,item] of entries){
+const objectItem=item&&typeof item==='object';
+const productId=objectItem?(item.productId||key.split('__')[0]):key;
+const quantity=objectItem?Number(item.quantity):Number(item);
 
- if(method!=='Cash on Delivery'&&(!senderNumber||!trxId)){
-  $('orderMsg').textContent='Sender Number ও Transaction ID দিন।';
-  return;
- }
+const productRef=doc(db,'storeProducts',productId);
+const productSnap=await tx.get(productRef);
+if(!productSnap.exists())throw Error('একটি পণ্য আর পাওয়া যাচ্ছে না।');
 
- $('placeOrder').disabled=true;
- $('placeOrder').textContent='PROCESSING...';
+const data=productSnap.data();
+if(data.active===false)throw Error((data.name||'পণ্য')+' বর্তমানে বিক্রির জন্য নেই।');
 
- try{
+if(!Number.isInteger(quantity)||quantity<=0)throw Error('পণ্যের পরিমাণ সঠিক নয়।');
 
-  const counterRef=doc(db,'counters','orderSequence');
+const variantId=objectItem?item.variantId:'';
+const variantLabel=objectItem?item.variantLabel||'':'';
+const variantValue=objectItem?item.variantValue||'':'';
 
-  const result=await runTransaction(db,async tx=>{
+const variantMode=globalVariantEnabled&&data.hasVariants===true&&Array.isArray(data.variants);
 
-   const counterSnap=await tx.get(counterRef);
-   const freshProducts=[];
+let variant=null;
+let stock=Number(data.stock)||0;
+let price=Number(data.price)||0;
 
-   for(const [productId,quantity] of entries){
-    const productRef=doc(db,'storeProducts',productId);
-    const productSnap=await tx.get(productRef);
+if(variantMode){
+if(!variantId)throw Error((data.name||'পণ্য')+' এর Variant নির্বাচন করা নেই।');
+variant=(data.variants||[]).find(v=>v.id===variantId);
+if(!variant||variant.active===false)throw Error('নির্বাচিত Variant আর পাওয়া যাচ্ছে না।');
+stock=Math.max(0,Number(variant.stock)||0);
+price=Number(variant.price??data.price)||0;
+}else if(variantId){
+throw Error('Variant System বর্তমানে বন্ধ। Cart থেকে পণ্য আবার যোগ করুন।');
+}
 
-    if(!productSnap.exists())throw Error('একটি পণ্য আর পাওয়া যাচ্ছে না।');
+if(stock<quantity){
+throw Error((data.name||'পণ্য')+' এর পর্যাপ্ত Stock নেই। বর্তমানে: '+stock);
+}
 
-    const data=productSnap.data();
-    const stock=Math.max(0,Number(data.stock)||0);
+freshProducts.push({
+id:productId,ref:productRef,name:data.name||'Product',
+quantity,price,stock,variantId,variantLabel,variantValue,
+variantMode,variants:data.variants||[]
+});
+}
 
-    if(data.active===false)throw Error(data.name+' বর্তমানে বিক্রির জন্য নেই।');
+/* সব পণ্য যাচাই শেষে হিসাব */
+const lines=freshProducts.map(p=>({
+productId:p.id,
+productName:p.name,
+price:p.price,
+quantity:p.quantity,
+...(p.variantMode?{
+variantId:p.variantId,
+variantLabel:p.variantLabel,
+variantValue:p.variantValue
+}:{})
+}));
 
-    if(!Number.isInteger(Number(quantity))||Number(quantity)<=0){
-     throw Error('পণ্যের পরিমাণ সঠিক নয়।');
-    }
+const sub=lines.reduce((s,p)=>s+p.price*p.quantity,0);
+const del=division==='Dhaka'?60:80;
+const total=sub+del;
+const num=(counterSnap.exists()?Number(counterSnap.data().lastNumber)||0:0)+1;
+const newOrderId='MS-'+String(num).padStart(4,'0');
 
-    if(stock<Number(quantity)){
-     throw Error(data.name+' এর পর্যাপ্ত স্টক নেই। বর্তমানে স্টক: '+stock);
-    }
+const orderRef=doc(db,'orders',newOrderId);
+const trackingRef=doc(db,'orderTracking',newOrderId);
+const stockChanges={};
 
-    freshProducts.push({
-     id:productId,
-     ref:productRef,
-     name:data.name||'Product',
-     price:Number(data.price)||0,
-     oldStock:stock,
-     quantity:Number(quantity)
-    });
-   }
+freshProducts.forEach(p=>{
+const stockKey=p.variantId?p.id+'__'+p.variantId:p.id;
+stockChanges[stockKey]=p.quantity;
+});
 
-   const lines=freshProducts.map(p=>({
-    productId:p.id,
-    productName:p.name,
-    price:p.price,
-    quantity:p.quantity
-   }));
+tx.set(counterRef,{lastNumber:num});
 
-   const sub=lines.reduce((s,p)=>s+p.price*p.quantity,0);
-   const del=division==='Dhaka'?60:80;
-   const total=sub+del;
+tx.set(orderRef,{
+uid:currentUser.uid,
+customerName:name,phone,email:orderEmail,
+accountEmail:currentUser.email,
+address,division,district,upazila,
+productName:lines.map(p=>
+p.productName+(p.variantValue?' ('+p.variantValue+')':'')+' x'+p.quantity
+).join(', '),
+products:lines,stockChanges,
+quantity:lines.reduce((s,p)=>s+p.quantity,0),
+subtotal:sub,deliveryCharge:del,totalPrice:total,
+paymentMethod:method,senderNumber,trxId,
+paymentStatus:method==='Cash on Delivery'?'Pending':'Unverified',
+orderId:newOrderId,status:'Pending',
+createdAt:serverTimestamp()
+});
 
-   const num=(counterSnap.exists()?
-    Number(counterSnap.data().lastNumber)||0:0)+1;
+tx.set(trackingRef,{
+orderId:newOrderId,status:'Pending',createdAt:serverTimestamp()
+});
 
-   const newOrderId='MS-'+String(num).padStart(4,'0');
+/* Variant Stock অথবা Normal Stock কমানো */
+freshProducts.forEach(p=>{
+if(p.variantMode){
+const updatedVariants=p.variants.map(v=>{
+if(v.id!==p.variantId)return v;
+return {...v,stock:Math.max(0,Number(v.stock)||0)-p.quantity};
+});
+const totalStock=updatedVariants
+.filter(v=>v.active!==false)
+.reduce((s,v)=>s+(Number(v.stock)||0),0);
 
-   const orderRef=doc(db,'orders',newOrderId);
-   const trackingRef=doc(db,'orderTracking',newOrderId);
+tx.update(p.ref,{
+variants:updatedVariants,
+stock:totalStock,
+lastStockOrderId:newOrderId
+});
+}else{
+tx.update(p.ref,{
+stock:p.stock-p.quantity,
+lastStockOrderId:newOrderId
+});
+}
+});
 
-   const stockChanges={};
-   freshProducts.forEach(p=>stockChanges[p.id]=p.quantity);
+return{orderId:newOrderId,lines,subtotal:sub,delivery:del,total};
+});
 
-   tx.set(counterRef,{lastNumber:num});
+/* সফল অর্ডার */
+cart={};
+localStorage.removeItem('msCart');
+localStorage.removeItem('msBuyNowMode');
+localStorage.removeItem('msCartBackup');
+renderCart();
 
-   tx.set(orderRef,{
-    uid:currentUser.uid,
-    customerName:name,
-    phone,
-    email:orderEmail,
-    accountEmail:currentUser.email,
-    address,
-    division,
-    district,
-    upazila,
-    productName:lines.map(p=>p.productName+' x'+p.quantity).join(', '),
-    products:lines,
-    stockChanges,
-    quantity:lines.reduce((s,p)=>s+p.quantity,0),
-    subtotal:sub,
-    deliveryCharge:del,
-    totalPrice:total,
-    paymentMethod:method,
-    senderNumber,
-    trxId,
-    paymentStatus:method==='Cash on Delivery'?'Pending':'Unverified',
-    orderId:newOrderId,
-    status:'Pending',
-    createdAt:serverTimestamp()
-   });
+let emailSent=false;
+try{
+await emailjs.send(
+EMAILJS_SERVICE_ID,
+EMAILJS_TEMPLATE_ID,
+{
+to_email:orderEmail,
+customer_name:name,
+order_id:result.orderId,
+product_name:result.lines.map(p=>
+p.productName+
+(p.variantValue?' ('+p.variantLabel+': '+p.variantValue+')':'')+
+' x'+p.quantity
+).join(', '),
+subtotal:money(result.subtotal),
+delivery_charge:money(result.delivery),
+total_price:money(result.total),
+order_status:'Pending',
+tracking_link:'https://mylifeshorts070-tech.github.io/ms-store/my-account.html'
+},
+EMAILJS_PUBLIC_KEY
+);
+emailSent=true;
+}catch(emailError){
+console.error('EmailJS Error:',emailError);
+}
 
-   tx.set(trackingRef,{
-    orderId:newOrderId,
-    status:'Pending',
-    createdAt:serverTimestamp()
-   });
+$('orderMsg').innerHTML=
+`<b style="color:green">অর্ডার সফল হয়েছে! Order ID: ${esc(result.orderId)}</b><br>
+Variant অনুযায়ী Stock স্বয়ংক্রিয়ভাবে আপডেট হয়েছে।<br>
+${emailSent?'Confirmation Email পাঠানো হয়েছে।':'অর্ডার হয়েছে, তবে Confirmation Email পাঠানো যায়নি।'}<br>
+<a href="my-account.html">আমার অর্ডার দেখুন</a>`;
 
-   freshProducts.forEach(p=>{
-    tx.update(p.ref,{
-     stock:p.oldStock-p.quantity,
-     lastStockOrderId:newOrderId
-    });
-   });
+showToast(emailSent?'অর্ডার সফল হয়েছে! Confirmation Email পাঠানো হয়েছে।':'অর্ডার সফল হয়েছে! Email পাঠানো যায়নি।');
 
-   return {
-    orderId:newOrderId,
-    lines,
-    subtotal:sub,
-    delivery:del,
-    total
-   };
-  });
-
-  // ORDER SUCCESS: CLEAR CART
-  cart={};
-  localStorage.removeItem('msCart');
-  renderCart();
-
-  // EMAILJS: SEND CONFIRMATION
-  let emailSent=false;
-
-  try{
-   await emailjs.send(
-    EMAILJS_SERVICE_ID,
-    EMAILJS_TEMPLATE_ID,
-    {
-     to_email:orderEmail,
-     customer_name:name,
-     order_id:result.orderId,
-     product_name:result.lines.map(p=>p.productName+' x'+p.quantity).join(', '),
-     subtotal:money(result.subtotal),
-     delivery_charge:money(result.delivery),
-     total_price:money(result.total),
-     order_status:'Pending',
-     tracking_link:'https://mylifeshorts070-tech.github.io/ms-store/my-account.html'
-    },
-    EMAILJS_PUBLIC_KEY
-   );
-
-   emailSent=true;
-
-  }catch(emailError){
-   console.error('EmailJS Error:',emailError);
-  }
-
-  $('orderMsg').innerHTML=
-   `<b style="color:green">অর্ডার সফল হয়েছে! Order ID: ${esc(result.orderId)}</b><br>
-   স্টক স্বয়ংক্রিয়ভাবে আপডেট হয়েছে।<br>
-   ${emailSent?'Confirmation Email পাঠানো হয়েছে।':'অর্ডার হয়েছে, তবে Confirmation Email পাঠানো যায়নি।'}<br>
-   <a href="my-account.html">আমার অর্ডার দেখুন</a>`;
-
-  showToast(emailSent?
-   'অর্ডার সফল হয়েছে! Confirmation Email পাঠানো হয়েছে।':
-   'অর্ডার সফল হয়েছে! Email পাঠানো যায়নি।');
-
- }catch(e){
-  console.error(e);
-  $('orderMsg').textContent='অর্ডার জমা হয়নি: '+authError(e);
-
- }finally{
-  $('placeOrder').disabled=false;
-  $('placeOrder').textContent='CONFIRM ORDER';
- }
+}catch(e){
+console.error(e);
+$('orderMsg').textContent='অর্ডার জমা হয়নি: '+authError(e);
+}finally{
+$('placeOrder').disabled=false;
+$('placeOrder').textContent='CONFIRM ORDER';
+}
 };
-
-
-/* START */
 
 await setupAuth();
 await loadData();
