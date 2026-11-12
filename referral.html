@@ -6,683 +6,384 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Refer & Earn | MS STORE</title>
 <meta name="theme-color" content="#6d28d9">
-
 <style>
 :root{
-  --purple:#6d28d9;
-  --dark:#3b0764;
-  --orange:#f59e0b;
-  --bg:#f7f5fc;
-  --white:#fff;
-  --text:#211b35;
-  --muted:#817995;
-  --green:#16a34a;
-  --red:#dc2626;
-  --border:#eee9f5;
+--purple:#6d28d9;--dark:#3b0764;--orange:#f59e0b;
+--bg:#f7f5fc;--white:#fff;--text:#211b35;
+--muted:#817995;--green:#16a34a;--red:#dc2626;
+--border:#eee9f5;
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,sans-serif;
-  padding-bottom:30px;
-}
-header{
-  background:linear-gradient(120deg,#3b0764,#6d28d9);
-  color:white;
-  padding:17px 5%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  box-shadow:0 4px 18px #26004420;
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;padding-bottom:30px}
+header{background:linear-gradient(120deg,#3b0764,#6d28d9);color:white;padding:17px 5%;display:flex;align-items:center;justify-content:space-between;box-shadow:0 4px 18px #26004420}
 .logo{font-size:22px;font-weight:900}
 .logo span{color:var(--orange)}
-.back{
-  color:white;
-  text-decoration:none;
-  background:#ffffff20;
-  padding:10px 13px;
-  border-radius:9px;
-  font-size:12px;
-  font-weight:bold;
-}
-main{
-  width:92%;
-  max-width:850px;
-  margin:20px auto;
-}
-.hero{
-  background:linear-gradient(125deg,#3b0764,#6d28d9 65%,#9333ea);
-  color:white;
-  border-radius:20px;
-  padding:27px 20px;
-  position:relative;
-  overflow:hidden;
-  box-shadow:0 10px 25px #6d28d925;
-}
-.hero:after{
-  content:"";
-  position:absolute;
-  width:170px;height:170px;
-  border:25px solid #ffffff15;
-  border-radius:50%;
-  right:-55px;top:25px;
-}
-.hero h1{
-  font-size:27px;
-  margin:0 0 10px;
-}
+.back{color:white;text-decoration:none;background:#ffffff20;padding:10px 13px;border-radius:9px;font-size:12px;font-weight:bold}
+main{width:92%;max-width:850px;margin:20px auto}
+.hero{background:linear-gradient(125deg,#3b0764,#6d28d9 65%,#9333ea);color:white;border-radius:20px;padding:27px 20px;position:relative;overflow:hidden;box-shadow:0 10px 25px #6d28d925}
+.hero:after{content:"";position:absolute;width:170px;height:170px;border:25px solid #ffffff15;border-radius:50%;right:-55px;top:25px}
+.hero h1{font-size:27px;margin:0 0 10px}
 .hero h1 span{color:#ffc247}
-.hero p{
-  font-size:13px;
-  line-height:1.7;
-  color:#eee6ff;
-  margin:0;
-  max-width:500px;
-}
-.reward-tag{
-  display:inline-block;
-  margin-top:17px;
-  padding:10px 16px;
-  background:var(--orange);
-  color:#321500;
-  border-radius:30px;
-  font-size:13px;
-  font-weight:900;
-}
-.card{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:17px;
-  margin-top:16px;
-  box-shadow:0 4px 15px #2d145008;
-}
-.card h2{
-  color:var(--dark);
-  font-size:17px;
-  margin:0 0 14px;
-}
-.label{
-  color:var(--muted);
-  font-size:12px;
-  margin-bottom:7px;
-  display:block;
-}
-.code-box{
-  display:flex;
-  gap:8px;
-  align-items:center;
-}
-.code-value{
-  flex:1;
-  min-width:0;
-  background:#f4efff;
-  color:var(--purple);
-  border:1px dashed #b69ae9;
-  padding:13px 10px;
-  border-radius:10px;
-  font-size:17px;
-  font-weight:900;
-  text-align:center;
-  overflow-wrap:anywhere;
-}
-button{
-  font-family:inherit;
-  cursor:pointer;
-  border:0;
-  font-weight:800;
-}
-.copy-btn,.share-btn{
-  background:var(--purple);
-  color:white;
-  padding:13px 14px;
-  border-radius:10px;
-  font-size:12px;
-}
-.share-btn{
-  background:var(--orange);
-  color:#321500;
-  width:100%;
-  margin-top:10px;
-}
-.link-box{
-  background:#f8f6fc;
-  border:1px solid var(--border);
-  padding:12px;
-  border-radius:10px;
-  font-size:12px;
-  color:#55476a;
-  overflow-wrap:anywhere;
-  line-height:1.6;
-}
-.stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-  margin-top:16px;
-}
-.stat{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:15px 12px;
-  box-shadow:0 4px 15px #2d145008;
-}
-.stat small{
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  margin-bottom:9px;
-}
-.stat strong{
-  color:var(--purple-dark);
-  font-size:22px;
-}
+.hero p{font-size:13px;line-height:1.7;color:#eee6ff;margin:0;max-width:500px}
+.reward-tag{display:inline-block;margin-top:17px;padding:10px 16px;background:var(--orange);color:#321500;border-radius:30px;font-size:13px;font-weight:900}
+.card{background:white;border:1px solid var(--border);border-radius:16px;padding:17px;margin-top:16px;box-shadow:0 4px 15px #2d145008}
+.card h2{color:var(--dark);font-size:17px;margin:0 0 14px}
+.label{color:var(--muted);font-size:12px;margin-bottom:7px;display:block}
+.code-box{display:flex;gap:8px;align-items:center}
+.code-value{flex:1;min-width:0;background:#f4efff;color:var(--purple);border:1px dashed #b69ae9;padding:13px 10px;border-radius:10px;font-size:17px;font-weight:900;text-align:center;overflow-wrap:anywhere}
+button{font-family:inherit;cursor:pointer;border:0;font-weight:800}
+.copy-btn,.share-btn{background:var(--purple);color:white;padding:13px 14px;border-radius:10px;font-size:12px}
+.share-btn{background:var(--orange);color:#321500;width:100%;margin-top:10px}
+.link-box{background:#f8f6fc;border:1px solid var(--border);padding:12px;border-radius:10px;font-size:12px;color:#55476a;overflow-wrap:anywhere;line-height:1.6}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:16px}
+.stat{background:white;border:1px solid var(--border);border-radius:14px;padding:15px 12px;box-shadow:0 4px 15px #2d145008}
+.stat small{display:block;color:var(--muted);font-size:11px;margin-bottom:9px}
+.stat strong{color:var(--dark);font-size:22px}
 .stat .money{color:var(--green)}
-.withdraw-info{
-  background:#f0fdf4;
-  color:#166534;
-  border:1px solid #bbf7d0;
-  border-radius:10px;
-  padding:12px;
-  font-size:12px;
-  line-height:1.7;
-  margin-bottom:14px;
-}
+.withdraw-info{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;border-radius:10px;padding:12px;font-size:12px;line-height:1.7;margin-bottom:14px}
 .field{margin:12px 0}
-.field label{
-  display:block;
-  font-size:12px;
-  font-weight:bold;
-  margin-bottom:7px;
-}
-.field input,.field select{
-  width:100%;
-  padding:13px;
-  border:1px solid #e5deef;
-  border-radius:10px;
-  font-size:14px;
-  outline:none;
-  background:white;
-}
-.field input:focus,.field select:focus{
-  border-color:var(--purple);
-}
-.primary-btn{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  background:linear-gradient(100deg,var(--purple),#8b35df);
-  color:white;
-  font-size:13px;
-}
-.primary-btn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
-.history-empty{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:20px 8px;
-}
-.history-item{
-  padding:12px 0;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  font-size:12px;
-}
+.field label{display:block;font-size:12px;font-weight:bold;margin-bottom:7px}
+.field input,.field select{width:100%;padding:13px;border:1px solid #e5deef;border-radius:10px;font-size:14px;outline:none;background:white}
+.field input:focus,.field select:focus{border-color:var(--purple)}
+.primary-btn{width:100%;padding:14px;border-radius:10px;background:linear-gradient(100deg,var(--purple),#8b35df);color:white;font-size:13px}
+.primary-btn:disabled{opacity:.5;cursor:not-allowed}
+.history-empty{text-align:center;color:var(--muted);font-size:12px;padding:20px 8px}
+.history-item{padding:12px 0;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;gap:10px;font-size:12px}
 .history-item:last-child{border:0}
 .history-item strong{display:block;margin-bottom:5px}
 .history-item small{color:var(--muted)}
-.status{
-  padding:5px 9px;
-  border-radius:20px;
-  background:#fef3c7;
-  color:#92400e;
-  font-size:10px;
-  font-weight:bold;
-  white-space:nowrap;
-  height:max-content;
-}
-.status.paid,.status.successful,.status.approved{
-  background:#dcfce7;color:#166534;
-}
+.status{padding:5px 9px;border-radius:20px;background:#fef3c7;color:#92400e;font-size:10px;font-weight:bold;white-space:nowrap;height:max-content}
+.status.paid,.status.successful,.status.approved{background:#dcfce7;color:#166534}
 .status.rejected{background:#fee2e2;color:#991b1b}
-.notice{
-  background:#fff7e6;
-  border:1px solid #f5d69a;
-  color:#854d0e;
-  border-radius:10px;
-  padding:12px;
-  font-size:11px;
-  line-height:1.7;
-  margin-top:15px;
-}
-#message{
-  display:none;
-  margin-top:12px;
-  padding:11px;
-  border-radius:9px;
-  font-size:12px;
-  line-height:1.5;
-}
+.notice{background:#fff7e6;border:1px solid #f5d69a;color:#854d0e;border-radius:10px;padding:12px;font-size:11px;line-height:1.7;margin-top:15px}
+#message{display:none;margin-top:12px;padding:11px;border-radius:9px;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
 #message.show{display:block}
 #message.error{background:#fee2e2;color:#991b1b}
 #message.success{background:#dcfce7;color:#166534}
 .loading{text-align:center;color:var(--muted);padding:15px;font-size:12px}
-footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:11px;
-  padding:20px;
-}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
 @media(max-width:360px){
-  .stats{gap:8px}
-  .stat{padding:12px 9px}
-  .stat strong{font-size:19px}
-  .hero h1{font-size:23px}
-  .copy-btn{padding:12px 9px}
+.stats{gap:8px}.stat{padding:12px 9px}.stat strong{font-size:19px}
+.hero h1{font-size:23px}.copy-btn{padding:12px 9px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">MS <span>STORE</span></div>
-  <a class="back" href="index.html">← Back to Store</a>
+<div class="logo">MS <span>STORE</span></div>
+<a class="back" href="index.html">← Back to Store</a>
 </header>
 
 <main>
-
 <section class="hero">
-  <h1>REFER <span>& EARN</span></h1>
-  <p>
-    বন্ধুদের MS STORE-এ আমন্ত্রণ জানান।
-    আপনার রেফার করা বন্ধু সফলভাবে অর্ডার ডেলিভারি পেলে
-    আপনি পাবেন ৳৫০ রিওয়ার্ড।
-  </p>
-  <div class="reward-tag">প্রতি সফল Referral-এ ৳৫০</div>
+<h1>REFER <span>& EARN</span></h1>
+<p>বন্ধুদের MS STORE-এ আমন্ত্রণ জানান। আপনার রেফার করা বন্ধু সফলভাবে অর্ডার ডেলিভারি পেলে আপনি পাবেন ৳৫০ রিওয়ার্ড।</p>
+<div class="reward-tag">প্রতি সফল Referral-এ ৳৫০</div>
 </section>
 
 <section class="card">
-  <h2>🎁 Your Referral Code</h2>
-
-  <span class="label">আপনার ইউনিক Referral Code</span>
-  <div class="code-box">
-    <div class="code-value" id="refCode">লোড হচ্ছে...</div>
-    <button class="copy-btn" id="copyCode">COPY</button>
-  </div>
-
-  <span class="label" style="margin-top:17px">আপনার Referral Link</span>
-  <div class="link-box" id="refLink">লোড হচ্ছে...</div>
-
-  <button class="share-btn" id="shareLink">
-    SHARE REFERRAL LINK
-  </button>
+<h2>🎁 Your Referral Code</h2>
+<span class="label">আপনার ইউনিক Referral Code</span>
+<div class="code-box">
+<div class="code-value" id="refCode">লোড হচ্ছে...</div>
+<button class="copy-btn" id="copyCode">COPY</button>
+</div>
+<span class="label" style="margin-top:17px">আপনার Referral Link</span>
+<div class="link-box" id="refLink">লোড হচ্ছে...</div>
+<button class="share-btn" id="shareLink">SHARE REFERRAL LINK</button>
 </section>
 
 <div class="stats">
-  <div class="stat">
-    <small>মোট Referral</small>
-    <strong id="totalReferrals">0</strong>
-  </div>
-  <div class="stat">
-    <small>Successful Referral</small>
-    <strong id="successfulReferrals">0</strong>
-  </div>
-  <div class="stat">
-    <small>Pending Balance</small>
-    <strong class="money" id="pendingBalance">৳0</strong>
-  </div>
-  <div class="stat">
-    <small>Withdrawable Balance</small>
-    <strong class="money" id="availableBalance">৳0</strong>
-  </div>
+<div class="stat"><small>মোট Referral</small><strong id="totalReferrals">0</strong></div>
+<div class="stat"><small>Successful Referral</small><strong id="successfulReferrals">0</strong></div>
+<div class="stat"><small>Pending Balance</small><strong class="money" id="pendingBalance">৳0</strong></div>
+<div class="stat"><small>Withdrawable Balance</small><strong class="money" id="availableBalance">৳0</strong></div>
 </div>
 
 <section class="card">
-  <h2>💰 Referral Wallet</h2>
-  <div class="withdraw-info">
-    সফল Referral-এর জন্য ৳৫০ পাওয়া যাবে।
-    বন্ধুর অর্ডারের পণ্যমূল্য ৳২০০-এর বেশি হতে হবে
-    এবং অর্ডার Delivered হতে হবে।
-    ন্যূনতম ৳২০০ হলে Withdrawal Request করা যাবে।
-  </div>
-
-  <div class="field">
-    <label>টাকা গ্রহণের মাধ্যম</label>
-    <select id="withdrawMethod">
-      <option value="">মাধ্যম নির্বাচন করুন</option>
-      <option value="bKash">bKash</option>
-      <option value="Nagad">Nagad</option>
-    </select>
-  </div>
-
-  <div class="field">
-    <label>আপনার Account Number</label>
-    <input id="withdrawNumber" type="tel"
-      inputmode="numeric" maxlength="15"
-      placeholder="মোবাইল নম্বর লিখুন">
-  </div>
-
-  <div class="field">
-    <label>Withdrawal Amount (৳)</label>
-    <input id="withdrawAmount" type="number"
-      min="200" step="1" placeholder="সর্বনিম্ন ৳২০০">
-  </div>
-
-  <button class="primary-btn" id="withdrawBtn">
-    REQUEST WITHDRAWAL
-  </button>
-
-  <div id="message"></div>
+<h2>💰 Referral Wallet</h2>
+<div class="withdraw-info">
+সফল Referral-এর জন্য ৳৫০ পাওয়া যাবে। বন্ধুর অর্ডারের পণ্যমূল্য ৳২০০-এর বেশি হতে হবে এবং অর্ডার Delivered হতে হবে। ন্যূনতম ৳২০০ হলে Withdrawal Request করা যাবে।
+</div>
+<div class="field">
+<label>টাকা গ্রহণের মাধ্যম</label>
+<select id="withdrawMethod">
+<option value="">মাধ্যম নির্বাচন করুন</option>
+<option value="bKash">bKash</option>
+<option value="Nagad">Nagad</option>
+</select>
+</div>
+<div class="field">
+<label>আপনার Account Number</label>
+<input id="withdrawNumber" type="tel" inputmode="numeric" maxlength="15" placeholder="মোবাইল নম্বর লিখুন">
+</div>
+<div class="field">
+<label>Withdrawal Amount (৳)</label>
+<input id="withdrawAmount" type="number" min="200" step="1" placeholder="সর্বনিম্ন ৳২০০">
+</div>
+<button class="primary-btn" id="withdrawBtn">REQUEST WITHDRAWAL</button>
+<div id="message"></div>
 </section>
 
 <section class="card">
-  <h2>👥 Referral History</h2>
-  <div id="referralHistory" class="loading">
-    Referral History লোড হচ্ছে...
-  </div>
+<h2>👥 Referral History</h2>
+<div id="referralHistory" class="loading">Referral History লোড হচ্ছে...</div>
 </section>
 
 <section class="card">
-  <h2>💳 Withdrawal History</h2>
-  <div id="withdrawHistory" class="loading">
-    Withdrawal History লোড হচ্ছে...
-  </div>
+<h2>💳 Withdrawal History</h2>
+<div id="withdrawHistory" class="loading">Withdrawal History লোড হচ্ছে...</div>
 </section>
 
 <div class="notice">
-  <strong>রিওয়ার্ডের নিয়ম:</strong><br>
-  ১. প্রত্যেক ব্যবহারকারীর একটি ইউনিক Referral Code থাকবে।<br>
-  ২. নিজের Referral Code দিয়ে নিজে অর্ডার করলে রিওয়ার্ড পাওয়া যাবে না।<br>
-  ৩. বন্ধুর পণ্যের Subtotal অবশ্যই ৳২০০-এর বেশি হতে হবে।<br>
-  ৪. অর্ডার Delivered হলে Referrer-এর Wallet-এ ৳৫০ যোগ হবে।<br>
-  ৫. ন্যূনতম ৳২০০ হলে Withdrawal Request করা যাবে।<br>
-  ৬. Admin যাচাই করে bKash/Nagad-এ পেমেন্ট করবেন।
+<strong>রিওয়ার্ডের নিয়ম:</strong><br>
+১. প্রত্যেক ব্যবহারকারীর একটি ইউনিক Referral Code থাকবে।<br>
+২. নিজের Referral Code দিয়ে নিজে অর্ডার করলে রিওয়ার্ড পাওয়া যাবে না।<br>
+৩. বন্ধুর পণ্যের Subtotal অবশ্যই ৳২০০-এর বেশি হতে হবে।<br>
+৪. অর্ডার Delivered হলে Referrer-এর Wallet-এ ৳৫০ যোগ হবে।<br>
+৫. ন্যূনতম ৳২০০ হলে Withdrawal Request করা যাবে।<br>
+৬. Admin যাচাই করে bKash/Nagad-এ পেমেন্ট করবেন।
 </div>
-
 </main>
 
-<footer>
-  © 2026 MS STORE. All Rights Reserved.
-</footer>
+<footer>© 2026 MS STORE. All Rights Reserved.</footer>
 
 <script type="module">
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {getAuth,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import {getFunctions,httpsCallable} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-functions.js";
 
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
-
-import {
-  getFunctions,
-  httpsCallable
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-functions.js";
-
-const firebaseConfig = {
-  apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
-  authDomain:"ms-store-admin-26416.firebaseapp.com",
-  projectId:"ms-store-admin-26416",
-  storageBucket:"ms-store-admin-26416.firebasestorage.app",
-  messagingSenderId:"968008425065",
-  appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
+const firebaseConfig={
+apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+authDomain:"ms-store-admin-26416.firebaseapp.com",
+projectId:"ms-store-admin-26416",
+storageBucket:"ms-store-admin-26416.firebasestorage.app",
+messagingSenderId:"968008425065",
+appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const functions = getFunctions(app, "asia-south1");
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const functions=getFunctions(app,"asia-south1");
+const $=id=>document.getElementById(id);
+const money=n=>"৳"+Number(n||0).toLocaleString("en-BD");
 
-const $ = id => document.getElementById(id);
-const money = n => "৳" + Number(n || 0).toLocaleString("en-BD");
+let currentUser=null;
+let referralLink="";
+let busy=false;
 
-let currentUser = null;
-let referralLink = "";
-
-function showMessage(message, type="success"){
-  const box = $("message");
-  box.textContent = message;
-  box.className = "show " + type;
+function showMessage(message,type="success"){
+const box=$("message");
+box.textContent=message;
+box.className="show "+type;
 }
 
 function safeText(value){
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c]));
+return String(value??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
 }
 
 function statusClass(status){
-  const s = String(status || "").toLowerCase();
-  if(["paid","successful","approved","delivered"].includes(s))
-    return "paid";
-  if(s === "rejected") return "rejected";
-  return "";
+const s=String(status||"").toLowerCase();
+if(["paid","successful","approved","delivered"].includes(s))return "paid";
+if(s==="rejected")return "rejected";
+return "";
 }
 
-function showEmpty(id, text){
-  $(id).innerHTML = '<div class="history-empty">' +
-    safeText(text) + '</div>';
+function showEmpty(id,text){
+$(id).innerHTML='<div class="history-empty">'+safeText(text)+'</div>';
 }
 
 async function copyText(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    showMessage("কপি হয়েছে!");
-  }catch(e){
-    const input = document.createElement("textarea");
-    input.value = text;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand("copy");
-    input.remove();
-    showMessage("কপি হয়েছে!");
-  }
+try{
+await navigator.clipboard.writeText(text);
+showMessage("কপি হয়েছে!");
+}catch(e){
+const input=document.createElement("textarea");
+input.value=text;
+document.body.appendChild(input);
+input.select();
+document.execCommand("copy");
+input.remove();
+showMessage("কপি হয়েছে!");
+}
 }
 
-$("copyCode").addEventListener("click", async () => {
-  const code = $("refCode").textContent;
-  if(code && code !== "লোড হচ্ছে..." && code !== "—"){
-    await copyText(code);
-  }
-});
+$("copyCode").onclick=()=>{
+const code=$("refCode").textContent;
+if(code&&code!=="লোড হচ্ছে..."&&code!=="—")copyText(code);
+};
 
-$("shareLink").addEventListener("click", async () => {
-  if(!referralLink) return;
-  const shareData = {
-    title:"MS STORE Refer & Earn",
-    text:"MS STORE-এ যোগ দিন। আমার Referral Link ব্যবহার করে কেনাকাটা করুন!",
-    url:referralLink
-  };
-  try{
-    if(navigator.share) await navigator.share(shareData);
-    else await copyText(referralLink);
-  }catch(e){
-    if(e.name !== "AbortError") await copyText(referralLink);
-  }
-});
+$("shareLink").onclick=async()=>{
+if(!referralLink)return;
+const data={
+title:"MS STORE Refer & Earn",
+text:"MS STORE-এ যোগ দিন। আমার Referral Link ব্যবহার করে কেনাকাটা করুন!",
+url:referralLink
+};
+try{
+if(navigator.share)await navigator.share(data);
+else await copyText(referralLink);
+}catch(e){
+if(e.name!=="AbortError")await copyText(referralLink);
+}
+};
 
 function renderReferralHistory(items){
-  const box = $("referralHistory");
-  if(!Array.isArray(items) || !items.length){
-    showEmpty("referralHistory","এখনো কোনো Referral নেই।");
-    return;
-  }
-
-  box.innerHTML = items.map(item => `
-    <div class="history-item">
-      <div>
-        <strong>${safeText(item.name || "Customer")}</strong>
-        <small>${safeText(item.date || "")}</small>
-        <div style="margin-top:5px;color:#817995">
-          ${safeText(item.orderId || "Referral")}
-        </div>
-      </div>
-      <span class="status ${statusClass(item.status)}">
-        ${safeText(item.status || "Pending")}
-      </span>
-    </div>
-  `).join("");
+if(!Array.isArray(items)||!items.length){
+showEmpty("referralHistory","এখনো কোনো Referral নেই।");
+return;
+}
+$("referralHistory").innerHTML=items.map(item=>`
+<div class="history-item">
+<div>
+<strong>${safeText(item.name||"Customer")}</strong>
+<small>${safeText(item.date||"")}</small>
+<div style="margin-top:5px;color:#817995">${safeText(item.orderId||"Referral")}</div>
+</div>
+<span class="status ${statusClass(item.status)}">${safeText(item.status||"Pending")}</span>
+</div>`).join("");
 }
 
 function renderWithdrawalHistory(items){
-  const box = $("withdrawHistory");
-  if(!Array.isArray(items) || !items.length){
-    showEmpty("withdrawHistory","এখনো কোনো Withdrawal Request নেই।");
-    return;
-  }
-
-  box.innerHTML = items.map(item => `
-    <div class="history-item">
-      <div>
-        <strong>${safeText(item.method || "Withdrawal")} · ${money(item.amount)}</strong>
-        <small>${safeText(item.date || "")}</small>
-        <div style="margin-top:5px;color:#817995">
-          ${safeText(item.accountNumber || "")}
-        </div>
-      </div>
-      <span class="status ${statusClass(item.status)}">
-        ${safeText(item.status || "Pending")}
-      </span>
-    </div>
-  `).join("");
+if(!Array.isArray(items)||!items.length){
+showEmpty("withdrawHistory","এখনো কোনো Withdrawal Request নেই।");
+return;
+}
+$("withdrawHistory").innerHTML=items.map(item=>`
+<div class="history-item">
+<div>
+<strong>${safeText(item.method||"Withdrawal")} · ${money(item.amount)}</strong>
+<small>${safeText(item.date||"")}</small>
+<div style="margin-top:5px;color:#817995">${safeText(item.accountNumber||"")}</div>
+</div>
+<span class="status ${statusClass(item.status)}">${safeText(item.status||"Pending")}</span>
+</div>`).join("");
 }
 
+/*
+ * Register the pending referral code first.
+ * Then load the dashboard.
+ */
 async function loadDashboard(){
-  const dashboardCall = httpsCallable(functions, "getReferralDashboard");
+const register= httpsCallable(functions,"registerReferral");
 
-  const result = await dashboardCall({});
-  const data = result.data || {};
+const pendingCode=(
+localStorage.getItem("ms_store_pending_referral")||""
+).trim().toUpperCase();
 
-  const code = String(data.referralCode || "");
-  if(!code){
-    throw new Error("Referral Code পাওয়া যায়নি।");
-  }
-
-  $("refCode").textContent = code;
-
-  referralLink = location.origin +
-    location.pathname.replace(/[^/]*$/, "") +
-    "index.html?ref=" + encodeURIComponent(code);
-
-  $("refLink").textContent = referralLink;
-
-  $("totalReferrals").textContent =
-    Number(data.totalReferrals || 0);
-
-  $("successfulReferrals").textContent =
-    Number(data.successfulReferrals || 0);
-
-  $("pendingBalance").textContent =
-    money(data.pendingBalance);
-
-  $("availableBalance").textContent =
-    money(data.availableBalance);
-
-  renderReferralHistory(data.referralHistory || []);
-  renderWithdrawalHistory(data.withdrawalHistory || []);
-}
-
-$("withdrawBtn").addEventListener("click", async () => {
-  if(!currentUser){
-    showMessage("প্রথমে Login করুন।","error");
-    return;
-  }
-
-  const method = $("withdrawMethod").value;
-  const accountNumber = $("withdrawNumber").value.trim();
-  const amount = Number($("withdrawAmount").value);
-
-  if(!method){
-    showMessage("Payment Method নির্বাচন করুন।","error");
-    return;
-  }
-
-  if(!/^01[3-9]\d{8}$/.test(accountNumber)){
-    showMessage("সঠিক বাংলাদেশি মোবাইল নম্বর লিখুন।","error");
-    return;
-  }
-
-  if(!Number.isInteger(amount) || amount < 200){
-    showMessage("সর্বনিম্ন Withdrawal Amount ৳২০০।","error");
-    return;
-  }
-
-  const button = $("withdrawBtn");
-  button.disabled = true;
-  button.textContent = "PLEASE WAIT...";
-
-  try{
-    const requestWithdrawal =
-      httpsCallable(functions, "requestReferralWithdrawal");
-
-    await requestWithdrawal({
-      method,
-      accountNumber,
-      amount
-    });
-
-    showMessage("Withdrawal Request জমা হয়েছে। Admin যাচাই করবেন।");
-    $("withdrawNumber").value = "";
-    $("withdrawAmount").value = "";
-
-    await loadDashboard();
-
-  }catch(error){
-    console.error(error);
-    showMessage(
-      error.message || "Request করা যায়নি। পরে আবার চেষ্টা করুন।",
-      "error"
-    );
-  }finally{
-    button.disabled = false;
-    button.textContent = "REQUEST WITHDRAWAL";
-  }
+const registration=await register({
+referralCode:pendingCode
 });
 
-onAuthStateChanged(auth, async user => {
-  currentUser = user;
+if(registration.data?.referred){
+localStorage.removeItem("ms_store_pending_referral");
+}
 
-  if(!user){
-    $("refCode").textContent = "—";
-    $("refLink").textContent = "Referral দেখতে Login করুন।";
-    $("totalReferrals").textContent = "0";
-    $("successfulReferrals").textContent = "0";
-    $("pendingBalance").textContent = money(0);
-    $("availableBalance").textContent = money(0);
+const dashboardCall=httpsCallable(functions,"getReferralDashboard");
+const result=await dashboardCall({});
+const data=result.data||{};
 
-    showEmpty("referralHistory","Referral দেখতে Login করুন।");
-    showEmpty("withdrawHistory","Withdrawal History দেখতে Login করুন।");
+const code=String(data.referralCode||"");
+if(!code)throw new Error("Referral Code পাওয়া যায়নি।");
 
-    showMessage("Referral Dashboard দেখতে আপনার Account-এ Login করুন।","error");
-    return;
-  }
+$("refCode").textContent=code;
 
-  try{
-    await loadDashboard();
-  }catch(error){
-    console.error("Referral dashboard error:", error);
-    showMessage(
-      "Referral Dashboard লোড হয়নি। Firebase Referral Functions চালু আছে কি না পরীক্ষা করুন।",
-      "error"
-    );
-    showEmpty("referralHistory","ডেটা লোড করা যায়নি।");
-    showEmpty("withdrawHistory","ডেটা লোড করা যায়নি।");
-  }
+referralLink=new URL("index.html",location.href).href+
+"?ref="+encodeURIComponent(code);
+
+$("refLink").textContent=referralLink;
+$("totalReferrals").textContent=Number(data.totalReferrals||0);
+$("successfulReferrals").textContent=Number(data.successfulReferrals||0);
+$("pendingBalance").textContent=money(data.pendingBalance);
+$("availableBalance").textContent=money(data.availableBalance);
+
+renderReferralHistory(data.referralHistory||[]);
+renderWithdrawalHistory(data.withdrawalHistory||[]);
+}
+
+$("withdrawBtn").onclick=async()=>{
+if(!currentUser){
+showMessage("প্রথমে Login করুন।","error");
+return;
+}
+
+if(busy)return;
+
+const method=$("withdrawMethod").value;
+const accountNumber=$("withdrawNumber").value.trim();
+const amount=Number($("withdrawAmount").value);
+
+if(!method){
+showMessage("Payment Method নির্বাচন করুন।","error");
+return;
+}
+if(!/^01[3-9]\d{8}$/.test(accountNumber)){
+showMessage("সঠিক বাংলাদেশি মোবাইল নম্বর লিখুন।","error");
+return;
+}
+if(!Number.isInteger(amount)||amount<200){
+showMessage("সর্বনিম্ন Withdrawal Amount ৳২০০।","error");
+return;
+}
+
+busy=true;
+const button=$("withdrawBtn");
+button.disabled=true;
+button.textContent="PLEASE WAIT...";
+
+try{
+const requestWithdrawal=httpsCallable(
+functions,"requestReferralWithdrawal"
+);
+
+await requestWithdrawal({method,accountNumber,amount});
+
+showMessage("Withdrawal Request জমা হয়েছে। Admin যাচাই করবেন।");
+$("withdrawNumber").value="";
+$("withdrawAmount").value="";
+
+await loadDashboard();
+}catch(error){
+console.error(error);
+showMessage(error.message||"Request করা যায়নি। পরে আবার চেষ্টা করুন।","error");
+}finally{
+busy=false;
+button.disabled=false;
+button.textContent="REQUEST WITHDRAWAL";
+}
+};
+
+onAuthStateChanged(auth,async user=>{
+currentUser=user;
+
+if(!user){
+$("refCode").textContent="—";
+$("refLink").textContent="Referral দেখতে Login করুন।";
+$("totalReferrals").textContent="0";
+$("successfulReferrals").textContent="0";
+$("pendingBalance").textContent=money(0);
+$("availableBalance").textContent=money(0);
+showEmpty("referralHistory","Referral দেখতে Login করুন।");
+showEmpty("withdrawHistory","Withdrawal History দেখতে Login করুন।");
+showMessage("Referral Dashboard দেখতে আপনার Account-এ Login করুন।","error");
+return;
+}
+
+try{
+await loadDashboard();
+}catch(error){
+console.error("Referral dashboard error:",error);
+showMessage(
+error.message||"Referral Dashboard লোড হয়নি। Firebase Functions পরীক্ষা করুন।",
+"error"
+);
+showEmpty("referralHistory","ডেটা লোড করা যায়নি।");
+showEmpty("withdrawHistory","ডেটা লোড করা যায়নি।");
+}
 });
 </script>
-
 </body>
 </html>
