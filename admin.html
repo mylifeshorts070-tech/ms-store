@@ -15,44 +15,22 @@
 --muted:#64748b;--green:#15803d;--red:#dc2626;
 }
 *{box-sizing:border-box}
-body{
-margin:0;background:var(--bg);color:var(--text);
-font-family:Arial,sans-serif;padding-bottom:85px
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;padding-bottom:85px}
 button,input,select,textarea{font:inherit}
-button{
-border:0;border-radius:9px;padding:12px;
-background:#2563eb;color:white;font-weight:bold;cursor:pointer
-}
+button{border:0;border-radius:9px;padding:12px;background:#2563eb;color:white;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.5}
-input,select,textarea{
-width:100%;padding:12px;margin:6px 0;
-border:1px solid #dbe1ec;border-radius:9px;
-background:white;color:#172033
-}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1px solid #dbe1ec;border-radius:9px;background:white;color:#172033}
 textarea{min-height:90px}
-header{
-background:var(--navy);color:white;padding:13px 16px;
-display:flex;align-items:center;justify-content:space-between;
-position:sticky;top:0;z-index:20;
-box-shadow:0 3px 12px #0002
-}
+header{background:var(--navy);color:white;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;box-shadow:0 3px 12px #0002}
 .brand{font-size:20px;font-weight:bold}
 .brand span{color:var(--orange)}
 .header-actions{display:flex;align-items:center;gap:9px}
 .header-actions button{background:#26385f;padding:9px 12px}
-#bellCount,.badge{
-background:#ef2929;color:white;border-radius:50%;
-padding:3px 7px;font-size:12px
-}
+#bellCount,.badge{background:#ef2929;color:white;border-radius:50%;padding:3px 7px;font-size:12px}
 main{max-width:1100px;margin:auto;padding:15px}
 .view{display:none}
 .view.active{display:block}
-.card{
-background:white;padding:16px;border-radius:16px;
-margin:13px 0;box-shadow:0 3px 15px #17255412;
-border:1px solid #e0e7f5
-}
+.card{background:white;padding:16px;border-radius:16px;margin:13px 0;box-shadow:0 3px 15px #17255412;border:1px solid #e0e7f5}
 h2,h3{margin:0 0 12px}
 .heading{font-size:27px;font-weight:bold}
 .sub{color:#64748b;margin:4px 0 15px}
@@ -65,10 +43,7 @@ h2,h3{margin:0 0 12px}
 .stat small{color:#475569}
 .stat-icon{font-size:23px}
 .section-title{font-size:19px;font-weight:bold;margin-bottom:13px}
-.order,.customer,.notice-item,.review-item{
-background:#f8fafc;padding:12px;border-radius:11px;
-margin:10px 0;overflow-wrap:anywhere;border:1px solid #e8edf5
-}
+.order,.customer,.notice-item,.review-item{background:#f8fafc;padding:12px;border-radius:11px;margin:10px 0;overflow-wrap:anywhere;border:1px solid #e8edf5}
 .order.new-order{background:#fff0f0;border-color:#fecaca}
 .order p{line-height:1.7;font-size:14px}
 .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
@@ -80,9 +55,7 @@ margin:10px 0;overflow-wrap:anywhere;border:1px solid #e8edf5
 .hidden{display:none!important}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .productline{display:flex;gap:12px;align-items:center}
-.productline img{
-width:70px;height:70px;object-fit:cover;border-radius:10px;background:#eee
-}
+.productline img{width:70px;height:70px;object-fit:cover;border-radius:10px;background:#eee}
 .productinfo{flex:1;min-width:0;overflow-wrap:anywhere}
 .tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:8px}
 .tabs button{min-width:90px;white-space:nowrap}
@@ -90,44 +63,21 @@ label{display:block;font-size:14px;font-weight:bold;margin-top:10px}
 small,.hint{color:#64748b}
 .hint{font-size:12px;line-height:1.6}
 .preview-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.preview-box img{
-width:100%;height:95px;object-fit:cover;border-radius:8px
-}
+.preview-box img{width:100%;height:95px;object-fit:cover;border-radius:8px}
 .preview-box button{padding:7px;font-size:12px}
 .existing-images{display:flex;gap:9px;overflow:auto}
-.existing-images img{
-width:85px;height:85px;object-fit:cover;border-radius:8px
-}
+.existing-images img{width:85px;height:85px;object-fit:cover;border-radius:8px}
 .item{padding:13px 0;border-bottom:1px solid #e5e7eb}
 .star{color:#f59e0b;font-size:19px}
 .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .quick-grid button{padding:13px 7px}
-.latest-row{
-display:flex;align-items:center;gap:10px;
-padding:11px 5px;border-bottom:1px solid #e2e8f0;font-size:14px
-}
+.latest-row{display:flex;align-items:center;gap:10px;padding:11px 5px;border-bottom:1px solid #e2e8f0;font-size:14px}
 .latest-row .grow{flex:1;min-width:0}
-.toast{
-position:fixed;left:50%;bottom:95px;transform:translateX(-50%);
-width:calc(100% - 28px);max-width:470px;
-max-height:65vh;overflow-y:auto;
-background:var(--navy);color:white;border:3px solid var(--orange);
-border-radius:16px;padding:14px;z-index:50;box-shadow:0 5px 22px #0004;
-display:none
-}
+.toast{position:fixed;left:50%;bottom:95px;transform:translateX(-50%);width:calc(100% - 28px);max-width:470px;max-height:65vh;overflow-y:auto;background:var(--navy);color:white;border:3px solid var(--orange);border-radius:16px;padding:14px;z-index:50;box-shadow:0 5px 22px #0004;display:none}
 .toast.show{display:block}
 .toast button{float:right;background:transparent;padding:3px}
-.bottom-nav{
-position:fixed;bottom:0;left:0;right:0;background:var(--navy);
-display:grid;grid-template-columns:repeat(5,1fr);
-padding:7px 4px max(7px,env(safe-area-inset-bottom));
-z-index:30;box-shadow:0 -3px 15px #0002
-}
-.bottom-nav button{
-background:transparent;color:white;padding:7px 2px;
-font-size:11px;border-radius:10px;
-display:flex;flex-direction:column;align-items:center;gap:3px
-}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--navy);display:grid;grid-template-columns:repeat(5,1fr);padding:7px 4px max(7px,env(safe-area-inset-bottom));z-index:30;box-shadow:0 -3px 15px #0002}
+.bottom-nav button{background:transparent;color:white;padding:7px 2px;font-size:11px;border-radius:10px;display:flex;flex-direction:column;align-items:center;gap:3px}
 .bottom-nav button span{font-size:21px}
 .bottom-nav button.active{background:var(--orange)}
 #login{max-width:430px;margin:45px auto}
@@ -135,100 +85,81 @@ display:flex;flex-direction:column;align-items:center;gap:3px
 .status-live{color:#15803d;font-size:13px;font-weight:bold}
 
 /* Variant editor */
-.variant-settings{
-background:#f5f3ff;border:1px solid #ddd6fe;
-border-radius:12px;padding:13px;margin:14px 0
-}
-.variant-row{
-background:#f8fafc;border:1px solid #e2e8f0;
-border-radius:10px;padding:10px;margin:9px 0
-}
+.variant-settings{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:12px;padding:13px;margin:14px 0}
+.variant-row{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px;margin:9px 0}
 .variant-row .grid2{gap:6px}
-.variant-heading{
-display:flex;justify-content:space-between;
-align-items:center;gap:8px
-}
-.switch-row{
-display:flex;align-items:center;gap:10px;
-background:#f8fafc;padding:12px;border-radius:10px;
-margin:9px 0
-}
+.variant-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.switch-row{display:flex;align-items:center;gap:10px;background:#f8fafc;padding:12px;border-radius:10px;margin:9px 0}
 .switch-row input{width:20px;height:20px;margin:0}
 .switch-row label{margin:0}
-.variant-pill{
-display:inline-block;background:#ede9fe;color:#5b21b6;
-padding:4px 8px;border-radius:20px;font-size:11px;font-weight:bold
-}
+.variant-pill{display:inline-block;background:#ede9fe;color:#5b21b6;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:bold}
 
 /* Order design */
-.order-card{
-background:white;border:1px solid #e2e8f0;
-border-radius:16px;padding:14px;margin:13px 0;
-box-shadow:0 3px 12px #1725540c;overflow:hidden
-}
-.order-card.new-order{
-border:2px solid #fca5a5;background:#fffafa
-}
-.order-top{
-display:flex;justify-content:space-between;
-align-items:center;gap:8px;flex-wrap:wrap;
-padding-bottom:12px;border-bottom:1px solid #e5e7eb
-}
+.order-card{background:white;border:1px solid #e2e8f0;border-radius:16px;padding:14px;margin:13px 0;box-shadow:0 3px 12px #1725540c;overflow:hidden}
+.order-card.new-order{border:2px solid #fca5a5;background:#fffafa}
+.order-top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid #e5e7eb}
 .order-id{font-size:17px;font-weight:900}
-.status-pill{
-padding:6px 10px;border-radius:20px;
-font-size:11px;font-weight:bold;background:#fef3c7;color:#92400e
-}
+.status-pill{padding:6px 10px;border-radius:20px;font-size:11px;font-weight:bold;background:#fef3c7;color:#92400e}
 .status-pill.delivered{background:#dcfce7;color:#166534}
 .status-pill.cancelled{background:#fee2e2;color:#991b1b}
 .status-pill.processing{background:#dbeafe;color:#1e40af}
 .order-section{padding:12px 0;border-bottom:1px solid #edf0f5}
 .order-section:last-child{border-bottom:0}
-.order-section h4{
-margin:0 0 9px;font-size:13px;color:#475569
-}
-.order-info{
-font-size:14px;line-height:1.8;overflow-wrap:anywhere
-}
-.order-product{
-background:#f8fafc;padding:10px;border-radius:9px;
-margin:7px 0;font-size:13px;line-height:1.7
-}
-.payment-box{
-background:#f5f3ff;border:1px solid #ddd6fe;
-border-radius:11px;padding:12px
-}
-.copy-row{
-display:flex;align-items:center;gap:6px;margin:6px 0;
-}
+.order-section h4{margin:0 0 9px;font-size:13px;color:#475569}
+.order-info{font-size:14px;line-height:1.8;overflow-wrap:anywhere}
+.order-product{background:#f8fafc;padding:10px;border-radius:9px;margin:7px 0;font-size:13px;line-height:1.7}
+.payment-box{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:11px;padding:12px}
+.copy-row{display:flex;align-items:center;gap:6px;margin:6px 0}
 .copy-row .copy-value{flex:1;min-width:0;overflow-wrap:anywhere;font-size:13px}
 .copy-row button{padding:7px 10px;font-size:11px;background:#475569}
-.money-row{
-display:flex;justify-content:space-between;
-gap:10px;padding:5px 0;font-size:14px
-}
-.money-total{
-display:flex;justify-content:space-between;
-font-size:20px;font-weight:900;color:#166534;
-border-top:1px dashed #cbd5e1;margin-top:8px;padding-top:11px
-}
+.money-row{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:14px}
+.money-total{display:flex;justify-content:space-between;font-size:20px;font-weight:900;color:#166534;border-top:1px dashed #cbd5e1;margin-top:8px;padding-top:11px}
 .order-card select{margin:5px 0}
-.notification-product{
-background:#ffffff18;padding:9px;border-radius:9px;
-margin-top:7px;line-height:1.7
+.notification-product{background:#ffffff18;padding:9px;border-radius:9px;margin-top:7px;line-height:1.7}
+
+/* NEW: Order product image and clickable product */
+.order-product-link{
+display:flex;align-items:center;gap:12px;
+text-decoration:none;color:inherit;
+background:#fff;border:1px solid #e2e8f0;
+border-radius:11px;padding:9px;margin-bottom:9px;
+transition:background .2s,border-color .2s;
 }
+.order-product-link:active{background:#ede9fe;border-color:#7c3aed}
+.order-product-thumb{
+width:76px;height:76px;flex-shrink:0;
+object-fit:contain;background:#f1f5f9;
+border-radius:9px;padding:3px;
+}
+.order-product-details{flex:1;min-width:0;overflow-wrap:anywhere}
+.order-product-details strong{display:block;font-size:14px;color:#1e1b4b;margin-bottom:5px}
+.order-product-details small{display:block;font-size:12px;line-height:1.6}
+.order-product-hint{font-size:10px;color:#7c3aed;font-weight:bold;margin-top:5px}
+.notification-product-link{
+display:flex;align-items:center;gap:9px;
+color:white;text-decoration:none;
+background:#ffffff12;padding:8px;border-radius:9px;
+margin-top:7px;
+}
+.notification-product-link img{
+width:55px;height:55px;object-fit:contain;
+background:white;border-radius:7px;flex-shrink:0;
+}
+.notification-product-link span{flex:1;min-width:0;overflow-wrap:anywhere}
+
 @media(min-width:700px){
 body{padding-bottom:20px}
 main{padding:24px}
 .stats{grid-template-columns:repeat(4,1fr)}
 .preview-grid{grid-template-columns:repeat(5,1fr)}
-.bottom-nav{
-position:static;display:flex;justify-content:center;
-gap:8px;padding:12px;margin-top:20px
-}
+.bottom-nav{position:static;display:flex;justify-content:center;gap:8px;padding:12px;margin-top:20px}
 .bottom-nav button{min-width:110px;font-size:14px}
 .bottom-nav button span{font-size:18px}
 .toast{bottom:25px}
+}
+@media(max-width:380px){
+.order-product-thumb{width:62px;height:62px}
+.order-product-link{gap:8px;padding:7px}
 }
 </style>
 </head>
@@ -451,6 +382,77 @@ return String(v??'').replace(/[&<>"']/g,c=>({
 function money(n){return'৳'+Number(n||0).toLocaleString('en-BD')}
 function msg(id,t){$(id).textContent=t}
 
+/* NEW: Find the product in Firestore product cache using productId */
+function getOrderProductInfo(orderProduct){
+const productId=orderProduct.productId||orderProduct.id||'';
+
+let found=productId
+?productDocs.find(d=>d.id===productId)
+:null;
+
+/* Older order fallback: find by product name */
+if(!found){
+const productName=String(
+orderProduct.productName||orderProduct.name||''
+).trim().toLowerCase();
+
+if(productName){
+found=productDocs.find(d=>
+String(d.data().name||'').trim().toLowerCase()===productName
+);
+}
+}
+
+const data=found?found.data():{};
+const images=Array.isArray(data.images)?data.images:[];
+
+const image=
+images[0]||
+data.imageUrl||
+orderProduct.imageUrl||
+orderProduct.image||
+'';
+
+return{
+id:found?.id||productId,
+name:orderProduct.productName||orderProduct.name||data.name||'Product',
+image,
+url:found||productId
+?'product-details.html?id='+encodeURIComponent(found?.id||productId)
+:''
+};
+}
+
+/* NEW: Reusable clickable order product HTML */
+function orderProductCard(p){
+const info=getOrderProductInfo(p);
+const qty=Number(p.quantity||1);
+const price=Number(p.price||0);
+const variant=p.variantLabel
+?`${p.variantLabel}: ${p.variantValue||''}`
+:'';
+
+const image=info.image
+?`<img class="order-product-thumb" src="${esc(info.image)}" alt="${esc(info.name)}" loading="lazy">`
+:`<div class="order-product-thumb" style="display:flex;align-items:center;justify-content:center;font-size:28px">🛍️</div>`;
+
+const content=`
+${image}
+<div class="order-product-details">
+<strong>${esc(info.name)}</strong>
+${variant?`<small>${esc(variant)}</small>`:''}
+<small>দাম: ${money(price)} × ${qty}</small>
+<small>মোট: <b>${money(price*qty)}</b></small>
+${info.url?'<div class="order-product-hint">↗ পণ্যের বিস্তারিত দেখতে চাপ দিন</div>':''}
+</div>`;
+
+if(info.url){
+return `<a class="order-product-link" href="${esc(info.url)}">${content}</a>`;
+}
+
+return `<div class="order-product-link">${content}</div>`;
+}
+
 function showView(view){
 document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
 $('login').classList.add('hidden');
@@ -549,6 +551,7 @@ alert('এই Browser-এ Notification সমর্থিত নয়।');
 }
 };
 
+/* UPDATED: New order notification also shows product images and clickable links */
 function announceNewOrder(o){
 newOrderCount++;
 updateBadges();
@@ -557,17 +560,28 @@ const id=o.orderId||o.id;
 const products=Array.isArray(o.products)?o.products:[];
 
 const productDetails=products.map(p=>{
+const info=getOrderProductInfo(p);
 const variant=p.variantLabel
 ?`${p.variantLabel}: ${p.variantValue||''}`
 :'';
 
-return `
-<div class="notification-product">
-<b>${esc(p.productName||p.name||'Product')}</b>
+const image=info.image
+?`<img src="${esc(info.image)}" alt="${esc(info.name)}">`
+:'<div style="width:55px;height:55px;background:white;border-radius:7px;display:flex;align-items:center;justify-content:center">🛍️</div>';
+
+const content=`
+${image}
+<span>
+<b>${esc(info.name)}</b>
 ${variant?`<br>${esc(variant)}`:''}
 <br>পরিমাণ: ${esc(p.quantity||1)}
 <br>দাম: ${money(p.price)}
-</div>`;
+${info.url?'<br><small style="color:#fbbf24">পণ্য দেখতে চাপ দিন</small>':''}
+</span>`;
+
+return info.url
+?`<a class="notification-product-link" href="${esc(info.url)}">${content}</a>`
+:`<div class="notification-product-link">${content}</div>`;
 }).join('');
 
 $('toastText').innerHTML=`
@@ -680,8 +694,6 @@ renderExistingImages();
 function makeVariantRow(v={}){
 const row=document.createElement('div');
 row.className='variant-row';
-
-/* Edit করার সময় পুরোনো Variant ID সংরক্ষণ */
 row.dataset.variantId=v.id||crypto.randomUUID();
 
 row.innerHTML=`
@@ -747,11 +759,7 @@ throw Error('Variant Price সঠিক নয়।');
 
 return{
 id:row.dataset.variantId||crypto.randomUUID(),
-label,
-value,
-price,
-stock,
-active:true
+label,value,price,stock,active:true
 };
 });
 
@@ -814,28 +822,21 @@ const variants=hasVariants?collectVariants():[];
 const totalVariantStock=variants.reduce((s,v)=>s+v.stock,0);
 
 const data={
-name,
-price,
+name,price,
 stock:hasVariants?totalVariantStock:stock,
-category,
-description,
-images,
+category,description,images,
 imageUrl:images[0]||'',
-hasVariants,
-variants,
-active:true
+hasVariants,variants,active:true
 };
 
 if(editingProductId){
 await updateDoc(doc(db,'storeProducts',editingProductId),{
-...data,
-updatedAt:serverTimestamp()
+...data,updatedAt:serverTimestamp()
 });
 msg('productMsg','পণ্য Update হয়েছে।');
 }else{
 await addDoc(collection(db,'storeProducts'),{
-...data,
-createdAt:serverTimestamp()
+...data,createdAt:serverTimestamp()
 });
 msg('productMsg','নতুন পণ্য যোগ হয়েছে।');
 $('recentActivity').textContent='📦 নতুন পণ্য যোগ করা হয়েছে: '+name;
@@ -857,6 +858,9 @@ const s=await getDocs(collection(db,'storeProducts'));
 productDocs=s.docs;
 $('productCount').textContent=s.size;
 renderProducts();
+
+/* NEW: Refresh order images when product data is refreshed */
+if(allOrders.length)renderOrders();
 }
 
 function renderProducts(){
@@ -883,9 +887,7 @@ ${images.length?`<img src="${esc(images[0])}">`:'<div>🛍️</div>'}
 <b>${esc(p.name)}</b>
 <div>${money(p.price)} | Stock ${esc(p.stock)} | ${esc(p.category)}</div>
 <small>${images.length}টি ছবি</small><br>
-${p.hasVariants
-?'<span class="variant-pill">Variants ON</span>'
-:'<span class="variant-pill">Variants OFF</span>'}
+${p.hasVariants?'<span class="variant-pill">Variants ON</span>':'<span class="variant-pill">Variants OFF</span>'}
 </div>
 </div>
 <p>${esc(p.description||'Description দেওয়া হয়নি।')}</p>
@@ -936,7 +938,6 @@ $('variantRows').innerHTML='';
 if(Array.isArray(p.variants)){
 p.variants.forEach(v=>makeVariantRow(v));
 }
-
 if(p.hasVariants&&!p.variants?.length){
 makeVariantRow();
 }
@@ -1056,15 +1057,10 @@ box.className='order-card'+(o.status==='Pending'?' new-order':'');
 const orderId=o.orderId||o.id;
 const products=Array.isArray(o.products)?o.products:[];
 
-const productHtml=products.length?products.map(p=>`
-<div class="order-product">
-<b>${esc(p.productName||p.name||'Product')}</b><br>
-${p.variantLabel?esc(p.variantLabel)+': ':''}${esc(p.variantValue||'')}
-${p.variantValue?'<br>':''}
-দাম: ${money(p.price)} × ${esc(p.quantity||1)}
-= <b>${money(Number(p.price||0)*Number(p.quantity||1))}</b>
-</div>`).join(''):
-`<div class="order-product">${esc(o.productName||'Product information unavailable')}</div>`;
+/* UPDATED: Each order product now uses product image and clickable link */
+const productHtml=products.length
+?products.map(p=>orderProductCard(p)).join('')
+:`<div class="order-product">${esc(o.productName||'Product information unavailable')}</div>`;
 
 const paymentMethod=o.paymentMethod||'Not specified';
 
@@ -1362,8 +1358,7 @@ if(!text)return;
 
 try{
 await addDoc(collection(db,'storeNotices'),{
-text,
-active:true,
+text,active:true,
 createdAt:serverTimestamp(),
 updatedAt:serverTimestamp()
 });
@@ -1482,9 +1477,7 @@ const refs=[...os.docs,...ts.docs];
 
 for(let i=0;i<refs.length;i+=400){
 const batch=writeBatch(db);
-
 refs.slice(i,i+400).forEach(d=>batch.delete(d.ref));
-
 await batch.commit();
 }
 
