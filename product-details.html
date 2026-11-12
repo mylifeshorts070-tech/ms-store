@@ -9,808 +9,556 @@
 
 <style>
 :root{
- --navy:#111827;
- --orange:#f59e0b;
- --bg:#f5f6fa;
- --text:#202536;
- --muted:#475569;
+--navy:#111827;--orange:#f59e0b;--bg:#f5f6fa;
+--text:#202536;--muted:#475569;--green:#15803d;
 }
 *{box-sizing:border-box}
-body{
- margin:0;
- background:var(--bg);
- font-family:Arial,sans-serif;
- color:var(--text);
-}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
 header{
- background:var(--navy);
- color:white;
- padding:12px 4%;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:8px;
+background:var(--navy);color:white;padding:12px 4%;
+display:flex;justify-content:space-between;align-items:center;gap:8px
 }
 .logo{font-size:21px;font-weight:bold}
 .logo span{color:var(--orange)}
 header a{
- color:var(--navy);
- background:var(--orange);
- padding:8px 11px;
- border-radius:7px;
- text-decoration:none;
- font-weight:bold;
- font-size:13px;
+color:var(--navy);background:var(--orange);
+padding:8px 11px;border-radius:7px;text-decoration:none;
+font-weight:bold;font-size:13px
 }
-main{
- max-width:950px;
- margin:14px auto;
- padding:0 10px;
-}
-.panel{
- background:white;
- padding:13px;
- border-radius:11px;
- margin-bottom:12px;
-}
-.product-layout{
- display:grid;
- grid-template-columns:1fr;
- gap:14px;
-}
+main{max-width:950px;margin:14px auto;padding:0 10px}
+.panel{background:white;padding:13px;border-radius:11px;margin-bottom:12px}
+.product-layout{display:grid;grid-template-columns:1fr;gap:14px}
 .main-image{
- height:230px;
- background:#f1f3f7;
- border-radius:9px;
- display:grid;
- place-items:center;
- overflow:hidden;
+height:230px;background:#f1f3f7;border-radius:9px;
+display:grid;place-items:center;overflow:hidden
 }
-.main-image img{
- width:100%;
- height:100%;
- object-fit:contain;
-}
-.thumbnails{
- display:flex;
- gap:7px;
- overflow:auto;
- margin-top:8px;
- padding-bottom:3px;
-}
+.main-image img{width:100%;height:100%;object-fit:contain}
+.thumbnails{display:flex;gap:7px;overflow:auto;margin-top:8px;padding-bottom:3px}
 .thumb{
- width:54px;
- height:54px;
- flex:0 0 54px;
- border:2px solid transparent;
- border-radius:7px;
- overflow:hidden;
- background:#eee;
- padding:0;
+width:54px;height:54px;flex:0 0 54px;border:2px solid transparent;
+border-radius:7px;overflow:hidden;background:#eee;padding:0
 }
 .thumb.active{border-color:var(--orange)}
-.thumb img{
- width:100%;
- height:100%;
- object-fit:cover;
-}
+.thumb img{width:100%;height:100%;object-fit:cover}
 h1{
- font-size:21px;
- line-height:1.35;
- color:#111827;
- margin:0 0 8px;
- overflow-wrap:anywhere;
+font-size:21px;line-height:1.35;color:#111827;
+margin:0 0 8px;overflow-wrap:anywhere
 }
 .price{
- font-size:23px;
- color:#a94d08;
- font-weight:bold;
- background:#fff7e6;
- padding:9px 12px;
- border-radius:8px;
- display:block;
- margin:10px 0;
+font-size:23px;color:#a94d08;font-weight:bold;
+background:#fff7e6;padding:9px 12px;border-radius:8px;
+display:block;margin:10px 0
 }
-.stock{
- color:#1e293b;
- font-size:14px;
- font-weight:bold;
- margin:9px 0;
-}
+.stock{color:#1e293b;font-size:14px;font-weight:bold;margin:9px 0}
 .description{
- font-size:14px;
- line-height:1.7;
- color:#263244;
- white-space:pre-wrap;
- overflow-wrap:anywhere;
+font-size:14px;line-height:1.7;color:#263244;
+white-space:pre-wrap;overflow-wrap:anywhere
 }
 button{
- cursor:pointer;
- border:0;
- border-radius:8px;
- padding:10px;
- font-size:13px;
- font-weight:bold;
+cursor:pointer;border:0;border-radius:8px;padding:10px;
+font-size:13px;font-weight:bold
 }
 button:disabled{opacity:.5;cursor:not-allowed}
-.actions{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
- margin-top:13px;
-}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}
 .add{background:var(--navy);color:white}
 .buy{background:var(--orange);color:#111827}
-.section-title{
- font-size:18px;
- color:#111827;
- margin:0 0 12px;
-}
-.rating-summary{
- display:flex;
- align-items:center;
- gap:12px;
- margin-bottom:13px;
-}
-.big-rating{
- font-size:30px;
- font-weight:bold;
- color:#111827;
-}
-.stars{
- color:#f59e0b;
- font-size:19px;
- letter-spacing:1px;
-}
-.review-card{
- border-bottom:1px solid #eee;
- padding:11px 0;
-}
-.review-name{
- font-weight:bold;
- color:#111827;
- font-size:14px;
-}
-.review-date{
- font-size:11px;
- color:#64748b;
- margin-top:3px;
-}
+.section-title{font-size:18px;color:#111827;margin:0 0 12px}
+.rating-summary{display:flex;align-items:center;gap:12px;margin-bottom:13px}
+.big-rating{font-size:30px;font-weight:bold;color:#111827}
+.stars{color:#f59e0b;font-size:19px;letter-spacing:1px}
+.review-card{border-bottom:1px solid #eee;padding:11px 0}
+.review-name{font-weight:bold;color:#111827;font-size:14px}
+.review-date{font-size:11px;color:#64748b;margin-top:3px}
 .review-comment{
- font-size:13px;
- color:#263244;
- line-height:1.6;
- white-space:pre-wrap;
- margin-top:6px;
- overflow-wrap:anywhere;
+font-size:13px;color:#263244;line-height:1.6;
+white-space:pre-wrap;margin-top:6px;overflow-wrap:anywhere
 }
-.rating-input{
- display:flex;
- gap:6px;
- margin:9px 0 12px;
-}
+.rating-input{display:flex;gap:6px;margin:9px 0 12px}
 .rating-input button{
- background:#f1f5f9;
- color:#94a3b8;
- font-size:23px;
- padding:3px 7px;
+background:#f1f5f9;color:#94a3b8;font-size:23px;padding:3px 7px
 }
-.rating-input button.selected{
- color:#f59e0b;
- background:#fff7e6;
-}
-input,textarea{
- width:100%;
- padding:10px;
- border:1px solid #d5dbe5;
- border-radius:7px;
- font-size:14px;
- margin:5px 0 10px;
+.rating-input button.selected{color:#f59e0b;background:#fff7e6}
+input,textarea,select{
+width:100%;padding:10px;border:1px solid #d5dbe5;
+border-radius:7px;font-size:14px;margin:5px 0 10px
 }
 textarea{min-height:80px;resize:vertical}
-.submit{
- background:var(--orange);
- color:#111827;
- width:100%;
-}
-.message{
- font-size:12px;
- line-height:1.5;
- color:#263244;
-}
-.grid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:9px;
-}
-.card{
- background:white;
- border-radius:9px;
- overflow:hidden;
- box-shadow:0 2px 8px #0000000d;
- cursor:pointer;
-}
-.card img{
- width:100%;
- height:115px;
- object-fit:contain;
- background:#f1f3f7;
-}
+.submit{background:var(--orange);color:#111827;width:100%}
+.message{font-size:12px;line-height:1.5;color:#263244}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.card{background:white;border-radius:9px;overflow:hidden;box-shadow:0 2px 8px #0000000d;cursor:pointer}
+.card img{width:100%;height:115px;object-fit:contain;background:#f1f3f7}
 .card-info{padding:9px}
-.card-info b{
- display:block;
- line-height:1.35;
- font-size:13px;
- color:#111827;
- overflow-wrap:anywhere;
-}
-.card-price{
- color:#a94d08;
- font-size:14px;
- font-weight:bold;
- margin-top:6px;
-}
-.empty{
- padding:14px;
- text-align:center;
- background:#f8fafc;
- border-radius:8px;
- color:#334155;
- font-size:13px;
-}
-footer{
- text-align:center;
- background:var(--navy);
- color:white;
- padding:17px;
- margin-top:20px;
-}
+.card-info b{display:block;line-height:1.35;font-size:13px;color:#111827;overflow-wrap:anywhere}
+.card-price{color:#a94d08;font-size:14px;font-weight:bold;margin-top:6px}
+.empty{padding:14px;text-align:center;background:#f8fafc;border-radius:8px;color:#334155;font-size:13px}
+footer{text-align:center;background:var(--navy);color:white;padding:17px;margin-top:20px}
 footer h2{font-size:19px;margin:0 0 6px}
 footer p{font-size:12px;margin:5px}
 #toast{
- position:fixed;
- top:12px;
- left:50%;
- transform:translate(-50%,-130px);
- background:#dcfce7;
- color:#166534;
- padding:11px 15px;
- border-radius:9px;
- z-index:99;
- transition:.3s;
- max-width:90%;
- font-size:13px;
- font-weight:bold;
+position:fixed;top:12px;left:50%;transform:translate(-50%,-130px);
+background:#dcfce7;color:#166534;padding:11px 15px;border-radius:9px;
+z-index:99;transition:.3s;max-width:90%;font-size:13px;font-weight:bold
 }
 #toast.show{transform:translate(-50%,0)}
-
+.variant-box{
+background:#f8fafc;border:1px solid #e2e8f0;
+padding:12px;border-radius:10px;margin:12px 0
+}
+.variant-box label{display:block;font-size:14px;font-weight:bold;margin-bottom:5px}
+.variant-info{font-size:13px;color:#475569;line-height:1.7;margin-top:6px}
+.variant-tag{
+display:inline-block;background:#ede9fe;color:#5b21b6;
+padding:4px 9px;border-radius:20px;font-size:11px;font-weight:bold
+}
 @media(min-width:700px){
- main{padding:0 18px}
- .panel{padding:17px}
- .product-layout{
-  grid-template-columns:1fr 1fr;
-  gap:20px;
- }
- .main-image{height:340px}
- h1{font-size:24px}
- .price{font-size:25px}
- .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
- .card img{height:145px}
- .card-info b{font-size:14px}
+main{padding:0 18px}
+.panel{padding:17px}
+.product-layout{grid-template-columns:1fr 1fr;gap:20px}
+.main-image{height:340px}
+h1{font-size:24px}
+.price{font-size:25px}
+.grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card img{height:145px}
+.card-info b{font-size:14px}
 }
 </style>
 </head>
 
 <body>
-
 <div id="toast"></div>
 
 <header>
- <div class="logo">MS <span>STORE</span></div>
- <div style="display:flex;gap:7px">
-  <a href="index.html">SHOP</a>
-  <a href="my-account.html" style="background:white">My Account</a>
- </div>
+<div class="logo">MS <span>STORE</span></div>
+<div style="display:flex;gap:7px">
+<a href="index.html">SHOP</a>
+<a href="my-account.html" style="background:white">My Account</a>
+</div>
 </header>
 
 <main>
-
 <section class="panel">
- <div id="productArea" class="empty">পণ্য লোড হচ্ছে...</div>
+<div id="productArea" class="empty">পণ্য লোড হচ্ছে...</div>
 </section>
 
 <section class="panel">
- <h2 class="section-title">Product Description</h2>
- <div id="description" class="description">পণ্যের বিস্তারিত লোড হচ্ছে...</div>
+<h2 class="section-title">Product Description</h2>
+<div id="description" class="description">পণ্যের বিস্তারিত লোড হচ্ছে...</div>
 </section>
 
 <section class="panel" id="reviews">
- <h2 class="section-title">Customer Reviews</h2>
+<h2 class="section-title">Customer Reviews</h2>
+<div class="rating-summary">
+<div class="big-rating" id="averageRating">0.0</div>
+<div>
+<div class="stars" id="averageStars">☆☆☆☆☆</div>
+<div class="message" id="reviewCount">কোনো Review নেই</div>
+</div>
+</div>
 
- <div class="rating-summary">
-  <div class="big-rating" id="averageRating">0.0</div>
-  <div>
-   <div class="stars" id="averageStars">☆☆☆☆☆</div>
-   <div class="message" id="reviewCount">কোনো Review নেই</div>
-  </div>
- </div>
+<h3 style="font-size:15px;color:#111827">Write a Review</h3>
+<p class="message">আপনার কেনাকাটার অভিজ্ঞতা শেয়ার করুন। Review দিতে Verified Gmail দিয়ে Login করতে হবে।</p>
 
- <h3 style="font-size:15px;color:#111827">Write a Review</h3>
- <p class="message">আপনার কেনাকাটার অভিজ্ঞতা শেয়ার করুন। Review দিতে Verified Gmail দিয়ে Login করতে হবে।</p>
+<div class="rating-input" id="ratingInput">
+<button type="button" data-rating="1">★</button>
+<button type="button" data-rating="2">★</button>
+<button type="button" data-rating="3">★</button>
+<button type="button" data-rating="4">★</button>
+<button type="button" data-rating="5">★</button>
+</div>
 
- <div class="rating-input" id="ratingInput">
-  <button type="button" data-rating="1">★</button>
-  <button type="button" data-rating="2">★</button>
-  <button type="button" data-rating="3">★</button>
-  <button type="button" data-rating="4">★</button>
-  <button type="button" data-rating="5">★</button>
- </div>
-
- <textarea id="reviewComment" placeholder="আপনার মতামত লিখুন..."></textarea>
- <button class="submit" id="submitReview">SUBMIT REVIEW</button>
- <p id="reviewMessage" class="message"></p>
-
- <h3 style="font-size:15px;color:#111827">All Reviews</h3>
- <div id="reviewList"><div class="empty">Review লোড হচ্ছে...</div></div>
+<textarea id="reviewComment" placeholder="আপনার মতামত লিখুন..."></textarea>
+<button class="submit" id="submitReview">SUBMIT REVIEW</button>
+<p id="reviewMessage" class="message"></p>
+<h3 style="font-size:15px;color:#111827">All Reviews</h3>
+<div id="reviewList"><div class="empty">Review লোড হচ্ছে...</div></div>
 </section>
 
 <section class="panel">
- <h2 class="section-title">Similar Products</h2>
- <div class="grid" id="similarProducts">
-  <div class="empty">পণ্য লোড হচ্ছে...</div>
- </div>
+<h2 class="section-title">Similar Products</h2>
+<div class="grid" id="similarProducts">
+<div class="empty">পণ্য লোড হচ্ছে...</div>
+</div>
 </section>
-
 </main>
 
 <footer>
- <h2>MS STORE</h2>
- <p>Your Trusted Online Shopping Store</p>
- <small>© 2026 MS STORE</small>
+<h2>MS STORE</h2>
+<p>Your Trusted Online Shopping Store</p>
+<small>© 2026 MS STORE</small>
 </footer>
 
 <script type="module">
-
 import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
 
 import{
- getFirestore,
- collection,
- doc,
- getDoc,
- getDocs,
- setDoc,
- serverTimestamp
+getFirestore,collection,doc,getDoc,getDocs,setDoc,serverTimestamp
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
 import{
- getAuth,
- onAuthStateChanged
+getAuth,onAuthStateChanged
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
 
 const firebaseConfig={
- apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
- authDomain:"ms-store-admin-26416.firebaseapp.com",
- projectId:"ms-store-admin-26416",
- storageBucket:"ms-store-admin-26416.firebasestorage.app",
- messagingSenderId:"968008425065",
- appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
+apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+authDomain:"ms-store-admin-26416.firebaseapp.com",
+projectId:"ms-store-admin-26416",
+storageBucket:"ms-store-admin-26416.firebasestorage.app",
+messagingSenderId:"968008425065",
+appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 const auth=getAuth(app);
-
 const $=id=>document.getElementById(id);
 const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
- '&':'&amp;',
- '<':'&lt;',
- '>':'&gt;',
- '"':'&quot;',
- "'":'&#39;'
+'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
 }[c]));
 
 const params=new URLSearchParams(location.search);
 const productId=params.get('id');
 
-let product=null;
-let currentUser=null;
-let selectedRating=0;
-let reviews=[];
+let product=null,currentUser=null,selectedRating=0,reviews=[];
+let selectedVariant=null,globalVariantEnabled=true;
+let toastTimer=null;
 
 function toast(message){
- $('toast').textContent=message;
- $('toast').classList.add('show');
- setTimeout(()=>$('toast').classList.remove('show'),3000);
+$('toast').textContent=message;
+$('toast').classList.add('show');
+clearTimeout(toastTimer);
+toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3000);
 }
 
 function getImages(p){
- let images=[];
-
- if(Array.isArray(p.images)){
-  images=p.images.map(x=>{
-   if(typeof x==='string')return x;
-   if(x&&typeof x.url==='string')return x.url;
-   return '';
-  }).filter(Boolean);
- }
-
- if(p.imageUrl&&!images.includes(p.imageUrl)){
-  images.unshift(p.imageUrl);
- }
-
- return [...new Set(images)];
+let images=[];
+if(Array.isArray(p.images)){
+images=p.images.map(x=>{
+if(typeof x==='string')return x;
+if(x&&typeof x.url==='string')return x.url;
+return '';
+}).filter(Boolean);
+}
+if(p.imageUrl&&!images.includes(p.imageUrl))images.unshift(p.imageUrl);
+return [...new Set(images)];
 }
 
-function buyNow(){
- if(!product)return;
+function variantIsActive(){
+return globalVariantEnabled&&product?.hasVariants===true&&Array.isArray(product.variants)&&product.variants.length>0;
+}
 
- const stock=Math.max(0,Number(product.stock)||0);
+function availableVariants(){
+return (product?.variants||[]).filter(v=>v.active!==false);
+}
 
- if(stock<1){
-  toast('এই পণ্যটি স্টকে নেই।');
-  return;
- }
+function getSelectedPrice(){
+return selectedVariant&&selectedVariant.price!==null&&selectedVariant.price!==undefined
+?Number(selectedVariant.price):Number(product?.price||0);
+}
 
- try{
-  localStorage.setItem(
-   'msCartBackup',
-   localStorage.getItem('msCart')||'{}'
-  );
+function getSelectedStock(){
+return selectedVariant?Math.max(0,Number(selectedVariant.stock)||0):Math.max(0,Number(product?.stock)||0);
+}
 
-  localStorage.setItem(
-   'msCart',
-   JSON.stringify({[productId]:1})
-  );
+function renderVariantSelector(){
+if(!variantIsActive())return '';
 
-  localStorage.setItem('msBuyNowMode','1');
+const variants=availableVariants();
+if(!variants.length)return `<div class="variant-box">এই পণ্যের কোনো Variant বর্তমানে পাওয়া যাচ্ছে না।</div>`;
 
-  location.href='checkout.html';
+if(!selectedVariant||!variants.some(v=>v.id===selectedVariant.id)){
+selectedVariant=variants[0];
+}
 
- }catch(e){
-  toast('Checkout চালু করা যাচ্ছে না।');
- }
+return `
+<div class="variant-box">
+<label for="variantSelect">পণ্যের Size / Color / Model নির্বাচন করুন</label>
+<select id="variantSelect">
+${variants.map(v=>`
+<option value="${esc(v.id)}" ${selectedVariant?.id===v.id?'selected':''} ${Number(v.stock)<=0?'disabled':''}>
+${esc(v.label)}: ${esc(v.value)} ${Number(v.stock)<=0?'(Stock শেষ)':''}
+</option>`).join('')}
+</select>
+<div class="variant-info" id="variantInfo"></div>
+</div>`;
+}
+
+function updateVariantInfo(){
+if(!variantIsActive())return;
+const info=$('variantInfo');
+if(!info||!selectedVariant)return;
+info.innerHTML=`
+<span class="variant-tag">${esc(selectedVariant.label)}: ${esc(selectedVariant.value)}</span><br>
+দাম: <b>${money(getSelectedPrice())}</b><br>
+স্টক: <b>${getSelectedStock()}</b> টি`;
+}
+
+function makeCartEntry(){
+const quantity=1;
+if(variantIsActive()){
+if(!selectedVariant)throw Error('একটি Variant নির্বাচন করুন।');
+return {
+productId,
+variantId:selectedVariant.id,
+variantLabel:selectedVariant.label,
+variantValue:selectedVariant.value,
+price:getSelectedPrice(),
+quantity
+};
+}
+return {productId,variantId:'',variantLabel:'',variantValue:'',price:Number(product.price||0),quantity};
+}
+
+function cartKey(entry){
+return entry.variantId?`${entry.productId}__${entry.variantId}`:entry.productId;
+}
+
+function readCart(){
+try{
+const c=JSON.parse(localStorage.getItem('msCart')||'{}');
+return c&&typeof c==='object'&&!Array.isArray(c)?c:{};
+}catch(e){return {};}
 }
 
 function addToCart(){
- if(!product)return;
+if(!product)return;
+const stock=getSelectedStock();
+if(stock<1){toast('এই Variant-টি স্টকে নেই।');return;}
+try{
+const entry=makeCartEntry();
+const cart=readCart();
+const key=cartKey(entry);
+const old=cart[key];
+let quantity=1;
+if(old&&typeof old==='object')quantity=Number(old.quantity||0)+1;
+else if(typeof old==='number')quantity=old+1;
+else if(old)quantity=Number(old)+1;
+if(quantity>stock){toast('স্টকে পর্যাপ্ত পণ্য নেই।');return;}
+cart[key]={...entry,quantity};
+localStorage.setItem('msCart',JSON.stringify(cart));
+toast('পণ্য Cart-এ যোগ হয়েছে!');
+}catch(e){toast(e.message||'Cart-এ যোগ করা যায়নি।');}
+}
 
- const stock=Math.max(0,Number(product.stock)||0);
- let cart={};
-
- try{
-  cart=JSON.parse(localStorage.getItem('msCart')||'{}');
- }catch(e){cart={};}
-
- const qty=Number(cart[productId]||0);
-
- if(qty>=stock){
-  toast('স্টকে পর্যাপ্ত পণ্য নেই।');
-  return;
- }
-
- cart[productId]=qty+1;
- localStorage.setItem('msCart',JSON.stringify(cart));
-
- toast('পণ্য Cart-এ যোগ হয়েছে!');
+function buyNow(){
+if(!product)return;
+if(getSelectedStock()<1){toast('এই Variant-টি স্টকে নেই।');return;}
+try{
+const entry=makeCartEntry();
+const key=cartKey(entry);
+const cart={[key]:entry};
+localStorage.setItem('msCartBackup',localStorage.getItem('msCart')||'{}');
+localStorage.setItem('msCart',JSON.stringify(cart));
+localStorage.setItem('msBuyNowMode','1');
+location.href='checkout.html';
+}catch(e){toast(e.message||'Checkout চালু করা যাচ্ছে না।');}
 }
 
 function renderProduct(){
- if(!product)return;
+if(!product)return;
+const images=getImages(product);
+document.title=(product.name||'Product')+' | MS STORE';
+$('description').textContent=product.description||'এই পণ্যের বিস্তারিত এখনো যোগ করা হয়নি।';
 
- const images=getImages(product);
- const stock=Math.max(0,Number(product.stock)||0);
+$('productArea').innerHTML=`
+<div class="product-layout">
+<div>
+<div class="main-image" id="mainImage">
+${images.length?`<img src="${esc(images[0])}" alt="${esc(product.name)}">`:'🛍️'}
+</div>
+<div class="thumbnails" id="thumbnails">
+${images.map((img,i)=>`
+<button class="thumb ${i===0?'active':''}" data-image="${i}">
+<img src="${esc(img)}" alt="Product image ${i+1}">
+</button>`).join('')}
+</div>
+</div>
+<div>
+<h1>${esc(product.name||'Product')}</h1>
+<div class="message">Category: ${esc(product.category||'General')}</div>
+<div id="variantSelector">${renderVariantSelector()}</div>
+<span class="price" id="productPrice">${money(getSelectedPrice())}</span>
+<div class="stock" id="productStock"></div>
+<div class="actions">
+<button class="add" id="addCart">ADD TO CART</button>
+<button class="buy" id="buyNow">BUY NOW</button>
+</div>
+</div>
+</div>`;
 
- document.title=(product.name||'Product')+' | MS STORE';
+const selector=$('variantSelect');
+if(selector){
+selector.onchange=()=>{
+selectedVariant=availableVariants().find(v=>v.id===selector.value)||null;
+updateVariantInfo();
+updatePurchaseDisplay();
+};
+updateVariantInfo();
+}
 
- $('description').textContent=
-  product.description||'এই পণ্যের বিস্তারিত এখনো যোগ করা হয়নি।';
+$('addCart').onclick=addToCart;
+$('buyNow').onclick=buyNow;
 
- $('productArea').innerHTML=`
-  <div class="product-layout">
+$('thumbnails').querySelectorAll('[data-image]').forEach(b=>{
+b.onclick=()=>{
+const index=Number(b.dataset.image);
+$('mainImage').innerHTML=`<img src="${esc(images[index])}" alt="${esc(product.name)}">`;
+$('thumbnails').querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));
+b.classList.add('active');
+};
+});
+updatePurchaseDisplay();
+}
 
-   <div>
-    <div class="main-image" id="mainImage">
-     ${images.length?
-      `<img src="${esc(images[0])}" alt="${esc(product.name)}">`:
-      '🛍️'}
-    </div>
-
-    <div class="thumbnails" id="thumbnails">
-     ${images.map((img,i)=>`
-      <button class="thumb ${i===0?'active':''}" data-image="${i}">
-       <img src="${esc(img)}" alt="Product image ${i+1}">
-      </button>
-     `).join('')}
-    </div>
-   </div>
-
-   <div>
-    <h1>${esc(product.name||'Product')}</h1>
-
-    <div class="message">
-     Category: ${esc(product.category||'General')}
-    </div>
-
-    <span class="price">${money(product.price)}</span>
-
-    <div class="stock">
-     ${stock>0?'In Stock: '+stock:'Out of Stock'}
-    </div>
-
-    <div class="actions">
-     <button class="add" id="addCart" ${stock<1?'disabled':''}>ADD TO CART</button>
-     <button class="buy" id="buyNow" ${stock<1?'disabled':''}>BUY NOW</button>
-    </div>
-   </div>
-
-  </div>
- `;
-
- $('addCart').onclick=addToCart;
- $('buyNow').onclick=buyNow;
-
- $('thumbnails').querySelectorAll('[data-image]').forEach(b=>{
-  b.onclick=()=>{
-   const index=Number(b.dataset.image);
-
-   $('mainImage').innerHTML=
-    `<img src="${esc(images[index])}" alt="${esc(product.name)}">`;
-
-   $('thumbnails').querySelectorAll('.thumb').forEach(x=>
-    x.classList.remove('active')
-   );
-
-   b.classList.add('active');
-  };
- });
+function updatePurchaseDisplay(){
+if(!product)return;
+const stock=getSelectedStock();
+$('productPrice').textContent=money(getSelectedPrice());
+$('productStock').textContent=stock>0?'In Stock: '+stock:'Out of Stock';
+$('addCart').disabled=stock<1;
+$('buyNow').disabled=stock<1;
 }
 
 async function loadProduct(){
- if(!productId){
-  $('productArea').textContent='Product ID পাওয়া যায়নি।';
-  return;
- }
-
- try{
-  const snap=await getDoc(doc(db,'storeProducts',productId));
-
-  if(!snap.exists()){
-   $('productArea').textContent='এই পণ্যটি পাওয়া যায়নি।';
-   $('description').textContent='';
-   return;
-  }
-
-  product={id:snap.id,...snap.data()};
-
-  if(product.active===false){
-   $('productArea').textContent='এই পণ্যটি বর্তমানে পাওয়া যাচ্ছে না।';
-   return;
-  }
-
-  renderProduct();
-  await loadReviews();
-  await loadSimilar();
-
- }catch(e){
-  console.error(e);
-  $('productArea').textContent='পণ্য লোড হয়নি: '+e.message;
- }
+if(!productId){$('productArea').textContent='Product ID পাওয়া যায়নি।';return;}
+try{
+const [snap,settings]=await Promise.all([
+getDoc(doc(db,'storeProducts',productId)),
+getDoc(doc(db,'storeSettings','variantSettings'))
+]);
+if(settings.exists())globalVariantEnabled=settings.data().enabled!==false;
+if(!snap.exists()){
+$('productArea').textContent='এই পণ্যটি পাওয়া যায়নি.';
+$('description').textContent='';return;
+}
+product={id:snap.id,...snap.data()};
+if(product.active===false){
+$('productArea').textContent='এই পণ্যটি বর্তমানে পাওয়া যাচ্ছে না।';return;
+}
+renderProduct();
+await loadReviews();
+await loadSimilar();
+}catch(e){
+console.error(e);
+$('productArea').textContent='পণ্য লোড হয়নি: '+e.message;
+}
 }
 
 async function loadSimilar(){
- try{
-  const snap=await getDocs(collection(db,'storeProducts'));
-
-  const allProducts=snap.docs
-   .map(d=>({id:d.id,...d.data()}))
-   .filter(p=>p.id!==productId&&p.active!==false);
-
-  const sameCategory=allProducts.filter(p=>
-   (p.category||'General')===(product.category||'General')
-  );
-
-  const list=(sameCategory.length?sameCategory:allProducts).slice(0,8);
-
-  $('similarProducts').innerHTML=list.length?
-   list.map(p=>`
-    <div class="card" data-product="${esc(p.id)}">
-     ${p.imageUrl?
-      `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy">`:
-      '<div style="height:115px;display:grid;place-items:center">🛍️</div>'}
-     <div class="card-info">
-      <b>${esc(p.name||'Product')}</b>
-      <div class="card-price">${money(p.price)}</div>
-     </div>
-    </div>
-   `).join(''):
-   '<div class="empty">এখনো Similar Products নেই।</div>';
-
-  $('similarProducts').querySelectorAll('[data-product]').forEach(b=>{
-   b.onclick=()=>{
-    location.href='product-details.html?id='+encodeURIComponent(b.dataset.product);
-   };
-  });
-
- }catch(e){
-  console.error(e);
-  $('similarProducts').innerHTML='<div class="empty">Similar Products লোড হয়নি।</div>';
- }
+try{
+const snap=await getDocs(collection(db,'storeProducts'));
+const allProducts=snap.docs.map(d=>({id:d.id,...d.data()}))
+.filter(p=>p.id!==productId&&p.active!==false);
+const sameCategory=allProducts.filter(p=>
+(p.category||'General')===(product.category||'General'));
+const list=(sameCategory.length?sameCategory:allProducts).slice(0,8);
+$('similarProducts').innerHTML=list.length?
+list.map(p=>`
+<div class="card" data-product="${esc(p.id)}">
+${p.imageUrl?`<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy">`:'<div style="height:115px;display:grid;place-items:center">🛍️</div>'}
+<div class="card-info"><b>${esc(p.name||'Product')}</b>
+<div class="card-price">${money(p.price)}</div></div>
+</div>`).join(''):
+'<div class="empty">এখনো Similar Products নেই।</div>';
+$('similarProducts').querySelectorAll('[data-product]').forEach(b=>{
+b.onclick=()=>location.href='product-details.html?id='+encodeURIComponent(b.dataset.product);
+});
+}catch(e){
+console.error(e);
+$('similarProducts').innerHTML='<div class="empty">Similar Products লোড হয়নি।</div>';
+}
 }
 
 function drawStars(n){
- n=Math.max(0,Math.min(5,Number(n)||0));
- return '★'.repeat(n)+'☆'.repeat(5-n);
+n=Math.max(0,Math.min(5,Number(n)||0));
+return '★'.repeat(n)+'☆'.repeat(5-n);
 }
-
 function renderReviews(){
- const count=reviews.length;
-
- const average=count?
-  reviews.reduce((s,r)=>s+Number(r.rating||0),0)/count:0;
-
- $('averageRating').textContent=average.toFixed(1);
- $('averageStars').textContent=drawStars(Math.round(average));
- $('reviewCount').textContent=count+'টি Customer Review';
-
- $('reviewList').innerHTML=count?
-  reviews.map(r=>`
-   <div class="review-card">
-    <div class="review-name">${esc(r.name||'Customer')}</div>
-    <div class="stars">${drawStars(r.rating)}</div>
-    <div class="review-date">
-     ${r.createdAt?.toDate?
-      r.createdAt.toDate().toLocaleDateString('bn-BD'):
-      'Customer Review'}
-    </div>
-    <div class="review-comment">${esc(r.comment||'')}</div>
-   </div>
-  `).join(''):
-  '<div class="empty">এখনো কোনো Review দেওয়া হয়নি। প্রথম Review দিন!</div>';
+const count=reviews.length;
+const average=count?reviews.reduce((s,r)=>s+Number(r.rating||0),0)/count:0;
+$('averageRating').textContent=average.toFixed(1);
+$('averageStars').textContent=drawStars(Math.round(average));
+$('reviewCount').textContent=count+'টি Customer Review';
+$('reviewList').innerHTML=count?reviews.map(r=>`
+<div class="review-card">
+<div class="review-name">${esc(r.name||'Customer')}</div>
+<div class="stars">${drawStars(r.rating)}</div>
+<div class="review-date">${r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('bn-BD'):'Customer Review'}</div>
+<div class="review-comment">${esc(r.comment||'')}</div>
+</div>`).join(''):
+'<div class="empty">এখনো কোনো Review দেওয়া হয়নি। প্রথম Review দিন!</div>';
 }
-
 async function loadReviews(){
- try{
-  const snap=await getDocs(
-   collection(db,'storeProducts',productId,'reviews')
-  );
-
-  reviews=snap.docs.map(d=>({id:d.id,...d.data()}));
-
-  reviews.sort((a,b)=>{
-   const ta=a.createdAt?.toMillis?a.createdAt.toMillis():0;
-   const tb=b.createdAt?.toMillis?b.createdAt.toMillis():0;
-   return tb-ta;
-  });
-
-  renderReviews();
-
- }catch(e){
-  console.error('Review load error:',e);
-  $('reviewList').innerHTML=
-   '<div class="empty">Review লোড করা যাচ্ছে না। Firestore Rules পরীক্ষা প্রয়োজন।</div>';
- }
+try{
+const snap=await getDocs(collection(db,'storeProducts',productId,'reviews'));
+reviews=snap.docs.map(d=>({id:d.id,...d.data()}));
+reviews.sort((a,b)=>{
+const ta=a.createdAt?.toMillis?a.createdAt.toMillis():0;
+const tb=b.createdAt?.toMillis?b.createdAt.toMillis():0;
+return tb-ta;
+});
+renderReviews();
+}catch(e){
+console.error('Review load error:',e);
+$('reviewList').innerHTML='<div class="empty">Review লোড করা যাচ্ছে না। Firestore Rules পরীক্ষা প্রয়োজন।</div>';
+}
 }
 
 $('ratingInput').querySelectorAll('[data-rating]').forEach(b=>{
- b.onclick=()=>{
-  selectedRating=Number(b.dataset.rating);
-
-  $('ratingInput').querySelectorAll('[data-rating]').forEach(x=>{
-   x.classList.toggle(
-    'selected',
-    Number(x.dataset.rating)<=selectedRating
-   );
-  });
- };
+b.onclick=()=>{
+selectedRating=Number(b.dataset.rating);
+$('ratingInput').querySelectorAll('[data-rating]').forEach(x=>{
+x.classList.toggle('selected',Number(x.dataset.rating)<=selectedRating);
+});
+};
 });
 
 $('submitReview').onclick=async()=>{
-
- $('reviewMessage').textContent='';
-
- if(!currentUser){
-  $('reviewMessage').textContent='Review দিতে আগে Login করুন।';
-  location.href='my-account.html';
-  return;
- }
-
- if(!currentUser.emailVerified){
-  $('reviewMessage').textContent=
-   'Review দিতে Gmail Verification সম্পন্ন করুন।';
-  return;
- }
-
- if(!selectedRating){
-  $('reviewMessage').textContent='১ থেকে ৫ Star নির্বাচন করুন।';
-  return;
- }
-
- const comment=$('reviewComment').value.trim();
-
- if(comment.length<3){
-  $('reviewMessage').textContent='কমপক্ষে ৩ অক্ষরের Review লিখুন।';
-  return;
- }
-
- if(comment.length>1000){
-  $('reviewMessage').textContent='Review সর্বোচ্চ ১০০০ অক্ষরের হতে পারবে।';
-  return;
- }
-
- $('submitReview').disabled=true;
- $('submitReview').textContent='SUBMITTING...';
-
- try{
-
-  const profileRef=doc(db,'customerProfiles',currentUser.uid);
-  const profileSnap=await getDoc(profileRef);
-
-  if(!profileSnap.exists()){
-   throw Error('Customer Profile পাওয়া যায়নি।');
-  }
-
-  const profile=profileSnap.data();
-
-  if(profile.banned===true){
-   throw Error('আপনার Customer Account বর্তমানে বন্ধ আছে।');
-  }
-
-  const reviewRef=doc(
-   db,
-   'storeProducts',
-   productId,
-   'reviews',
-   currentUser.uid
-  );
-
-  const existing=await getDoc(reviewRef);
-
-  if(existing.exists()){
-   throw Error('আপনি এই পণ্যে ইতিমধ্যে Review দিয়েছেন।');
-  }
-
-  await setDoc(reviewRef,{
-   uid:currentUser.uid,
-   name:profile.name||'Customer',
-   rating:selectedRating,
-   comment:comment,
-   createdAt:serverTimestamp()
-  });
-
-  $('reviewComment').value='';
-  selectedRating=0;
-
-  $('ratingInput').querySelectorAll('button').forEach(b=>
-   b.classList.remove('selected')
-  );
-
-  $('reviewMessage').textContent='আপনার Review সফলভাবে জমা হয়েছে।';
-  toast('Review জমা হয়েছে!');
-
-  await loadReviews();
-
- }catch(e){
-
-  console.error('Review submit error:',e);
-  $('reviewMessage').textContent='Review জমা হয়নি: '+e.message;
-
- }finally{
-
-  $('submitReview').disabled=false;
-  $('submitReview').textContent='SUBMIT REVIEW';
-
- }
+$('reviewMessage').textContent='';
+if(!currentUser){
+$('reviewMessage').textContent='Review দিতে আগে Login করুন।';
+location.href='my-account.html';return;
+}
+if(!currentUser.emailVerified){
+$('reviewMessage').textContent='Review দিতে Gmail Verification সম্পন্ন করুন.';return;
+}
+if(!selectedRating){$('reviewMessage').textContent='১ থেকে ৫ Star নির্বাচন করুন।';return;}
+const comment=$('reviewComment').value.trim();
+if(comment.length<3){$('reviewMessage').textContent='কমপক্ষে ৩ অক্ষরের Review লিখুন।';return;}
+if(comment.length>1000){$('reviewMessage').textContent='Review সর্বোচ্চ ১০০০ অক্ষরের হতে পারবে।';return;}
+$('submitReview').disabled=true;
+$('submitReview').textContent='SUBMITTING...';
+try{
+const profileRef=doc(db,'customerProfiles',currentUser.uid);
+const profileSnap=await getDoc(profileRef);
+if(!profileSnap.exists())throw Error('Customer Profile পাওয়া যায়নি।');
+const profile=profileSnap.data();
+if(profile.banned===true)throw Error('আপনার Customer Account বর্তমানে বন্ধ আছে।');
+const reviewRef=doc(db,'storeProducts',productId,'reviews',currentUser.uid);
+const existing=await getDoc(reviewRef);
+if(existing.exists())throw Error('আপনি এই পণ্যে ইতিমধ্যে Review দিয়েছেন।');
+await setDoc(reviewRef,{
+uid:currentUser.uid,name:profile.name||'Customer',
+rating:selectedRating,comment,createdAt:serverTimestamp()
+});
+$('reviewComment').value='';selectedRating=0;
+$('ratingInput').querySelectorAll('button').forEach(b=>b.classList.remove('selected'));
+$('reviewMessage').textContent='আপনার Review সফলভাবে জমা হয়েছে।';
+toast('Review জমা হয়েছে!');
+await loadReviews();
+}catch(e){
+console.error('Review submit error:',e);
+$('reviewMessage').textContent='Review জমা হয়নি: '+e.message;
+}finally{
+$('submitReview').disabled=false;
+$('submitReview').textContent='SUBMIT REVIEW';
+}
 };
 
-onAuthStateChanged(auth,user=>{
- currentUser=user;
-});
-
+onAuthStateChanged(auth,user=>{currentUser=user;});
 loadProduct();
-
 </script>
 </body>
 </html>
