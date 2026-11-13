@@ -28,22 +28,12 @@ main{max-width:950px;margin:14px auto;padding:0 10px}
 .panel{background:white;padding:13px;border-radius:11px;margin-bottom:12px}
 .product-layout{display:grid;grid-template-columns:1fr;gap:14px}
 
-/* PRODUCT IMAGE */
 .main-image{
-min-height:230px;
-background:#f1f3f7;
-border-radius:9px;
-display:flex;
-justify-content:center;
-align-items:center;
-overflow:hidden;
+min-height:230px;background:#f1f3f7;border-radius:9px;
+display:flex;justify-content:center;align-items:center;overflow:hidden
 }
 .main-image img{
-display:block;
-width:100%;
-height:auto;
-max-height:none;
-object-fit:contain;
+display:block;width:100%;height:auto;max-height:none;object-fit:contain
 }
 .thumbnails{display:flex;gap:7px;overflow:auto;margin-top:8px;padding-bottom:3px}
 .thumb{
@@ -52,7 +42,6 @@ border-radius:7px;overflow:hidden;background:#eee;padding:0
 }
 .thumb.active{border-color:var(--orange)}
 .thumb img{width:100%;height:100%;object-fit:cover}
-
 h1{
 font-size:21px;line-height:1.35;color:#111827;
 margin:0 0 8px;overflow-wrap:anywhere
@@ -76,28 +65,10 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .add{background:var(--navy);color:white}
 .buy{background:var(--orange);color:#111827}
 
-/* SHARE BUTTONS */
-.share-section{
-margin-top:15px;
-padding-top:13px;
-border-top:1px solid #e5e7eb;
-}
-.share-title{
-font-size:14px;
-font-weight:bold;
-color:#111827;
-margin-bottom:10px;
-}
-.share-buttons{
-display:grid;
-grid-template-columns:repeat(2,minmax(0,1fr));
-gap:8px;
-}
-.share-buttons button{
-padding:12px 8px;
-font-size:13px;
-border-radius:8px;
-}
+.share-section{margin-top:15px;padding-top:13px;border-top:1px solid #e5e7eb}
+.share-title{font-size:14px;font-weight:bold;color:#111827;margin-bottom:10px}
+.share-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.share-buttons button{padding:12px 8px;font-size:13px;border-radius:8px}
 .share-main{background:#6d28d9;color:white}
 .share-whatsapp{background:#16a34a;color:white}
 .share-facebook{background:#1877f2;color:white}
@@ -157,6 +128,11 @@ background:#fff1f2;border:1px solid #fecdd3;
 color:#9f1239;padding:10px;border-radius:8px;
 font-size:13px;line-height:1.6
 }
+.review-notice{
+background:#f8fafc;border:1px solid #e2e8f0;
+padding:10px;border-radius:8px;margin:10px 0;
+font-size:12px;line-height:1.6;color:#334155
+}
 @media(min-width:700px){
 main{padding:0 18px}
 .panel{padding:17px}
@@ -194,6 +170,7 @@ h1{font-size:24px}
 
 <section class="panel" id="reviews">
 <h2 class="section-title">Customer Reviews</h2>
+
 <div class="rating-summary">
 <div class="big-rating" id="averageRating">0.0</div>
 <div>
@@ -203,8 +180,17 @@ h1{font-size:24px}
 </div>
 
 <h3 style="font-size:15px;color:#111827">Write a Review</h3>
-<p class="message">আপনার কেনাকাটার অভিজ্ঞতা শেয়ার করুন। Review দিতে Verified Gmail দিয়ে Login করতে হবে।</p>
 
+<div class="review-notice">
+শুধুমাত্র যেসব কাস্টমারের এই পণ্যের অর্ডার Delivered হয়েছে,
+তারাই Verified Gmail দিয়ে Review দিতে পারবেন।
+</div>
+
+<div id="reviewEligibility" class="message">
+আপনার Review দেওয়ার যোগ্যতা যাচাই হচ্ছে...
+</div>
+
+<div id="reviewForm">
 <div class="rating-input" id="ratingInput">
 <button type="button" data-rating="1">★</button>
 <button type="button" data-rating="2">★</button>
@@ -215,7 +201,10 @@ h1{font-size:24px}
 
 <textarea id="reviewComment" placeholder="আপনার মতামত লিখুন..."></textarea>
 <button class="submit" id="submitReview">SUBMIT REVIEW</button>
+</div>
+
 <p id="reviewMessage" class="message"></p>
+
 <h3 style="font-size:15px;color:#111827">All Reviews</h3>
 <div id="reviewList"><div class="empty">Review লোড হচ্ছে...</div></div>
 </section>
@@ -238,7 +227,8 @@ h1{font-size:24px}
 import{initializeApp}from'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
 
 import{
-getFirestore,collection,doc,getDoc,getDocs,setDoc,serverTimestamp
+getFirestore,collection,doc,getDoc,getDocs,setDoc,serverTimestamp,
+query,where
 }from'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
 import{
@@ -270,6 +260,8 @@ const productId=params.get('id');
 let product=null,currentUser=null,selectedRating=0,reviews=[];
 let selectedVariant=null,globalVariantEnabled=true;
 let toastTimer=null;
+let reviewEligibilityChecked=false;
+let canReview=false;
 
 function toast(message){
 $('toast').textContent=message;
@@ -278,7 +270,7 @@ clearTimeout(toastTimer);
 toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3000);
 }
 
-/* PRODUCT SHARE FUNCTIONS */
+/* SHARE FUNCTIONS */
 
 function getProductShareLink(){
 const url=new URL('product-details.html',location.href);
@@ -288,16 +280,12 @@ return url.href;
 
 function getProductShareText(){
 const name=product?.name||'Product';
-const price=selectedVariant
-?getSelectedPrice()
-:Number(product?.price||0);
-
+const price=selectedVariant?getSelectedPrice():Number(product?.price||0);
 return `Check out ${name} at MS STORE!\nPrice: ${money(price)}\n`;
 }
 
 async function shareProduct(){
 if(!productId)return;
-
 const link=getProductShareLink();
 
 if(navigator.share){
@@ -308,10 +296,7 @@ text:getProductShareText(),
 url:link
 });
 }catch(e){
-if(e.name!=='AbortError'){
-console.error('Share error:',e);
-toast('Share করা যায়নি।');
-}
+if(e.name!=='AbortError')toast('Share করা যায়নি।');
 }
 }else{
 await copyProductLink();
@@ -319,43 +304,28 @@ await copyProductLink();
 }
 
 function shareWhatsApp(){
-if(!productId)return;
-
-const link=getProductShareLink();
-const text=getProductShareText()+'\n'+link;
-
-window.open(
-'https://wa.me/?text='+encodeURIComponent(text),
-'_blank',
-'noopener,noreferrer'
-);
+const text=getProductShareText()+'\n'+getProductShareLink();
+window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank','noopener,noreferrer');
 }
 
 function shareFacebook(){
-if(!productId)return;
-
 const link=getProductShareLink();
-
 window.open(
 'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(link),
-'_blank',
-'noopener,noreferrer'
+'_blank','noopener,noreferrer'
 );
 }
 
 async function copyProductLink(){
-if(!productId)return;
-
 const link=getProductShareLink();
 
 try{
 if(navigator.clipboard&&window.isSecureContext){
 await navigator.clipboard.writeText(link);
-}else{
-throw new Error('Clipboard unavailable');
-}
-
 toast('Product Link Copy হয়েছে!');
+return;
+}
+throw new Error('Clipboard unavailable');
 }catch(e){
 const area=document.createElement('textarea');
 area.value=link;
@@ -370,10 +340,11 @@ toast(copied?'Product Link Copy হয়েছে!':'লিংকটি Copy ক�
 }catch(error){
 prompt('এই Product Link Copy করুন:',link);
 }
-
 area.remove();
 }
 }
+
+/* PRODUCT FUNCTIONS */
 
 function getImages(p){
 let images=[];
@@ -407,9 +378,7 @@ return selectedVariant&&selectedVariant.price!==null&&selectedVariant.price!==un
 
 function getSelectedStock(){
 if(variantIsActive()){
-return selectedVariant
-?Math.max(0,Number(selectedVariant.stock)||0)
-:0;
+return selectedVariant?Math.max(0,Number(selectedVariant.stock)||0):0;
 }
 return Math.max(0,Number(product?.stock)||0);
 }
@@ -421,17 +390,13 @@ const variants=availableVariants();
 
 if(!variants.length){
 selectedVariant=null;
-return `
-<div class="variant-box">
-<div class="variant-unavailable">
+return `<div class="variant-box"><div class="variant-unavailable">
 এই পণ্যের কোনো Variant বর্তমানে পাওয়া যাচ্ছে না।
-</div>
-</div>`;
+</div></div>`;
 }
 
 if(!selectedVariant||!variants.some(v=>v.id===selectedVariant.id)){
-selectedVariant=
-variants.find(v=>Number(v.stock)>0)||variants[0];
+selectedVariant=variants.find(v=>Number(v.stock)>0)||variants[0];
 }
 
 return `
@@ -439,8 +404,7 @@ return `
 <label for="variantSelect">পণ্যের Size / Color / Model নির্বাচন করুন</label>
 <select id="variantSelect">
 ${variants.map(v=>`
-<option
-value="${esc(v.id)}"
+<option value="${esc(v.id)}"
 ${selectedVariant?.id===v.id?'selected':''}
 ${Number(v.stock)<=0?'disabled':''}>
 ${esc(v.label)}: ${esc(v.value)}
@@ -453,7 +417,6 @@ ${Number(v.stock)<=0?'(Stock শেষ)':''}
 
 function updateVariantInfo(){
 if(!variantIsActive())return;
-
 const info=$('variantInfo');
 if(!info)return;
 
@@ -472,12 +435,8 @@ function makeCartEntry(){
 const quantity=1;
 
 if(variantIsActive()){
-if(!selectedVariant){
-throw Error('একটি Variant নির্বাচন করুন।');
-}
-if(getSelectedStock()<1){
-throw Error('এই Variant-টি স্টকে নেই।');
-}
+if(!selectedVariant)throw Error('একটি Variant নির্বাচন করুন।');
+if(getSelectedStock()<1)throw Error('এই Variant-টি স্টকে নেই।');
 
 return {
 productId,
@@ -500,29 +459,21 @@ quantity
 }
 
 function cartKey(entry){
-return entry.variantId
-?`${entry.productId}__${entry.variantId}`
-:entry.productId;
+return entry.variantId?`${entry.productId}__${entry.variantId}`:entry.productId;
 }
 
 function readCart(){
 try{
 const c=JSON.parse(localStorage.getItem('msCart')||'{}');
 return c&&typeof c==='object'&&!Array.isArray(c)?c:{};
-}catch(e){
-return {};
-}
+}catch(e){return {};}
 }
 
 function addToCart(){
 if(!product)return;
-
 const stock=getSelectedStock();
 
-if(stock<1){
-toast('এই Variant-টি স্টকে নেই।');
-return;
-}
+if(stock<1){toast('এই Variant-টি স্টকে নেই।');return;}
 
 try{
 const entry=makeCartEntry();
@@ -531,77 +482,47 @@ const key=cartKey(entry);
 const old=cart[key];
 
 let quantity=1;
+if(old&&typeof old==='object')quantity=Number(old.quantity||0)+1;
+else if(typeof old==='number')quantity=old+1;
+else if(old)quantity=Number(old)+1;
 
-if(old&&typeof old==='object'){
-quantity=Number(old.quantity||0)+1;
-}else if(typeof old==='number'){
-quantity=old+1;
-}else if(old){
-quantity=Number(old)+1;
-}
-
-if(quantity>stock){
-toast('স্টকে পর্যাপ্ত পণ্য নেই।');
-return;
-}
+if(quantity>stock){toast('স্টকে পর্যাপ্ত পণ্য নেই।');return;}
 
 cart[key]={...entry,quantity};
-
 localStorage.setItem('msCart',JSON.stringify(cart));
 toast('পণ্য Cart-এ যোগ হয়েছে!');
-
-}catch(e){
-toast(e.message||'Cart-এ যোগ করা যায়নি।');
-}
+}catch(e){toast(e.message||'Cart-এ যোগ করা যায়নি।');}
 }
 
 function buyNow(){
 if(!product)return;
-
-if(getSelectedStock()<1){
-toast('এই Variant-টি স্টকে নেই।');
-return;
-}
+if(getSelectedStock()<1){toast('এই Variant-টি স্টকে নেই।');return;}
 
 try{
 const entry=makeCartEntry();
 const key=cartKey(entry);
 const cart={[key]:entry};
 
-localStorage.setItem(
-'msCartBackup',
-localStorage.getItem('msCart')||'{}'
-);
-
+localStorage.setItem('msCartBackup',localStorage.getItem('msCart')||'{}');
 localStorage.setItem('msCart',JSON.stringify(cart));
 localStorage.setItem('msBuyNowMode','1');
-
 location.href='checkout.html';
-
-}catch(e){
-toast(e.message||'Checkout চালু করা যাচ্ছে না।');
-}
+}catch(e){toast(e.message||'Checkout চালু করা যাচ্ছে না।');}
 }
 
 function renderProduct(){
 if(!product)return;
 
 const images=getImages(product);
-
 document.title=(product.name||'Product')+' | MS STORE';
-
-$('description').textContent=
-product.description||'এই পণ্যের বিস্তারিত এখনো যোগ করা হয়নি।';
+$('description').textContent=product.description||'এই পণ্যের বিস্তারিত এখনো যোগ করা হয়নি।';
 
 $('productArea').innerHTML=`
 <div class="product-layout">
 <div>
 <div class="main-image" id="mainImage">
-${images.length
-?`<img src="${esc(images[0])}" alt="${esc(product.name)}">`
-:'🛍️'}
+${images.length?`<img src="${esc(images[0])}" alt="${esc(product.name)}">`:'🛍️'}
 </div>
-
 <div class="thumbnails" id="thumbnails">
 ${images.map((img,i)=>`
 <button class="thumb ${i===0?'active':''}" data-image="${i}">
@@ -612,19 +533,11 @@ ${images.map((img,i)=>`
 
 <div>
 <h1>${esc(product.name||'Product')}</h1>
+<div class="message">Category: ${esc(product.category||'General')}</div>
 
-<div class="message">
-Category: ${esc(product.category||'General')}
-</div>
+<div id="variantSelector">${renderVariantSelector()}</div>
 
-<div id="variantSelector">
-${renderVariantSelector()}
-</div>
-
-<span class="price" id="productPrice">
-${money(getSelectedPrice())}
-</span>
-
+<span class="price" id="productPrice">${money(getSelectedPrice())}</span>
 <div class="stock" id="productStock"></div>
 
 <div class="actions">
@@ -641,17 +554,13 @@ ${money(getSelectedPrice())}
 <button class="share-copy" id="copyLink">📋 Copy Link</button>
 </div>
 </div>
-
 </div>
 </div>`;
 
 const selector=$('variantSelect');
-
 if(selector){
 selector.onchange=()=>{
-selectedVariant=
-availableVariants().find(v=>v.id===selector.value)||null;
-
+selectedVariant=availableVariants().find(v=>v.id===selector.value)||null;
 updateVariantInfo();
 updatePurchaseDisplay();
 };
@@ -660,7 +569,6 @@ updateVariantInfo();
 
 $('addCart').onclick=addToCart;
 $('buyNow').onclick=buyNow;
-
 $('shareMain').onclick=shareProduct;
 $('shareWhatsApp').onclick=shareWhatsApp;
 $('shareFacebook').onclick=shareFacebook;
@@ -669,14 +577,8 @@ $('copyLink').onclick=copyProductLink;
 $('thumbnails').querySelectorAll('[data-image]').forEach(b=>{
 b.onclick=()=>{
 const index=Number(b.dataset.image);
-
-$('mainImage').innerHTML=`
-<img src="${esc(images[index])}" alt="${esc(product.name)}">`;
-
-$('thumbnails').querySelectorAll('.thumb').forEach(x=>{
-x.classList.remove('active');
-});
-
+$('mainImage').innerHTML=`<img src="${esc(images[index])}" alt="${esc(product.name)}">`;
+$('thumbnails').querySelectorAll('.thumb').forEach(x=>x.classList.remove('active'));
 b.classList.add('active');
 };
 });
@@ -686,15 +588,10 @@ updatePurchaseDisplay();
 
 function updatePurchaseDisplay(){
 if(!product)return;
-
 const stock=getSelectedStock();
 
 $('productPrice').textContent=money(getSelectedPrice());
-
-$('productStock').textContent=stock>0
-?'In Stock: '+stock
-:'Out of Stock';
-
+$('productStock').textContent=stock>0?'In Stock: '+stock:'Out of Stock';
 $('addCart').disabled=stock<1;
 $('buyNow').disabled=stock<1;
 }
@@ -711,9 +608,7 @@ getDoc(doc(db,'storeProducts',productId)),
 getDoc(doc(db,'storeSettings','variantSettings'))
 ]);
 
-if(settings.exists()){
-globalVariantEnabled=settings.data().enabled!==false;
-}
+if(settings.exists())globalVariantEnabled=settings.data().enabled!==false;
 
 if(!snap.exists()){
 $('productArea').textContent='এই পণ্যটি পাওয়া যায়নি।';
@@ -729,7 +624,6 @@ return;
 }
 
 renderProduct();
-
 await loadReviews();
 await loadSimilar();
 
@@ -759,7 +653,6 @@ list.map(p=>`
 ${p.imageUrl
 ?`<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" loading="lazy">`
 :'<div style="height:115px;display:grid;place-items:center">🛍️</div>'}
-
 <div class="card-info">
 <b>${esc(p.name||'Product')}</b>
 <div class="card-price">${money(p.price)}</div>
@@ -769,17 +662,100 @@ ${p.imageUrl
 
 $('similarProducts').querySelectorAll('[data-product]').forEach(b=>{
 b.onclick=()=>{
-location.href='product-details.html?id='+
-encodeURIComponent(b.dataset.product);
+location.href='product-details.html?id='+encodeURIComponent(b.dataset.product);
 };
 });
 
 }catch(e){
 console.error(e);
-$('similarProducts').innerHTML=
-'<div class="empty">Similar Products লোড হয়নি।</div>';
+$('similarProducts').innerHTML='<div class="empty">Similar Products লোড হয়নি।</div>';
 }
 }
+
+/* REVIEW ELIGIBILITY: CUSTOMER MUST HAVE A DELIVERED ORDER FOR THIS PRODUCT */
+
+async function hasDeliveredOrderForProduct(){
+if(!currentUser||!productId)return false;
+
+const ordersQuery=query(
+collection(db,'orders'),
+where('uid','==',currentUser.uid)
+);
+
+const ordersSnap=await getDocs(ordersQuery);
+
+return ordersSnap.docs.some(orderDoc=>{
+const order=orderDoc.data();
+const status=String(order.status||'').trim().toLowerCase();
+
+if(status!=='delivered')return false;
+
+const products=Array.isArray(order.products)?order.products:[];
+
+return products.some(item=>
+String(item.productId||'')===String(productId)
+);
+});
+}
+
+function setReviewFormEnabled(enabled){
+$('reviewForm').style.display=enabled?'block':'none';
+}
+
+async function checkReviewEligibility(){
+reviewEligibilityChecked=false;
+canReview=false;
+setReviewFormEnabled(false);
+
+if(!currentUser){
+$('reviewEligibility').textContent='Review দিতে আগে Login করুন।';
+reviewEligibilityChecked=true;
+return;
+}
+
+if(!currentUser.emailVerified){
+$('reviewEligibility').textContent='Review দিতে আপনার Gmail Verification সম্পন্ন করুন।';
+reviewEligibilityChecked=true;
+return;
+}
+
+$('reviewEligibility').textContent='আপনার Delivered Order যাচাই হচ্ছে...';
+
+try{
+const eligible=await hasDeliveredOrderForProduct();
+
+if(!eligible){
+$('reviewEligibility').textContent=
+'এই পণ্যের কোনো Delivered Order পাওয়া যায়নি। অর্ডার Delivered হলে Review দিতে পারবেন।';
+setReviewFormEnabled(false);
+canReview=false;
+}else{
+const reviewRef=doc(db,'storeProducts',productId,'reviews',currentUser.uid);
+const existing=await getDoc(reviewRef);
+
+if(existing.exists()){
+$('reviewEligibility').textContent='আপনি এই পণ্যে ইতিমধ্যে Review দিয়েছেন।';
+setReviewFormEnabled(false);
+canReview=false;
+}else{
+$('reviewEligibility').textContent='আপনি Review দেওয়ার যোগ্য। আপনার অভিজ্ঞতা শেয়ার করুন।';
+setReviewFormEnabled(true);
+canReview=true;
+}
+}
+
+}catch(e){
+console.error('Review eligibility error:',e);
+$('reviewEligibility').textContent=
+'অর্ডার যাচাই করা যাচ্ছে না। কিছুক্ষণ পর আবার চেষ্টা করুন।';
+setReviewFormEnabled(false);
+canReview=false;
+}finally{
+reviewEligibilityChecked=true;
+}
+}
+
+/* REVIEWS */
 
 function drawStars(n){
 n=Math.max(0,Math.min(5,Number(n)||0));
@@ -788,7 +764,6 @@ return '★'.repeat(n)+'☆'.repeat(5-n);
 
 function renderReviews(){
 const count=reviews.length;
-
 const average=count
 ?reviews.reduce((s,r)=>s+Number(r.rating||0),0)/count
 :0;
@@ -803,9 +778,7 @@ reviews.map(r=>`
 <div class="review-name">${esc(r.name||'Customer')}</div>
 <div class="stars">${drawStars(r.rating)}</div>
 <div class="review-date">
-${r.createdAt?.toDate
-?r.createdAt.toDate().toLocaleDateString('bn-BD')
-:'Customer Review'}
+${r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('bn-BD'):'Customer Review'}
 </div>
 <div class="review-comment">${esc(r.comment||'')}</div>
 </div>`).join(''):
@@ -814,10 +787,7 @@ ${r.createdAt?.toDate
 
 async function loadReviews(){
 try{
-const snap=await getDocs(
-collection(db,'storeProducts',productId,'reviews')
-);
-
+const snap=await getDocs(collection(db,'storeProducts',productId,'reviews'));
 reviews=snap.docs.map(d=>({id:d.id,...d.data()}));
 
 reviews.sort((a,b)=>{
@@ -827,10 +797,8 @@ return tb-ta;
 });
 
 renderReviews();
-
 }catch(e){
 console.error('Review load error:',e);
-
 $('reviewList').innerHTML=
 '<div class="empty">Review লোড করা যাচ্ছে না। Firestore Rules পরীক্ষা প্রয়োজন।</div>';
 }
@@ -839,15 +807,13 @@ $('reviewList').innerHTML=
 $('ratingInput').querySelectorAll('[data-rating]').forEach(b=>{
 b.onclick=()=>{
 selectedRating=Number(b.dataset.rating);
-
 $('ratingInput').querySelectorAll('[data-rating]').forEach(x=>{
-x.classList.toggle(
-'selected',
-Number(x.dataset.rating)<=selectedRating
-);
+x.classList.toggle('selected',Number(x.dataset.rating)<=selectedRating);
 });
 };
 });
+
+/* REVIEW SUBMISSION */
 
 $('submitReview').onclick=async()=>{
 $('reviewMessage').textContent='';
@@ -860,6 +826,11 @@ return;
 
 if(!currentUser.emailVerified){
 $('reviewMessage').textContent='Review দিতে Gmail Verification সম্পন্ন করুন।';
+return;
+}
+
+if(!reviewEligibilityChecked||!canReview){
+$('reviewMessage').textContent='আপনি এখনো Review দেওয়ার যোগ্য নন। Delivered Order প্রয়োজন।';
 return;
 }
 
@@ -884,12 +855,19 @@ $('submitReview').disabled=true;
 $('submitReview').textContent='SUBMITTING...';
 
 try{
+/* Firebase থেকে আবার অর্ডার যাচাই */
+const eligible=await hasDeliveredOrderForProduct();
+
+if(!eligible){
+canReview=false;
+setReviewFormEnabled(false);
+throw Error('এই পণ্যের Delivered Order পাওয়া যায়নি।');
+}
+
 const profileRef=doc(db,'customerProfiles',currentUser.uid);
 const profileSnap=await getDoc(profileRef);
 
-if(!profileSnap.exists()){
-throw Error('Customer Profile পাওয়া যায়নি।');
-}
+if(!profileSnap.exists())throw Error('Customer Profile পাওয়া যায়নি。');
 
 const profile=profileSnap.data();
 
@@ -897,14 +875,7 @@ if(profile.banned===true){
 throw Error('আপনার Customer Account বর্তমানে বন্ধ আছে।');
 }
 
-const reviewRef=doc(
-db,
-'storeProducts',
-productId,
-'reviews',
-currentUser.uid
-);
-
+const reviewRef=doc(db,'storeProducts',productId,'reviews',currentUser.uid);
 const existing=await getDoc(reviewRef);
 
 if(existing.exists()){
@@ -927,10 +898,10 @@ b.classList.remove('selected');
 });
 
 $('reviewMessage').textContent='আপনার Review সফলভাবে জমা হয়েছে।';
-
 toast('Review জমা হয়েছে!');
 
 await loadReviews();
+await checkReviewEligibility();
 
 }catch(e){
 console.error('Review submit error:',e);
@@ -942,8 +913,9 @@ $('submitReview').textContent='SUBMIT REVIEW';
 }
 };
 
-onAuthStateChanged(auth,user=>{
+onAuthStateChanged(auth,async user=>{
 currentUser=user;
+if(productId)await checkReviewEligibility();
 });
 
 loadProduct();
