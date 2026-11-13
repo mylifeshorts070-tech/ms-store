@@ -42,8 +42,6 @@ button:disabled{opacity:.6;cursor:not-allowed}
 #toast.show{transform:translateX(-50%) translateY(0)}
 a{color:#6d28d9}
 .info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px;margin:10px 0}
-.info-box strong{display:block;margin-bottom:5px;color:#1d4ed8}
-.gate-title{font-size:17px;font-weight:bold}
 @media(max-width:520px){
 .grid{grid-template-columns:1fr}
 .full{grid-column:auto}
@@ -64,10 +62,9 @@ main{margin:18px auto}
 
 <main>
 
-<!-- CART -->
-
 <section class="panel">
 <h2>🛒 Your Order</h2>
+
 <div id="cartList">Cart লোড হচ্ছে...</div>
 
 <div class="row"><span>Subtotal</span><b id="subtotal">৳0</b></div>
@@ -85,82 +82,6 @@ PROCEED TO CHECKOUT
 <p id="gateMessage" class="msg"></p>
 </section>
 
-
-<!-- LOGIN / REGISTER: ONLY AFTER PROCEED -->
-
-<section class="panel hidden" id="authPanel">
-
-<h2>🔐 Customer Login</h2>
-
-<p id="authStatus" class="msg">
-অর্ডার করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।
-</p>
-
-<div id="authBox">
-
-<div id="registerFields" class="hidden">
-<input id="regName" placeholder="আপনার নাম">
-<input id="regPhone" type="tel" placeholder="মোবাইল নম্বর">
-</div>
-
-<input id="email" type="email" placeholder="Gmail / Email" autocomplete="email">
-
-<input id="password" type="password" placeholder="Password (কমপক্ষে ৬ অক্ষর)" autocomplete="current-password">
-
-<button id="authSubmit">Login</button>
-
-<button class="secondary" id="toggle" type="button">
-নতুন অ্যাকাউন্ট তৈরি করুন
-</button>
-
-<button class="secondary" id="forgot" type="button">
-Forgot Password
-</button>
-
-</div>
-
-<p id="authMsg" class="msg"></p>
-
-<button id="backToCart" class="secondary" type="button">
-← Cart-এ ফিরে যান
-</button>
-
-</section>
-
-
-<!-- EMAIL VERIFICATION -->
-
-<section class="panel hidden" id="verifyPanel">
-
-<h2>📧 Email Verification</h2>
-
-<div class="info-box">
-<strong>আপনার Email Verify করুন</strong>
-<p class="msg">
-আপনার Gmail-এর Inbox অথবা Spam Folder-এ পাঠানো Verification Link খুলুন। Email Verify না হওয়া পর্যন্ত Checkout করা যাবে না।
-</p>
-</div>
-
-<p id="verifyEmail" class="msg"></p>
-
-<button id="resendVerification" class="secondary">
-RESEND VERIFICATION EMAIL
-</button>
-
-<button id="checkVerification" class="green">
-I HAVE VERIFIED MY EMAIL
-</button>
-
-<p id="verifyMsg" class="msg"></p>
-
-<button id="verifyLogout" class="red">
-অন্য অ্যাকাউন্ট দিয়ে Login করুন
-</button>
-
-</section>
-
-
-<!-- DELIVERY FORM: ONLY AFTER VERIFIED LOGIN -->
 
 <section class="panel hidden" id="deliveryPanel">
 
@@ -191,7 +112,6 @@ Email Verified ✓
 </select>
 
 <input id="district" placeholder="জেলা *">
-
 <input id="upazila" placeholder="উপজেলা / থানা *">
 
 <textarea id="address" class="full" placeholder="বিস্তারিত ঠিকানা *"></textarea>
@@ -205,7 +125,6 @@ Email Verified ✓
 <div id="paymentInfo" class="full msg"></div>
 
 <input id="senderNumber" class="full hidden" placeholder="যে নম্বর থেকে টাকা পাঠিয়েছেন">
-
 <input id="trxId" class="full hidden" placeholder="Transaction ID">
 
 </div>
@@ -234,11 +153,7 @@ initializeApp
 import {
 initializeAuth,
 onAuthStateChanged,
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
 signOut,
-sendEmailVerification,
-sendPasswordResetEmail,
 browserLocalPersistence,
 reload
 } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
@@ -296,7 +211,6 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
 let cart={};
 let products=[];
 let currentUser=null;
-let isRegister=false;
 
 let payment={
 bkashNumber:'',
@@ -337,23 +251,13 @@ const m=e.code||e.message;
 const errors={
 
 'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
-
 'auth/invalid-email':'Email ঠিক নয়।',
-
 'auth/weak-password':'Password কমপক্ষে ৬ অক্ষরের হতে হবে।',
-
 'auth/invalid-credential':'Email অথবা Password ভুল।',
-
 'auth/user-not-found':'এই Email দিয়ে অ্যাকাউন্ট পাওয়া যায়নি।',
-
 'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।',
-
 'auth/network-request-failed':'Internet Connection পরীক্ষা করুন।',
-
-'auth/invalid-api-key':'Firebase API Key সঠিক নয়।',
-
 'permission-denied':'Firestore Rules অনুমতি দিচ্ছে না।',
-
 'unavailable':'Internet Connection পরীক্ষা করুন।'
 
 };
@@ -664,7 +568,7 @@ $('paymentMethod').onchange=renderPayment;
 $('division').onchange=renderCart;
 
 
-/* PROFILE */
+/* CUSTOMER PROFILE */
 
 async function ensureProfile(user){
 
@@ -672,9 +576,15 @@ const profileRef=doc(db,'customerProfiles',user.uid);
 
 const snap=await getDoc(profileRef);
 
-if(snap.exists()){
+if(!snap.exists()){
 
-if(snap.data().banned===true){
+throw Error('Customer Profile পাওয়া যায়নি। My Account থেকে আবার Login করুন।');
+
+}
+
+const profile=snap.data();
+
+if(profile.banned===true){
 
 await signOut(auth);
 
@@ -682,93 +592,27 @@ throw Error('এই অ্যাকাউন্টটি বন্ধ করা 
 
 }
 
-return snap.data();
-
-}
-
-const profile={
-
-uid:user.uid,
-
-name:user.displayName||user.email.split('@')[0],
-
-phone:'',
-
-email:user.email,
-
-banned:false,
-
-createdAt:serverTimestamp()
-
-};
-
-await setDoc(profileRef,profile);
-
 return profile;
 
 }
 
 
-/* SHOW / HIDE PANELS */
+/* CHECKOUT GATE */
 
-function hideAllCheckoutPanels(){
+function hideDelivery(){
 
-$('authPanel').classList.add('hidden');
-$('verifyPanel').classList.add('hidden');
 $('deliveryPanel').classList.add('hidden');
 
 }
 
-
-function showLogin(){
-
-hideAllCheckoutPanels();
-
-$('authPanel').classList.remove('hidden');
-
-$('authMsg').textContent='';
-
-$('authPanel').scrollIntoView({
-behavior:'smooth',
-block:'start'
-});
-
-}
-
-
-function showVerification(){
-
-hideAllCheckoutPanels();
-
-$('verifyPanel').classList.remove('hidden');
-
-$('verifyEmail').textContent='Verification Email: '+(currentUser?.email||'');
-
-$('verifyMsg').textContent='আপনার Gmail খুলে Verification Link-এ চাপ দিন।';
-
-$('verifyPanel').scrollIntoView({
-behavior:'smooth',
-block:'start'
-});
-
-}
-
-
 function showDelivery(profile){
-
-hideAllCheckoutPanels();
 
 $('deliveryPanel').classList.remove('hidden');
 
 $('verifiedStatus').textContent='Email Verified ✓ | '+currentUser.email;
 
-if(profile){
-
 $('customerName').value=profile.name||'';
 $('phone').value=profile.phone||'';
-
-}
-
 $('orderEmail').value=currentUser.email||'';
 
 $('deliveryPanel').scrollIntoView({
@@ -779,13 +623,40 @@ block:'start'
 }
 
 
-async function updateCheckoutGate(){
+async function redirectToAccount(reason){
+
+hideDelivery();
+
+const returnUrl='my-account.html?return=checkout';
+
+$('gateMessage').textContent=reason;
+
+showToast(reason);
+
+setTimeout(()=>{
+
+window.location.href=returnUrl;
+
+},700);
+
+}
+
+
+async function checkCheckoutAccess(){
 
 if(!checkoutRequested)return;
 
+if(!authReady){
+
+$('gateMessage').textContent='Login যাচাই হচ্ছে। একটু অপেক্ষা করুন।';
+
+return;
+
+}
+
 if(!currentUser){
 
-showLogin();
+await redirectToAccount('অর্ডার করতে প্রথমে Login করুন।');
 
 return;
 
@@ -797,9 +668,17 @@ await reload(currentUser);
 
 currentUser=auth.currentUser;
 
-if(!currentUser||!currentUser.emailVerified){
+if(!currentUser){
 
-showVerification();
+await redirectToAccount('প্রথমে Login করুন।');
+
+return;
+
+}
+
+if(!currentUser.emailVerified){
+
+await redirectToAccount('আপনার Email Verify করা হয়নি। My Account থেকে Email Verify করুন।');
 
 return;
 
@@ -809,11 +688,13 @@ const profile=await ensureProfile(currentUser);
 
 profileReady=true;
 
+$('gateMessage').textContent='';
+
 showDelivery(profile);
 
 }catch(e){
 
-console.error('CHECKOUT GATE:',e);
+console.error('CHECKOUT ACCESS:',e);
 
 $('gateMessage').textContent=authError(e);
 
@@ -822,7 +703,7 @@ $('gateMessage').textContent=authError(e);
 }
 
 
-/* PROCEED BUTTON */
+/* PROCEED */
 
 $('proceedBtn').onclick=async()=>{
 
@@ -854,362 +735,9 @@ return;
 
 checkoutRequested=true;
 
-$('gateMessage').textContent='';
-
-if(!authReady){
-
-$('gateMessage').textContent='Login তথ্য যাচাই হচ্ছে। একটু অপেক্ষা করুন।';
-
-return;
-
-}
-
-await updateCheckoutGate();
+await checkCheckoutAccess();
 
 };
-
-
-/* AUTH MODE */
-
-$('toggle').onclick=()=>{
-
-isRegister=!isRegister;
-
-$('registerFields').classList.toggle('hidden',!isRegister);
-
-$('authSubmit').textContent=isRegister?'Register':'Login';
-
-$('toggle').textContent=isRegister
-?'আগে থেকেই অ্যাকাউন্ট আছে? Login'
-:'নতুন অ্যাকাউন্ট তৈরি করুন';
-
-$('forgot').classList.toggle('hidden',isRegister);
-
-$('authMsg').textContent='';
-
-};
-
-
-/* LOGIN / REGISTER */
-
-$('authSubmit').onclick=async()=>{
-
-const email=$('email').value.trim().toLowerCase();
-
-const password=$('password').value;
-
-$('authMsg').textContent='';
-
-if(!email||!password){
-
-$('authMsg').textContent='Email ও Password লিখুন।';
-
-return;
-
-}
-
-if(password.length<6){
-
-$('authMsg').textContent='Password কমপক্ষে ৬ অক্ষরের হতে হবে।';
-
-return;
-
-}
-
-$('authSubmit').disabled=true;
-
-try{
-
-if(isRegister){
-
-const name=$('regName').value.trim();
-
-const phone=$('regPhone').value.trim();
-
-if(!name||!phone){
-
-throw Error('নাম ও মোবাইল নম্বর লিখুন।');
-
-}
-
-const result=await createUserWithEmailAndPassword(auth,email,password);
-
-await setDoc(doc(db,'customerProfiles',result.user.uid),{
-
-uid:result.user.uid,
-
-name,
-
-phone,
-
-email:result.user.email,
-
-banned:false,
-
-createdAt:serverTimestamp()
-
-});
-
-currentUser=result.user;
-
-await sendEmailVerification(result.user);
-
-showToast('অ্যাকাউন্ট তৈরি হয়েছে। Verification Email পাঠানো হয়েছে।');
-
-isRegister=false;
-
-$('registerFields').classList.add('hidden');
-
-$('authSubmit').textContent='Login';
-
-$('toggle').textContent='নতুন অ্যাকাউন্ট তৈরি করুন';
-
-$('forgot').classList.remove('hidden');
-
-$('authBox').classList.add('hidden');
-
-showVerification();
-
-}else{
-
-const result=await signInWithEmailAndPassword(auth,email,password);
-
-currentUser=result.user;
-
-await reload(currentUser);
-
-currentUser=auth.currentUser;
-
-const profile=await ensureProfile(currentUser);
-
-if(!currentUser.emailVerified){
-
-showToast('Login হয়েছে। Email Verify করুন।');
-
-showVerification();
-
-}else{
-
-showToast('Login সফল হয়েছে।');
-
-showDelivery(profile);
-
-}
-
-}
-
-}catch(e){
-
-console.error('AUTH ERROR:',e);
-
-$('authMsg').textContent=authError(e);
-
-}finally{
-
-$('authSubmit').disabled=false;
-
-}
-
-};
-
-
-/* RESEND VERIFICATION */
-
-$('resendVerification').onclick=async()=>{
-
-if(!currentUser)return;
-
-$('verifyMsg').textContent='';
-
-$('resendVerification').disabled=true;
-
-try{
-
-await sendEmailVerification(currentUser);
-
-$('verifyMsg').textContent='নতুন Verification Email পাঠানো হয়েছে। Inbox/Spam দেখুন।';
-
-showToast('Verification Email পাঠানো হয়েছে।');
-
-}catch(e){
-
-$('verifyMsg').textContent=authError(e);
-
-}finally{
-
-$('resendVerification').disabled=false;
-
-}
-
-};
-
-
-/* CHECK EMAIL VERIFICATION */
-
-$('checkVerification').onclick=async()=>{
-
-$('checkVerification').disabled=true;
-
-$('verifyMsg').textContent='Verification পরীক্ষা করা হচ্ছে...';
-
-try{
-
-if(!currentUser){
-
-throw Error('আগে Login করুন।');
-
-}
-
-await reload(currentUser);
-
-currentUser=auth.currentUser;
-
-if(!currentUser.emailVerified){
-
-$('verifyMsg').textContent='এখনো Email Verify হয়নি। Gmail-এর Verification Link-এ চাপ দিন।';
-
-return;
-
-}
-
-const profile=await ensureProfile(currentUser);
-
-profileReady=true;
-
-showToast('Email Verification সফল হয়েছে!');
-
-showDelivery(profile);
-
-}catch(e){
-
-console.error(e);
-
-$('verifyMsg').textContent=authError(e);
-
-}finally{
-
-$('checkVerification').disabled=false;
-
-}
-
-};
-
-
-/* FORGOT PASSWORD */
-
-$('forgot').onclick=async()=>{
-
-const email=$('email').value.trim().toLowerCase();
-
-$('authMsg').textContent='';
-
-if(!email){
-
-$('authMsg').textContent='আগে Email লিখুন।';
-
-return;
-
-}
-
-$('forgot').disabled=true;
-
-try{
-
-await sendPasswordResetEmail(auth,email);
-
-$('authMsg').textContent='Password reset email পাঠানো হয়েছে। Inbox/Spam দেখুন।';
-
-showToast('Password reset email পাঠানো হয়েছে।');
-
-}catch(e){
-
-$('authMsg').textContent=authError(e);
-
-}finally{
-
-$('forgot').disabled=false;
-
-}
-
-};
-
-
-/* LOGOUT */
-
-async function logoutUser(){
-
-try{
-
-await signOut(auth);
-
-currentUser=null;
-
-profileReady=false;
-
-checkoutRequested=false;
-
-hideAllCheckoutPanels();
-
-$('gateMessage').textContent='আবার Checkout করতে Login করুন।';
-
-showToast('আপনি Logout করেছেন।');
-
-}catch(e){
-
-$('authMsg').textContent=authError(e);
-
-}
-
-}
-
-$('verifyLogout').onclick=logoutUser;
-$('checkoutLogout').onclick=logoutUser;
-
-$('backToCart').onclick=()=>{
-
-checkoutRequested=false;
-
-hideAllCheckoutPanels();
-
-$('gateMessage').textContent='';
-
-window.scrollTo({
-top:0,
-behavior:'smooth'
-});
-
-};
-
-
-/* AUTH STATE */
-
-const authPromise=new Promise(resolve=>{
-
-let firstAuthCheck=true;
-
-onAuthStateChanged(auth,async user=>{
-
-currentUser=user;
-
-if(firstAuthCheck){
-
-firstAuthCheck=false;
-
-authReady=true;
-
-resolve();
-
-}
-
-if(checkoutRequested){
-
-await updateCheckoutGate();
-
-}
-
-});
-
-});
 
 
 /* VALIDATION */
@@ -1237,11 +765,9 @@ $('orderMsg').textContent='';
 
 if(!currentUser){
 
-$('orderMsg').textContent='Login করুন।';
+$('orderMsg').textContent='Login প্রয়োজন।';
 
-checkoutRequested=true;
-
-showLogin();
+await redirectToAccount('প্রথমে Login করুন।');
 
 return;
 
@@ -1265,7 +791,7 @@ if(!currentUser||!currentUser.emailVerified){
 
 $('orderMsg').textContent='Email Verification প্রয়োজন।';
 
-showVerification();
+await redirectToAccount('Email Verify করে আবার Checkout করুন।');
 
 return;
 
@@ -1492,27 +1018,16 @@ if(stock<quantity)throw Error((data.name||'পণ্য')+' এর পর্য�
 freshProducts.push({
 
 id:productId,
-
 ref:productRef,
-
 name:data.name||'Product',
-
 quantity,
-
 price,
-
 stock,
-
 variantId,
-
 variantLabel,
-
 variantValue,
-
 variantMode,
-
 variants:data.variants||[],
-
 productImage:Array.isArray(data.images)&&data.images.length
 ?data.images[0]
 :data.imageUrl||''
@@ -1527,21 +1042,15 @@ productImage:Array.isArray(data.images)&&data.images.length
 const lines=freshProducts.map(p=>({
 
 productId:p.id,
-
 productName:p.name,
-
 price:p.price,
-
 quantity:p.quantity,
-
 productImage:p.productImage,
 
 ...(p.variantMode?{
 
 variantId:p.variantId,
-
 variantLabel:p.variantLabel,
-
 variantValue:p.variantValue
 
 }:{ })
@@ -1577,15 +1086,10 @@ if(!productGroups.has(p.id)){
 productGroups.set(p.id,{
 
 ref:p.ref,
-
 variantMode:p.variantMode,
-
 variants:p.variants,
-
 normalStock:p.stock,
-
 normalQuantity:0,
-
 variantQuantities:new Map()
 
 });
@@ -1655,13 +1159,9 @@ if(trxRef){
 tx.set(trxRef,{
 
 trxId,
-
 paymentMethod:method,
-
 orderId:newOrderId,
-
 uid:currentUser.uid,
-
 createdAt:serverTimestamp()
 
 });
@@ -1674,21 +1174,13 @@ createdAt:serverTimestamp()
 tx.set(orderRef,{
 
 uid:currentUser.uid,
-
 customerName:name,
-
 phone,
-
 email:orderEmail,
-
 accountEmail:currentUser.email,
-
 address,
-
 division,
-
 district,
-
 upazila,
 
 productName:lines.map(p=>
@@ -1698,29 +1190,17 @@ p.productName+
 ).join(', '),
 
 products:lines,
-
 stockChanges,
-
 quantity:lines.reduce((s,p)=>s+p.quantity,0),
-
 subtotal:sub,
-
 deliveryCharge:del,
-
 totalPrice:total,
-
 paymentMethod:method,
-
 senderNumber,
-
 trxId,
-
 paymentStatus:method==='Cash on Delivery'?'Pending':'Unverified',
-
 orderId:newOrderId,
-
 status:'Pending',
-
 createdAt:serverTimestamp()
 
 });
@@ -1731,9 +1211,7 @@ createdAt:serverTimestamp()
 tx.set(trackingRef,{
 
 orderId:newOrderId,
-
 status:'Pending',
-
 createdAt:serverTimestamp()
 
 });
@@ -1754,7 +1232,6 @@ if(quantity<=0)return v;
 return{
 
 ...v,
-
 stock:Math.max(0,Number(v.stock||0)-quantity)
 
 };
@@ -1768,9 +1245,7 @@ const totalStock=updatedVariants
 tx.update(group.ref,{
 
 variants:updatedVariants,
-
 stock:totalStock,
-
 lastStockOrderId:newOrderId
 
 });
@@ -1780,7 +1255,6 @@ lastStockOrderId:newOrderId
 tx.update(group.ref,{
 
 stock:group.normalStock-group.normalQuantity,
-
 lastStockOrderId:newOrderId
 
 });
@@ -1792,13 +1266,9 @@ lastStockOrderId:newOrderId
 return{
 
 orderId:newOrderId,
-
 lines,
-
 subtotal:sub,
-
 delivery:del,
-
 total
 
 };
@@ -1813,9 +1283,7 @@ cart={};
 try{
 
 localStorage.removeItem('msCart');
-
 localStorage.removeItem('msBuyNowMode');
-
 localStorage.removeItem('msCartBackup');
 
 }catch(e){
@@ -1838,15 +1306,12 @@ const emailjs=await import('https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm
 await emailjs.default.send(
 
 EMAILJS_SERVICE_ID,
-
 EMAILJS_TEMPLATE_ID,
 
 {
 
 to_email:orderEmail,
-
 customer_name:name,
-
 order_id:result.orderId,
 
 product_name:result.lines.map(p=>
@@ -1856,13 +1321,9 @@ p.productName+
 ).join(', '),
 
 subtotal:money(result.subtotal),
-
 delivery_charge:money(result.delivery),
-
 total_price:money(result.total),
-
 order_status:'Pending',
-
 tracking_link:'https://mylifeshorts070-tech.github.io/ms-store/my-account.html'
 
 },
@@ -1940,6 +1401,77 @@ $('placeOrder').textContent='CONFIRM ORDER';
 };
 
 
+/* LOGOUT */
+
+$('checkoutLogout').onclick=async()=>{
+
+try{
+
+await signOut(auth);
+
+currentUser=null;
+profileReady=false;
+checkoutRequested=false;
+
+hideDelivery();
+
+$('gateMessage').textContent='আপনি Logout করেছেন। আবার Checkout করতে Login করুন।';
+
+showToast('আপনি Logout করেছেন।');
+
+}catch(e){
+
+$('orderMsg').textContent=authError(e);
+
+}
+
+};
+
+
+/* AUTH STATE */
+
+const authPromise=new Promise(resolve=>{
+
+let firstAuthCheck=true;
+
+onAuthStateChanged(auth,async user=>{
+
+currentUser=user;
+
+if(firstAuthCheck){
+
+firstAuthCheck=false;
+authReady=true;
+resolve();
+
+}
+
+if(!user){
+
+profileReady=false;
+hideDelivery();
+
+if(checkoutRequested){
+
+await redirectToAccount('অর্ডার করতে Login করুন।');
+
+}
+
+return;
+
+}
+
+if(checkoutRequested){
+
+await checkCheckoutAccess();
+
+}
+
+});
+
+});
+
+
 /* START */
 
 await authPromise;
@@ -1956,21 +1488,17 @@ await reload(currentUser);
 
 currentUser=auth.currentUser;
 
-if(currentUser){
+if(currentUser&&currentUser.emailVerified){
 
 const profile=await ensureProfile(currentUser);
 
-if(currentUser.emailVerified){
-
 profileReady=true;
 
-$('gateMessage').textContent='আপনি ইতোমধ্যে Login ও Email Verify করেছেন। Checkout করতে এগিয়ে যান।';
+$('gateMessage').textContent='আপনি Login ও Email Verify করেছেন। Checkout করতে Proceed চাপুন।';
 
 }else{
 
-$('gateMessage').textContent='Checkout করতে Email Verification প্রয়োজন।';
-
-}
+$('gateMessage').textContent='Checkout করতে Email Verification প্রয়োজন। Proceed চাপলে My Account-এ যেতে পারবেন।';
 
 }
 
@@ -1978,7 +1506,13 @@ $('gateMessage').textContent='Checkout করতে Email Verification প্র
 
 console.error('INITIAL AUTH:',e);
 
+$('gateMessage').textContent=authError(e);
+
 }
+
+}else{
+
+$('gateMessage').textContent='অর্ডার করতে Proceed চাপুন। Login না থাকলে My Account-এ নিয়ে যাওয়া হবে।';
 
 }
 
