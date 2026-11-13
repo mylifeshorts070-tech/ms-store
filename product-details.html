@@ -262,6 +262,7 @@ let selectedVariant=null,globalVariantEnabled=true;
 let toastTimer=null;
 let reviewEligibilityChecked=false;
 let canReview=false;
+let eligibleOrderId=null;
 
 function toast(message){
 $('toast').textContent=message;
@@ -672,10 +673,11 @@ $('similarProducts').innerHTML='<div class="empty">Similar Products লোড �
 }
 }
 
-/* REVIEW ELIGIBILITY: CUSTOMER MUST HAVE A DELIVERED ORDER FOR THIS PRODUCT */
+/* REVIEW ELIGIBILITY */
 
-async function hasDeliveredOrderForProduct(){
-if(!currentUser||!productId)return false;
+async function getDeliveredOrderForProduct(){
+
+if(!currentUser||!productId)return null;
 
 const ordersQuery=query(
 collection(db,'orders'),
@@ -684,18 +686,36 @@ where('uid','==',currentUser.uid)
 
 const ordersSnap=await getDocs(ordersQuery);
 
-return ordersSnap.docs.some(orderDoc=>{
+const eligibleOrders=ordersSnap.docs.filter(orderDoc=>{
+
 const order=orderDoc.data();
+
 const status=String(order.status||'').trim().toLowerCase();
 
 if(status!=='delivered')return false;
 
-const products=Array.isArray(order.products)?order.products:[];
+const productIds=Array.isArray(order.productIds)
+?order.productIds.map(String)
+:[];
 
-return products.some(item=>
-String(item.productId||'')===String(productId)
-);
+return productIds.includes(String(productId));
+
 });
+
+if(!eligibleOrders.length)return null;
+
+/* সর্বশেষ Delivered Order বেছে নেওয়া */
+
+eligibleOrders.sort((a,b)=>{
+
+const ta=a.data().createdAt?.toMillis?a.data().createdAt.toMillis():0;
+const tb=b.data().createdAt?.toMillis?b.data().createdAt.toMillis():0;
+
+return tb-ta;
+
+});
+
+return eligibleOrders[0].id;
 }
 
 function setReviewFormEnabled(enabled){
@@ -703,56 +723,85 @@ $('reviewForm').style.display=enabled?'block':'none';
 }
 
 async function checkReviewEligibility(){
+
 reviewEligibilityChecked=false;
 canReview=false;
+eligibleOrderId=null;
+
 setReviewFormEnabled(false);
 
 if(!currentUser){
+
 $('reviewEligibility').textContent='Review দিতে আগে Login করুন।';
 reviewEligibilityChecked=true;
 return;
+
 }
 
 if(!currentUser.emailVerified){
+
 $('reviewEligibility').textContent='Review দিতে আপনার Gmail Verification সম্পন্ন করুন।';
 reviewEligibilityChecked=true;
 return;
+
 }
 
 $('reviewEligibility').textContent='আপনার Delivered Order যাচাই হচ্ছে...';
 
 try{
-const eligible=await hasDeliveredOrderForProduct();
 
-if(!eligible){
+const orderId=await getDeliveredOrderForProduct();
+
+if(!orderId){
+
 $('reviewEligibility').textContent=
 'এই পণ্যের কোনো Delivered Order পাওয়া যায়নি। অর্ডার Delivered হলে Review দিতে পারবেন।';
+
 setReviewFormEnabled(false);
 canReview=false;
+
 }else{
+
 const reviewRef=doc(db,'storeProducts',productId,'reviews',currentUser.uid);
+
 const existing=await getDoc(reviewRef);
 
 if(existing.exists()){
+
 $('reviewEligibility').textContent='আপনি এই পণ্যে ইতিমধ্যে Review দিয়েছেন।';
+
 setReviewFormEnabled(false);
 canReview=false;
+
 }else{
+
+eligibleOrderId=orderId;
+
 $('reviewEligibility').textContent='আপনি Review দেওয়ার যোগ্য। আপনার অভিজ্ঞতা শেয়ার করুন।';
+
 setReviewFormEnabled(true);
 canReview=true;
+
 }
+
 }
 
 }catch(e){
+
 console.error('Review eligibility error:',e);
+
 $('reviewEligibility').textContent=
 'অর্ডার যাচাই করা যাচ্ছে না। কিছুক্ষণ পর আবার চেষ্টা করুন।';
+
 setReviewFormEnabled(false);
 canReview=false;
+
 }finally{
+
 reviewEligibilityChecked=true;
+
 }
+
 }
 
 /* REVIEWS */
@@ -763,7 +812,9 @@ return '★'.repeat(n)+'☆'.repeat(5-n);
 }
 
 function renderReviews(){
+
 const count=reviews.length;
+
 const average=count
 ?reviews.reduce((s,r)=>s+Number(r.rating||0),0)/count
 :0;
@@ -773,6 +824,7 @@ $('averageStars').textContent=drawStars(Math.round(average));
 $('reviewCount').textContent=count+'টি Customer Review';
 
 $('reviewList').innerHTML=count?
+
 reviews.map(r=>`
 <div class="review-card">
 <div class="review-name">${esc(r.name||'Customer')}</div>
@@ -782,112 +834,183 @@ ${r.createdAt?.toDate?r.createdAt.toDate().toLocaleDateString('bn-BD'):'Customer
 </div>
 <div class="review-comment">${esc(r.comment||'')}</div>
 </div>`).join(''):
+
 '<div class="empty">এখনো কোনো Review দেওয়া হয়নি। প্রথম Review দিন!</div>';
+
 }
 
 async function loadReviews(){
+
 try{
+
 const snap=await getDocs(collection(db,'storeProducts',productId,'reviews'));
+
 reviews=snap.docs.map(d=>({id:d.id,...d.data()}));
 
 reviews.sort((a,b)=>{
+
 const ta=a.createdAt?.toMillis?a.createdAt.toMillis():0;
 const tb=b.createdAt?.toMillis?b.createdAt.toMillis():0;
+
 return tb-ta;
+
 });
 
 renderReviews();
+
 }catch(e){
+
 console.error('Review load error:',e);
+
 $('reviewList').innerHTML=
 '<div class="empty">Review লোড করা যাচ্ছে না। Firestore Rules পরীক্ষা প্রয়োজন।</div>';
+
 }
+
 }
 
 $('ratingInput').querySelectorAll('[data-rating]').forEach(b=>{
+
 b.onclick=()=>{
+
 selectedRating=Number(b.dataset.rating);
+
 $('ratingInput').querySelectorAll('[data-rating]').forEach(x=>{
+
 x.classList.toggle('selected',Number(x.dataset.rating)<=selectedRating);
+
 });
+
 };
+
 });
 
 /* REVIEW SUBMISSION */
 
 $('submitReview').onclick=async()=>{
+
 $('reviewMessage').textContent='';
 
 if(!currentUser){
+
 $('reviewMessage').textContent='Review দিতে আগে Login করুন।';
+
 location.href='my-account.html';
+
 return;
+
 }
 
 if(!currentUser.emailVerified){
+
 $('reviewMessage').textContent='Review দিতে Gmail Verification সম্পন্ন করুন।';
+
 return;
+
 }
 
-if(!reviewEligibilityChecked||!canReview){
+if(!reviewEligibilityChecked||!canReview||!eligibleOrderId){
+
 $('reviewMessage').textContent='আপনি এখনো Review দেওয়ার যোগ্য নন। Delivered Order প্রয়োজন।';
+
 return;
+
 }
 
 if(!selectedRating){
+
 $('reviewMessage').textContent='১ থেকে ৫ Star নির্বাচন করুন।';
+
 return;
+
 }
 
 const comment=$('reviewComment').value.trim();
 
 if(comment.length<3){
+
 $('reviewMessage').textContent='কমপক্ষে ৩ অক্ষরের Review লিখুন।';
+
 return;
+
 }
 
 if(comment.length>1000){
+
 $('reviewMessage').textContent='Review সর্বোচ্চ ১০০০ অক্ষরের হতে পারবে।';
+
 return;
+
 }
 
 $('submitReview').disabled=true;
 $('submitReview').textContent='SUBMITTING...';
 
 try{
-/* Firebase থেকে আবার অর্ডার যাচাই */
-const eligible=await hasDeliveredOrderForProduct();
 
-if(!eligible){
+/* অর্ডার আবার যাচাই */
+
+const verifiedOrderId=await getDeliveredOrderForProduct();
+
+if(!verifiedOrderId){
+
 canReview=false;
+eligibleOrderId=null;
+
 setReviewFormEnabled(false);
+
 throw Error('এই পণ্যের Delivered Order পাওয়া যায়নি।');
+
 }
 
+/* Profile যাচাই */
+
 const profileRef=doc(db,'customerProfiles',currentUser.uid);
+
 const profileSnap=await getDoc(profileRef);
 
-if(!profileSnap.exists())throw Error('Customer Profile পাওয়া যায়নি。');
+if(!profileSnap.exists()){
+
+throw Error('Customer Profile পাওয়া যায়নি।');
+
+}
 
 const profile=profileSnap.data();
 
 if(profile.banned===true){
+
 throw Error('আপনার Customer Account বর্তমানে বন্ধ আছে।');
+
 }
 
+/* One Review Per Customer Per Product */
+
 const reviewRef=doc(db,'storeProducts',productId,'reviews',currentUser.uid);
+
 const existing=await getDoc(reviewRef);
 
 if(existing.exists()){
+
+canReview=false;
+eligibleOrderId=null;
+
+setReviewFormEnabled(false);
+
 throw Error('আপনি এই পণ্যে ইতিমধ্যে Review দিয়েছেন।');
+
 }
 
+/* SAVE REVIEW */
+
 await setDoc(reviewRef,{
+
 uid:currentUser.uid,
 name:profile.name||'Customer',
 rating:selectedRating,
 comment,
+orderId:verifiedOrderId,
 createdAt:serverTimestamp()
+
 });
 
 $('reviewComment').value='';
@@ -898,27 +1021,41 @@ b.classList.remove('selected');
 });
 
 $('reviewMessage').textContent='আপনার Review সফলভাবে জমা হয়েছে।';
+
 toast('Review জমা হয়েছে!');
 
 await loadReviews();
 await checkReviewEligibility();
 
 }catch(e){
+
 console.error('Review submit error:',e);
+
 $('reviewMessage').textContent='Review জমা হয়নি: '+e.message;
 
 }finally{
+
 $('submitReview').disabled=false;
 $('submitReview').textContent='SUBMIT REVIEW';
+
 }
+
 };
 
 onAuthStateChanged(auth,async user=>{
+
 currentUser=user;
-if(productId)await checkReviewEligibility();
+
+if(productId&&product){
+
+await checkReviewEligibility();
+
+}
+
 });
 
-loadProduct();
+await loadProduct();
+
 </script>
 </body>
 </html>
