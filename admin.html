@@ -87,7 +87,15 @@ small,.hint{color:#64748b}.hint{font-size:12px;line-height:1.6}
 .payment-update-box{background:#fff7ed;border:1px solid #fed7aa;border-radius:11px;padding:12px;margin-top:10px}
 .payment-update-box label{margin-top:0}.payment-update-box button{width:100%;margin-top:8px}
 .search-panel{background:#f5f3ff;border:1px solid #ddd6fe;border-radius:14px;padding:14px;margin:12px 0}
-.search-result{margin-top:12px}
+
+/* Delivery Settings */
+.delivery-settings{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px;margin:14px 0}
+.delivery-region{background:#fff;border:1px solid #e2e8f0;border-radius:11px;padding:13px;margin:12px 0}
+.delivery-region h4{margin:0 0 8px;color:#7c2d12}
+.delivery-region input[type=number]{margin-bottom:4px}
+.delivery-free-switch{display:flex;align-items:center;gap:10px;background:#f8fafc;padding:11px;border-radius:9px;margin-top:9px}
+.delivery-free-switch input{width:20px;height:20px;margin:0}
+.delivery-free-switch label{margin:0}
 @media(min-width:700px){
 body{padding-bottom:20px}main{padding:24px}.stats{grid-template-columns:repeat(4,1fr)}
 .preview-grid{grid-template-columns:repeat(5,1fr)}
@@ -236,6 +244,36 @@ body{padding-bottom:20px}main{padding:24px}.stats{grid-template-columns:repeat(4
 </div>
 <button id="saveVariantSetting" class="green">Save Variant Settings</button>
 <p id="variantSettingMsg"></p>
+</div>
+
+<div class="card">
+<h3>🚚 Delivery Charge Settings</h3>
+<p class="hint">Dhaka Division এবং Outside Dhaka-এর Delivery Charge আলাদাভাবে নির্ধারণ করুন। Free Delivery চালু করলে ওই এলাকার Delivery Charge ৳0 হবে।</p>
+
+<div class="delivery-settings">
+<div class="delivery-region">
+<h4>📍 Dhaka Division</h4>
+<label for="dhakaCharge">Delivery Charge (৳)</label>
+<input id="dhakaCharge" type="number" min="0" step="1" placeholder="60">
+<div class="delivery-free-switch">
+<input type="checkbox" id="dhakaFree">
+<label for="dhakaFree">Dhaka-তে Free Delivery চালু করুন</label>
+</div>
+</div>
+
+<div class="delivery-region">
+<h4>📍 Outside Dhaka Division</h4>
+<label for="outsideCharge">Delivery Charge (৳)</label>
+<input id="outsideCharge" type="number" min="0" step="1" placeholder="80">
+<div class="delivery-free-switch">
+<input type="checkbox" id="outsideFree">
+<label for="outsideFree">Outside Dhaka-তে Free Delivery চালু করুন</label>
+</div>
+</div>
+</div>
+
+<button id="saveDeliverySettings" class="green" style="width:100%">💾 Save Delivery Settings</button>
+<p id="deliverySettingMsg"></p>
 </div>
 
 <div class="card">
@@ -388,6 +426,7 @@ if(view==='more'){
 loadNotices();
 loadAdminReviews();
 loadGlobalVariantSetting();
+loadDeliverySettings();
 }
 }
 
@@ -1240,6 +1279,68 @@ msg('paymentMsg','Payment settings saved.');
 }catch(e){msg('paymentMsg',e.message)}
 };
 
+/* Delivery Charge Settings */
+const DEFAULT_DELIVERY_SETTINGS={
+dhakaCharge:60,
+outsideCharge:80,
+dhakaFree:false,
+outsideFree:false
+};
+
+async function loadDeliverySettings(){
+try{
+const snap=await getDoc(doc(db,'storeSettings','deliverySettings'));
+const settings=snap.exists()?snap.data():DEFAULT_DELIVERY_SETTINGS;
+
+$('dhakaCharge').value=Number.isFinite(Number(settings.dhakaCharge))?Number(settings.dhakaCharge):60;
+$('outsideCharge').value=Number.isFinite(Number(settings.outsideCharge))?Number(settings.outsideCharge):80;
+$('dhakaFree').checked=settings.dhakaFree===true;
+$('outsideFree').checked=settings.outsideFree===true;
+
+msg('deliverySettingMsg','বর্তমান Delivery Settings লোড হয়েছে।');
+}catch(e){
+msg('deliverySettingMsg','Settings লোড হয়নি: '+e.message);
+}
+}
+
+$('saveDeliverySettings').onclick=async()=>{
+const dhakaText=$('dhakaCharge').value.trim();
+const outsideText=$('outsideCharge').value.trim();
+
+const dhakaCharge=Number(dhakaText);
+const outsideCharge=Number(outsideText);
+
+if(dhakaText===''||outsideText===''||
+!Number.isFinite(dhakaCharge)||!Number.isFinite(outsideCharge)||
+dhakaCharge<0||outsideCharge<0||
+!Number.isInteger(dhakaCharge)||!Number.isInteger(outsideCharge)){
+msg('deliverySettingMsg','দুই এলাকার Delivery Charge সঠিক পূর্ণসংখ্যা লিখুন।');
+return;
+}
+
+const btn=$('saveDeliverySettings');
+btn.disabled=true;
+btn.textContent='Saving...';
+
+try{
+await setDoc(doc(db,'storeSettings','deliverySettings'),{
+dhakaCharge,
+outsideCharge,
+dhakaFree:$('dhakaFree').checked,
+outsideFree:$('outsideFree').checked,
+updatedAt:serverTimestamp()
+},{merge:true});
+
+msg('deliverySettingMsg','✅ Delivery Settings সফলভাবে Save হয়েছে।');
+$('recentActivity').textContent='🚚 Delivery Charge Settings Update করা হয়েছে।';
+}catch(e){
+msg('deliverySettingMsg','Save হয়নি: '+e.message);
+}finally{
+btn.disabled=false;
+btn.textContent='💾 Save Delivery Settings';
+}
+};
+
 /* Global variants */
 async function loadGlobalVariantSetting(){
 try{
@@ -1364,7 +1465,13 @@ $('adminReviews').textContent='Reviews লোড হয়নি: '+e.message;
 /* Load */
 async function loadData(){
 try{
-await Promise.all([loadProducts(),loadNotices(),loadAdminReviews(),loadGlobalVariantSetting()]);
+await Promise.all([
+loadProducts(),
+loadNotices(),
+loadAdminReviews(),
+loadGlobalVariantSetting(),
+loadDeliverySettings()
+]);
 const p=await getDoc(doc(db,'storeSettings','paymentMethods'));
 if(p.exists()){
 $('bkashNumber').value=p.data().bkashNumber||'';
