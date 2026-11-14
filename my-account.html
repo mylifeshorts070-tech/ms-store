@@ -241,6 +241,7 @@ button:disabled{
   font-size:13px;
   color:#625b70;
   margin:7px 0;
+  overflow-wrap:anywhere;
 }
 .order strong{color:var(--text)}
 .order-actions{
@@ -467,7 +468,6 @@ const db = getFirestore(app);
 const $ = id => document.getElementById(id);
 
 let currentUser = null;
-let authReady = false;
 let persistenceReady = false;
 let accountLoadToken = 0;
 let isSubmitting = false;
@@ -562,6 +562,56 @@ async function getCustomerProfile(user) {
   }
 
   return profileSnap.data();
+}
+
+
+/* ORDER TOTAL FIX */
+function getOrderTotal(order) {
+  const possibleTotals = [
+    order.totalPrice,
+    order.total,
+    order.grandTotal,
+    order.amount,
+    order.finalAmount
+  ];
+
+  for (const value of possibleTotals) {
+    if (
+      value !== undefined &&
+      value !== null &&
+      value !== "" &&
+      Number.isFinite(Number(value))
+    ) {
+      return Number(value);
+    }
+  }
+
+  const subtotal = Number(order.subtotal);
+  const deliveryCharge = Number(order.deliveryCharge);
+
+  if (
+    Number.isFinite(subtotal) &&
+    Number.isFinite(deliveryCharge) &&
+    (order.subtotal !== undefined || order.deliveryCharge !== undefined)
+  ) {
+    return subtotal + deliveryCharge;
+  }
+
+  return 0;
+}
+
+
+/* SUPPORT BOTH products AND items */
+function getOrderItems(order) {
+  if (Array.isArray(order.products) && order.products.length) {
+    return order.products;
+  }
+
+  if (Array.isArray(order.items) && order.items.length) {
+    return order.items;
+  }
+
+  return [];
 }
 
 
@@ -689,17 +739,25 @@ function createOrderElement(order) {
     ? order.createdAt.toDate().toLocaleString()
     : "Date unavailable";
 
-  const total = Number(order.total || 0);
+  /* FIX: Read the actual amount saved by checkout/admin */
+  const total = getOrderTotal(order);
 
-  let itemsText = "";
+  /* FIX: Admin order data uses products, not only items */
+  const orderItems = getOrderItems(order);
 
-  if (Array.isArray(order.items)) {
-    itemsText = order.items.map(item => {
-      const name = escapeHTML(item.name || item.title || "Product");
-      const quantity = Number(item.quantity || 1);
-      return `${name} × ${quantity}`;
-    }).join("<br>");
-  }
+  const itemsText = orderItems.map(item => {
+    const name = escapeHTML(
+      item.productName || item.name || item.title || "Product"
+    );
+
+    const quantity = Number(item.quantity || 1);
+
+    const variant = item.variantLabel
+      ? ` (${escapeHTML(item.variantLabel)}: ${escapeHTML(item.variantValue || "")})`
+      : "";
+
+    return `${name}${variant} × ${quantity}`;
+  }).join("<br>");
 
   const canCancel = ["New", "Pending"].includes(status);
 
@@ -1140,8 +1198,6 @@ async function startApp() {
         );
       }
     });
-
-    authReady = true;
 
   } catch (error) {
     console.error("Firebase initialization error:", error);
