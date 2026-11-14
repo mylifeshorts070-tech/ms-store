@@ -225,6 +225,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 <footer>© MS STORE. All rights reserved.</footer>
 
 <script type="module">
+
 import { initializeApp } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
@@ -270,10 +271,15 @@ let paymentSettings = {};
 let variantSettings = {};
 
 let authResolve;
+
 const authPromise = new Promise(resolve => {
   authResolve = resolve;
 });
 
+
+/* ==============================
+   MESSAGE HELPERS
+============================== */
 
 function showMessage(element, message, type = "info") {
   element.textContent = message;
@@ -289,13 +295,37 @@ function money(value) {
   return "৳" + Number(value || 0).toLocaleString("en-BD");
 }
 
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
+
+
+/* ==============================
+   CART MANAGEMENT
+============================== */
+
 function getCartObject() {
   try {
-    const value = JSON.parse(localStorage.getItem("msCart") || "{}");
-    if (Array.isArray(value) || !value || typeof value !== "object") {
+    const value = JSON.parse(
+      localStorage.getItem("msCart") || "{}"
+    );
+
+    if (
+      Array.isArray(value) ||
+      !value ||
+      typeof value !== "object"
+    ) {
       return {};
     }
+
     return value;
+
   } catch {
     return {};
   }
@@ -330,21 +360,38 @@ function normalizeCartEntry(key, raw) {
       variantLabel: "",
       variantValue: "",
       price: null,
-      quantity: Math.max(0, Number(raw) || 0)
+      quantity: Math.max(0, Number(raw) || 0),
+      name: "",
+      image: ""
     };
   }
 
-  if (!raw || typeof raw !== "object") return null;
+  if (!raw || typeof raw !== "object") {
+    return null;
+  }
 
   return {
-    productId: String(raw.productId || raw.id || parts[0] || ""),
-    variantId: String(raw.variantId || parts[1] || ""),
+    productId: String(
+      raw.productId || raw.id || parts[0] || ""
+    ),
+
+    variantId: String(
+      raw.variantId || parts[1] || ""
+    ),
+
     variantLabel: String(raw.variantLabel || ""),
     variantValue: String(raw.variantValue || ""),
-    price: raw.price === undefined || raw.price === null
-      ? null
-      : Number(raw.price),
-    quantity: Math.max(0, Number(raw.quantity || 0)),
+
+    price:
+      raw.price === undefined || raw.price === null
+        ? null
+        : Number(raw.price),
+
+    quantity: Math.max(
+      0,
+      Number(raw.quantity || 0)
+    ),
+
     name: String(raw.name || raw.title || ""),
     image: String(raw.image || raw.imageUrl || "")
   };
@@ -357,31 +404,57 @@ function loadCheckoutItems() {
 
   cartItems = Object.entries(rawCart)
     .map(([key, raw]) => normalizeCartEntry(key, raw))
-    .filter(item => item && item.productId && item.quantity > 0);
+    .filter(item =>
+      item &&
+      item.productId &&
+      item.quantity > 0
+    );
 
   if (!cartItems.length) {
-    throw new Error("Your cart is empty. Please add products first.");
+    throw new Error(
+      "Your cart is empty. Please add products first."
+    );
   }
 
   renderCart();
 }
 
+
+/* ==============================
+   DELIVERY & TOTALS
+============================== */
+
 function getSubtotal() {
   return cartItems.reduce((sum, item) => {
-    return sum + Number(item.price || 0) * Number(item.quantity || 0);
+    return sum +
+      Number(item.price || 0) *
+      Number(item.quantity || 0);
   }, 0);
 }
 
 function getDeliveryCharge() {
-  const city = $("customerCity").value.trim().toLowerCase();
+  const city = $("customerCity").value
+    .trim()
+    .toLowerCase();
 
-  // Current MS STORE delivery policy.
-  if (city.includes("dhaka")) return 70;
+  if (city.includes("dhaka")) {
+    return 70;
+  }
+
   return 120;
 }
 
 function getTotal() {
   return getSubtotal() + getDeliveryCharge();
+}
+
+function updateTotals() {
+  $("subtotal").textContent = money(getSubtotal());
+
+  $("deliveryCharge").textContent =
+    money(getDeliveryCharge());
+
+  $("grandTotal").textContent = money(getTotal());
 }
 
 function renderCart() {
@@ -394,6 +467,7 @@ function renderCart() {
         <a href="index.html">Continue shopping</a>
       </p>
     `;
+
     updateTotals();
     return;
   }
@@ -409,12 +483,20 @@ function renderCart() {
           <div class="product-name">
             ${escapeHTML(item.name || "Product")}
           </div>
+
           <div class="product-meta">
-            ${variantText ? escapeHTML(variantText) + " · " : ""}
+            ${variantText
+              ? escapeHTML(variantText) + " · "
+              : ""}
             Qty: ${Number(item.quantity)}
           </div>
         </div>
-        <strong>${money(Number(item.price || 0) * item.quantity)}</strong>
+
+        <strong>
+          ${money(
+            Number(item.price || 0) * item.quantity
+          )}
+        </strong>
       </div>
     `;
   }).join("");
@@ -422,29 +504,21 @@ function renderCart() {
   updateTotals();
 }
 
-function updateTotals() {
-  $("subtotal").textContent = money(getSubtotal());
-  $("deliveryCharge").textContent = money(getDeliveryCharge());
-  $("grandTotal").textContent = money(getTotal());
-}
+$("customerCity").addEventListener(
+  "input",
+  updateTotals
+);
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  })[char]);
-}
 
-$("customerCity").addEventListener("input", updateTotals);
-
+/* ==============================
+   PAYMENT METHOD
+============================== */
 
 function setPaymentMethod(method) {
-  document.querySelectorAll(".payment-option").forEach(option => {
-    option.classList.remove("selected");
-  });
+  document.querySelectorAll(".payment-option")
+    .forEach(option => {
+      option.classList.remove("selected");
+    });
 
   const selected = document.querySelector(
     `input[name="paymentMethod"][value="${method}"]`
@@ -452,20 +526,27 @@ function setPaymentMethod(method) {
 
   if (selected) {
     selected.checked = true;
-    selected.closest(".payment-option").classList.add("selected");
+
+    selected.closest(".payment-option")
+      .classList.add("selected");
   }
 
-  const mobilePayment = method === "bKash" || method === "Nagad";
+  const mobilePayment =
+    method === "bKash" || method === "Nagad";
 
-  $("mobilePaymentDetails").classList.toggle("hidden", !mobilePayment);
+  $("mobilePaymentDetails")
+    .classList.toggle("hidden", !mobilePayment);
 
   if (mobilePayment) {
     const setting = paymentSettings[method] || {};
 
-    const number = setting.number ||
-      setting.accountNumber || "Contact store";
+    const number =
+      setting.number ||
+      setting.accountNumber ||
+      "Contact store";
 
-    const instructions = setting.instructions ||
+    const instructions =
+      setting.instructions ||
       `Send the payment using ${method} and enter your Transaction ID below.`;
 
     $("paymentInstructions").textContent =
@@ -473,12 +554,18 @@ function setPaymentMethod(method) {
   }
 }
 
-document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
+document.querySelectorAll(
+  'input[name="paymentMethod"]'
+).forEach(input => {
   input.addEventListener("change", () => {
     setPaymentMethod(input.value);
   });
 });
 
+
+/* ==============================
+   STORE SETTINGS
+============================== */
 
 async function loadStoreSettings() {
   try {
@@ -489,8 +576,12 @@ async function loadStoreSettings() {
     if (paymentSnap.exists()) {
       paymentSettings = paymentSnap.data() || {};
     }
+
   } catch (error) {
-    console.warn("Payment settings unavailable:", error);
+    console.warn(
+      "Payment settings unavailable:",
+      error
+    );
   }
 
   try {
@@ -501,11 +592,19 @@ async function loadStoreSettings() {
     if (variantSnap.exists()) {
       variantSettings = variantSnap.data() || {};
     }
+
   } catch (error) {
-    console.warn("Variant settings unavailable:", error);
+    console.warn(
+      "Variant settings unavailable:",
+      error
+    );
   }
 }
 
+
+/* ==============================
+   CUSTOMER PROFILE
+============================== */
 
 async function loadCustomerProfile(user) {
   const snap = await getDoc(
@@ -513,19 +612,27 @@ async function loadCustomerProfile(user) {
   );
 
   if (!snap.exists()) {
-    throw new Error("Customer profile not found. Please contact support.");
+    throw new Error(
+      "Customer profile not found. Please contact support."
+    );
   }
 
   const profile = snap.data();
 
   if (profile.banned === true) {
-    throw new Error("This account is restricted.");
+    throw new Error(
+      "This account is restricted."
+    );
   }
 
   $("customerName").value = profile.name || "";
   $("customerPhone").value = profile.phone || "";
 }
 
+
+/* ==============================
+   VALIDATION
+============================== */
 
 function getSelectedPaymentMethod() {
   return document.querySelector(
@@ -538,62 +645,112 @@ function validateCheckout() {
   const phone = $("customerPhone").value.trim();
   const address = $("customerAddress").value.trim();
   const city = $("customerCity").value.trim();
+
   const method = getSelectedPaymentMethod();
+
   const trxId = $("transactionId").value.trim();
 
   if (name.length < 2) {
-    throw new Error("Please enter your full name.");
+    throw new Error(
+      "Please enter your full name."
+    );
   }
 
   if (phone.length < 6) {
-    throw new Error("Please enter a valid phone number.");
+    throw new Error(
+      "Please enter a valid phone number."
+    );
   }
 
   if (address.length < 5) {
-    throw new Error("Please enter your full delivery address.");
+    throw new Error(
+      "Please enter your full delivery address."
+    );
   }
 
   if (city.length < 2) {
-    throw new Error("Please enter your district or city.");
+    throw new Error(
+      "Please enter your district or city."
+    );
   }
 
   if (!cartItems.length) {
-    throw new Error("Your cart is empty.");
+    throw new Error(
+      "Your cart is empty."
+    );
+  }
+
+  if (
+    !["Cash on Delivery", "bKash", "Nagad"].includes(method)
+  ) {
+    throw new Error(
+      "Invalid payment method."
+    );
   }
 
   if (method !== "Cash on Delivery") {
-    if (trxId.length < 6 || trxId.length > 40) {
-      throw new Error("Please enter a valid Transaction ID.");
-    }
-
-    if (!/^[A-Za-z0-9]+$/.test(trxId)) {
-      throw new Error("Transaction ID must contain letters and numbers only.");
+    if (
+      trxId.length < 6 ||
+      trxId.length > 40 ||
+      !/^[A-Za-z0-9]+$/.test(trxId)
+    ) {
+      throw new Error(
+        "Please enter a valid Transaction ID."
+      );
     }
   }
 
-  return { name, phone, address, city, method, trxId };
+  return {
+    name,
+    phone,
+    address,
+    city,
+    method,
+    trxId
+  };
 }
 
 
+/* ==============================
+   ORDER HELPERS
+============================== */
+
 function createOrderNumber() {
-  return "MS" + Date.now().toString().slice(-9);
+  const randomPart = Math.floor(
+    100000 + Math.random() * 900000
+  );
+
+  return "MS" + Date.now() + randomPart;
 }
 
 function getVariant(product, variantId) {
   if (!variantId) return null;
 
-  if (!Array.isArray(product.variants)) return null;
+  if (!Array.isArray(product.variants)) {
+    return null;
+  }
 
-  return product.variants.find(v => String(v.id) === String(variantId)) || null;
+  return product.variants.find(
+    v => String(v.id) === String(variantId)
+  ) || null;
 }
 
 function getCurrentItemPrice(product, variant) {
-  if (variant && variant.price !== undefined && variant.price !== null) {
+  if (
+    variant &&
+    variant.price !== undefined &&
+    variant.price !== null
+  ) {
     return Number(variant.price);
   }
+
   return Number(product.price);
 }
 
+
+/* ==============================
+   PLACE ORDER
+============================== */
 
 async function placeOrder() {
   if (placingOrder) return;
@@ -601,42 +758,71 @@ async function placeOrder() {
   placingOrder = true;
 
   const button = $("placeOrderButton");
+
   button.disabled = true;
   button.textContent = "Processing Order...";
 
   clearMessage($("checkoutMessage"));
 
   try {
-    if (!currentUser || auth.currentUser?.uid !== currentUser.uid) {
-      throw new Error("Please login before placing your order.");
+
+    if (
+      !currentUser ||
+      auth.currentUser?.uid !== currentUser.uid
+    ) {
+      throw new Error(
+        "Please login before placing your order."
+      );
     }
 
     if (!currentUser.emailVerified) {
-      throw new Error("Please verify your email before placing your order.");
+      throw new Error(
+        "Please verify your email before placing your order."
+      );
     }
 
     const customer = validateCheckout();
 
     const orderNumber = createOrderNumber();
-    const orderRef = doc(collection(db, "orders"));
-    const trackingRef = doc(db, "orderTracking", orderNumber);
+
+    // Firestore document ID must match orderData.orderId.
+    const orderRef = doc(
+      db,
+      "orders",
+      orderNumber
+    );
+
+    const trackingRef = doc(
+      db,
+      "orderTracking",
+      orderNumber
+    );
 
     const delivery = getDeliveryCharge();
-    const paymentStatus = customer.method === "Cash on Delivery"
-      ? "Pending"
-      : "Unverified";
 
-    const transactionRef = customer.method === "Cash on Delivery"
-      ? null
-      : doc(db, "usedTransactionIds", customer.trxId);
+    const paymentStatus =
+      customer.method === "Cash on Delivery"
+        ? "Pending"
+        : "Unverified";
 
-    // Group cart items by product so each product is read only once.
+    const transactionRef =
+      customer.method === "Cash on Delivery"
+        ? null
+        : doc(
+            db,
+            "usedTransactionIds",
+            customer.trxId
+          );
+
+
+    // Group items by product.
     const grouped = new Map();
 
     for (const item of cartItems) {
       if (!grouped.has(item.productId)) {
         grouped.set(item.productId, []);
       }
+
       grouped.get(item.productId).push(item);
     }
 
@@ -649,74 +835,120 @@ async function placeOrder() {
       );
     }
 
-    let verifiedSubtotal = 0;
+
     let finalItems = [];
+    let verifiedSubtotal = 0;
+
 
     await runTransaction(db, async transaction => {
+
       const productSnapshots = new Map();
 
-      // All reads happen before writes.
+      // All Firestore reads happen before writes.
       for (const [productId, productRef] of productRefs) {
-        const productSnap = await transaction.get(productRef);
+
+        const productSnap = await transaction.get(
+          productRef
+        );
 
         if (!productSnap.exists()) {
-          throw new Error("One of your products is no longer available.");
+          throw new Error(
+            "One of your products is no longer available."
+          );
         }
 
-        productSnapshots.set(productId, productSnap.data());
+        productSnapshots.set(
+          productId,
+          productSnap.data()
+        );
       }
 
+
+      // Check duplicate Transaction ID.
       if (transactionRef) {
-        const trxSnap = await transaction.get(transactionRef);
+        const trxSnap = await transaction.get(
+          transactionRef
+        );
 
         if (trxSnap.exists()) {
-          throw new Error("This Transaction ID has already been used.");
+          throw new Error(
+            "This Transaction ID has already been used."
+          );
         }
       }
 
-      const stockUpdates = new Map();
+
       finalItems = [];
       verifiedSubtotal = 0;
 
+
+      // Validate every product and variant.
       for (const [productId, items] of grouped) {
+
         const product = productSnapshots.get(productId);
-        const productRef = productRefs.get(productId);
 
         if (product.active === false) {
-          throw new Error(`${product.name || "A product"} is unavailable.`);
+          throw new Error(
+            `${product.name || "A product"} is unavailable.`
+          );
         }
 
-        let variants = Array.isArray(product.variants)
-          ? product.variants.map(v => ({ ...v }))
+        const variants = Array.isArray(product.variants)
+          ? product.variants
           : [];
 
-        let normalStock = Number(product.stock ?? 0);
+        let normalStock = Number(
+          product.stock ?? 0
+        );
+
 
         for (const item of items) {
+
           const quantity = Number(item.quantity);
 
-          if (!Number.isInteger(quantity) || quantity < 1) {
-            throw new Error("Invalid product quantity.");
+          if (
+            !Number.isInteger(quantity) ||
+            quantity < 1
+          ) {
+            throw new Error(
+              "Invalid product quantity."
+            );
           }
 
+
           const variant = item.variantId
-            ? variants.find(v => String(v.id) === String(item.variantId))
+            ? getVariant(product, item.variantId)
             : null;
 
           if (item.variantId && !variant) {
-            throw new Error("A selected product variant is no longer available.");
+            throw new Error(
+              "A selected product variant is no longer available."
+            );
           }
 
           if (variant && variant.active === false) {
-            throw new Error("A selected product variant is unavailable.");
+            throw new Error(
+              "A selected product variant is unavailable."
+            );
           }
 
-          const currentPrice = getCurrentItemPrice(product, variant);
 
-          if (!Number.isFinite(currentPrice) || currentPrice <= 0) {
-            throw new Error("A product has an invalid current price.");
+          const currentPrice = getCurrentItemPrice(
+            product,
+            variant
+          );
+
+          if (
+            !Number.isFinite(currentPrice) ||
+            currentPrice <= 0
+          ) {
+            throw new Error(
+              "A product has an invalid current price."
+            );
           }
 
+
+          // Check price against current Firestore price.
           if (
             item.price !== null &&
             Number(item.price) !== currentPrice
@@ -726,17 +958,23 @@ async function placeOrder() {
             );
           }
 
-          if (variant) {
-            const stock = Math.max(0, Number(variant.stock ?? 0));
 
-            if (stock < quantity) {
+          // Validate available stock.
+          if (variant) {
+
+            const variantStock = Math.max(
+              0,
+              Number(variant.stock ?? 0)
+            );
+
+            if (variantStock < quantity) {
               throw new Error(
-                `${product.name || "Product"} has insufficient variant stock.`
+                `${product.name || "Product"} has insufficient variant stock. Available: ${variantStock}`
               );
             }
 
-            variant.stock = stock - quantity;
           } else {
+
             if (normalStock < quantity) {
               throw new Error(
                 `${product.name || "Product"} has insufficient stock. Available: ${normalStock}`
@@ -746,34 +984,44 @@ async function placeOrder() {
             normalStock -= quantity;
           }
 
-          verifiedSubtotal += currentPrice * quantity;
+
+          verifiedSubtotal +=
+            currentPrice * quantity;
+
 
           finalItems.push({
             id: productId,
             productId,
-            name: product.name || item.name || "Product",
+
+            name: product.name ||
+              item.name ||
+              "Product",
+
             price: currentPrice,
             quantity,
+
             variantId: item.variantId || "",
             variantLabel: item.variantLabel || "",
             variantValue: item.variantValue || "",
+
             variant: item.variantLabel
               ? `${item.variantLabel}: ${item.variantValue}`
               : "",
-            image: product.imageUrl || product.image || item.image || ""
+
+            image:
+              product.imageUrl ||
+              product.image ||
+              item.image ||
+              ""
           });
         }
-
-        stockUpdates.set(productId, {
-          ref: productRef,
-          normalStock,
-          variants,
-          hadVariants: Array.isArray(product.variants),
-          normalStockChanged: items.some(item => !item.variantId)
-        });
       }
 
-      const verifiedTotal = verifiedSubtotal + delivery;
+
+      // Recalculate total using current product prices.
+      const verifiedTotal =
+        verifiedSubtotal + delivery;
+
 
       const orderData = {
         orderId: orderNumber,
@@ -793,9 +1041,10 @@ async function placeOrder() {
         paymentMethod: customer.method,
         paymentStatus,
 
-        transactionId: customer.method === "Cash on Delivery"
-          ? ""
-          : customer.trxId,
+        transactionId:
+          customer.method === "Cash on Delivery"
+            ? ""
+            : customer.trxId,
 
         note: $("orderNote").value.trim(),
 
@@ -803,40 +1052,41 @@ async function placeOrder() {
         createdAt: serverTimestamp()
       };
 
-      transaction.set(orderRef, orderData);
 
-      transaction.set(trackingRef, {
-        orderId: orderNumber,
-        status: "Pending",
-        updatedAt: serverTimestamp()
-      });
+      // Create order.
+      transaction.set(
+        orderRef,
+        orderData
+      );
 
-      if (transactionRef) {
-        transaction.set(transactionRef, {
-          uid: currentUser.uid,
+
+      // Create order tracking.
+      transaction.set(
+        trackingRef,
+        {
           orderId: orderNumber,
-          createdAt: serverTimestamp()
-        });
-      }
-
-      for (const update of stockUpdates.values()) {
-        const data = {
+          status: "Pending",
           updatedAt: serverTimestamp()
-        };
-
-        if (update.normalStockChanged) {
-          data.stock = update.normalStock;
         }
+      );
 
-        if (update.hadVariants) {
-          data.variants = update.variants;
-        }
 
-        transaction.update(update.ref, data);
+      // Reserve Transaction ID.
+      if (transactionRef) {
+        transaction.set(
+          transactionRef,
+          {
+            uid: currentUser.uid,
+            orderId: orderNumber,
+            createdAt: serverTimestamp()
+          }
+        );
       }
+
     });
 
-    // Restore the customer's previous cart after a successful Buy Now.
+
+    // Successful order: restore previous cart for Buy Now.
     if (buyNowMode) {
       restoreOriginalCart();
     } else {
@@ -844,6 +1094,7 @@ async function placeOrder() {
     }
 
     cartItems = [];
+
     renderCart();
 
     showMessage(
@@ -858,12 +1109,18 @@ async function placeOrder() {
       window.location.href = "my-account.html";
     }, 1800);
 
+
   } catch (error) {
-    console.error("Order placement error:", error);
+
+    console.error(
+      "Order placement error:",
+      error
+    );
 
     showMessage(
       $("checkoutMessage"),
-      error.message || "Unable to place your order. Please try again.",
+      error.message ||
+        "Unable to place your order. Please try again.",
       "error"
     );
 
@@ -875,53 +1132,90 @@ async function placeOrder() {
   }
 }
 
-$("placeOrderButton").addEventListener("click", placeOrder);
 
+$("placeOrderButton").addEventListener(
+  "click",
+  placeOrder
+);
+
+
+/* ==============================
+   CHECKOUT INITIALIZATION
+============================== */
 
 async function startCheckout() {
+
   try {
-    await setPersistence(auth, browserLocalPersistence);
+
+    await setPersistence(
+      auth,
+      browserLocalPersistence
+    );
 
     onAuthStateChanged(auth, user => {
       currentUser = user;
       authResolve(user);
     });
 
+
     await loadStoreSettings();
 
     const user = await authPromise;
 
+
     if (!user) {
-      localStorage.setItem("msCheckoutRequested", "true");
+      localStorage.setItem(
+        "msCheckoutRequested",
+        "true"
+      );
+
       window.location.href = "my-account.html";
       return;
     }
+
 
     if (!user.emailVerified) {
-      localStorage.setItem("msCheckoutRequested", "true");
+      localStorage.setItem(
+        "msCheckoutRequested",
+        "true"
+      );
+
       window.location.href = "my-account.html";
       return;
     }
 
+
     await loadCustomerProfile(user);
+
     loadCheckoutItems();
 
-    localStorage.removeItem("msCheckoutRequested");
+    localStorage.removeItem(
+      "msCheckoutRequested"
+    );
 
-    setPaymentMethod("Cash on Delivery");
+    setPaymentMethod(
+      "Cash on Delivery"
+    );
+
 
   } catch (error) {
-    console.error("Checkout initialization error:", error);
+
+    console.error(
+      "Checkout initialization error:",
+      error
+    );
 
     showMessage(
       $("pageMessage"),
-      error.message || "Unable to load checkout.",
+      error.message ||
+        "Unable to load checkout.",
       "error"
     );
 
     $("placeOrderButton").disabled = true;
   }
 }
+
 
 startCheckout();
 
