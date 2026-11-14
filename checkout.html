@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -19,29 +20,21 @@
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
+  margin:0;background:var(--bg);color:var(--text);
   font-family:Arial,sans-serif;
 }
 header{
   background:linear-gradient(110deg,var(--dark),var(--purple));
-  color:#fff;
-  padding:16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  color:#fff;padding:16px;display:flex;
+  align-items:center;justify-content:space-between;
 }
 .logo{font-size:22px;font-weight:900}
 .logo span{color:#fb923c}
 header a{color:#fff;text-decoration:none;font-size:13px}
 .container{max-width:900px;margin:22px auto;padding:0 14px 40px}
 .card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:20px;
-  margin-bottom:16px;
+  background:#fff;border:1px solid var(--border);
+  border-radius:15px;padding:20px;margin-bottom:16px;
   box-shadow:0 5px 18px #4c1d9508;
 }
 h2{font-size:20px;margin:0 0 16px}
@@ -49,101 +42,63 @@ h3{font-size:16px;margin:0 0 12px}
 label{display:block;font-size:13px;font-weight:bold;margin-bottom:7px}
 .field{margin-bottom:14px}
 input,textarea,select{
-  width:100%;
-  padding:13px;
-  border:1px solid #ddd5eb;
-  border-radius:9px;
-  font-size:14px;
-  outline:none;
-  background:#fff;
+  width:100%;padding:13px;border:1px solid #ddd5eb;
+  border-radius:9px;font-size:14px;outline:none;background:#fff;
 }
 input:focus,textarea:focus,select:focus{
-  border-color:var(--purple);
-  box-shadow:0 0 0 3px #6d28d91a;
+  border-color:var(--purple);box-shadow:0 0 0 3px #6d28d91a;
 }
 textarea{min-height:85px;resize:vertical}
 button{
-  border:0;
-  border-radius:9px;
-  padding:13px 16px;
-  font-size:14px;
-  font-weight:bold;
-  cursor:pointer;
+  border:0;border-radius:9px;padding:13px 16px;
+  font-size:14px;font-weight:bold;cursor:pointer;
 }
 button:disabled{opacity:.55;cursor:not-allowed}
 .primary{
-  width:100%;
-  color:#fff;
+  width:100%;color:#fff;
   background:linear-gradient(110deg,var(--purple),var(--dark));
 }
 .secondary{
-  color:#c2410c;
-  background:#fff7ed;
-  border:1px solid #fed7aa;
+  color:#c2410c;background:#fff7ed;border:1px solid #fed7aa;
 }
 .message{
-  display:none;
-  padding:12px;
-  border-radius:9px;
-  margin-bottom:14px;
-  font-size:13px;
-  line-height:1.5;
+  display:none;padding:12px;border-radius:9px;
+  margin-bottom:14px;font-size:13px;line-height:1.5;
 }
 .message.error{display:block;background:#fee2e2;color:#991b1b}
 .message.success{display:block;background:#dcfce7;color:#166534}
 .message.info{display:block;background:#ede9fe;color:#5b21b6}
 .hidden{display:none!important}
 .product-row{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  padding:12px 0;
-  border-bottom:1px solid var(--border);
+  display:flex;justify-content:space-between;gap:12px;
+  padding:12px 0;border-bottom:1px solid var(--border);
   font-size:13px;
 }
 .product-row:last-child{border-bottom:0}
 .product-name{font-weight:bold}
 .product-meta{color:var(--muted);margin-top:5px}
 .total-row{
-  display:flex;
-  justify-content:space-between;
-  padding:9px 0;
-  font-size:14px;
+  display:flex;justify-content:space-between;
+  padding:9px 0;font-size:14px;
 }
 .grand-total{
   border-top:1px solid var(--border);
-  margin-top:8px;
-  padding-top:15px;
-  font-size:18px;
-  font-weight:900;
+  margin-top:8px;padding-top:15px;font-size:18px;font-weight:900;
 }
 .payment-option{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  padding:13px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  margin-bottom:9px;
-  cursor:pointer;
+  display:flex;gap:10px;align-items:center;
+  padding:13px;border:1px solid var(--border);
+  border-radius:10px;margin-bottom:9px;cursor:pointer;
 }
 .payment-option input{width:auto}
 .payment-option.selected{
-  border-color:var(--purple);
-  background:#f5f0ff;
+  border-color:var(--purple);background:#f5f0ff;
 }
 .payment-details{
-  background:#faf8ff;
-  border:1px solid var(--border);
-  padding:14px;
-  border-radius:10px;
-  margin:12px 0;
-  font-size:13px;
-  line-height:1.7;
+  background:#faf8ff;border:1px solid var(--border);
+  padding:14px;border-radius:10px;margin:12px 0;
+  font-size:13px;line-height:1.7;
 }
-.copy-row{display:flex;gap:8px;align-items:center}
-.copy-row input{flex:1}
-.copy-row button{padding:11px;background:#ede9fe;color:var(--dark)}
 .note{font-size:12px;color:var(--muted);line-height:1.6}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 @media(max-width:520px){
@@ -246,7 +201,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 
       <p class="note">
         Your mobile payment will remain Unverified until MS STORE
-        checks the transaction. Do not enter a transaction ID unless
+        checks the transaction. Do not enter a Transaction ID unless
         you have completed the payment.
       </p>
     </div>
@@ -271,7 +226,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
 
 <script type="module">
 import { initializeApp } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth,
@@ -279,7 +234,7 @@ import {
   browserLocalPersistence,
   onAuthStateChanged
 } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
   getFirestore,
@@ -289,7 +244,7 @@ import {
   runTransaction,
   serverTimestamp
 } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -310,12 +265,11 @@ const $ = id => document.getElementById(id);
 let currentUser = null;
 let cartItems = [];
 let buyNowMode = false;
-let checkoutReady = false;
 let placingOrder = false;
 let paymentSettings = {};
 let variantSettings = {};
-let authResolve;
 
+let authResolve;
 const authPromise = new Promise(resolve => {
   authResolve = resolve;
 });
@@ -335,74 +289,100 @@ function money(value) {
   return "৳" + Number(value || 0).toLocaleString("en-BD");
 }
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  })[char]);
-}
-
-function getCart() {
+function getCartObject() {
   try {
-    return JSON.parse(localStorage.getItem("msCart") || "[]");
+    const value = JSON.parse(localStorage.getItem("msCart") || "{}");
+    if (Array.isArray(value) || !value || typeof value !== "object") {
+      return {};
+    }
+    return value;
   } catch {
-    return [];
+    return {};
   }
 }
 
-function saveCart(items) {
-  localStorage.setItem("msCart", JSON.stringify(items));
+function getBuyNowMode() {
+  return localStorage.getItem("msBuyNowMode") === "1";
 }
 
-function getBuyNowData() {
-  try {
-    return JSON.parse(localStorage.getItem("msBuyNowMode") || "null");
-  } catch {
-    return null;
+function restoreOriginalCart() {
+  const backup = localStorage.getItem("msCartBackup");
+
+  if (backup !== null) {
+    localStorage.setItem("msCart", backup);
   }
-}
 
-function clearBuyNowData() {
+  localStorage.removeItem("msCartBackup");
   localStorage.removeItem("msBuyNowMode");
 }
 
+function clearNormalCart() {
+  localStorage.setItem("msCart", "{}");
+}
 
-function normalizeItem(item) {
+function normalizeCartEntry(key, raw) {
+  const parts = String(key).split("__");
+
+  if (typeof raw === "number") {
+    return {
+      productId: parts[0],
+      variantId: parts[1] || "",
+      variantLabel: "",
+      variantValue: "",
+      price: null,
+      quantity: Math.max(0, Number(raw) || 0)
+    };
+  }
+
+  if (!raw || typeof raw !== "object") return null;
+
   return {
-    ...item,
-    id: String(item.id || item.productId || ""),
-    name: String(item.name || item.title || "Product"),
-    quantity: Math.max(1, Number(item.quantity || 1)),
-    price: Number(item.price || 0),
-    variant: item.variant || "",
-    image: item.image || item.imageUrl || ""
+    productId: String(raw.productId || raw.id || parts[0] || ""),
+    variantId: String(raw.variantId || parts[1] || ""),
+    variantLabel: String(raw.variantLabel || ""),
+    variantValue: String(raw.variantValue || ""),
+    price: raw.price === undefined || raw.price === null
+      ? null
+      : Number(raw.price),
+    quantity: Math.max(0, Number(raw.quantity || 0)),
+    name: String(raw.name || raw.title || ""),
+    image: String(raw.image || raw.imageUrl || "")
   };
 }
 
+function loadCheckoutItems() {
+  const rawCart = getCartObject();
+
+  buyNowMode = getBuyNowMode();
+
+  cartItems = Object.entries(rawCart)
+    .map(([key, raw]) => normalizeCartEntry(key, raw))
+    .filter(item => item && item.productId && item.quantity > 0);
+
+  if (!cartItems.length) {
+    throw new Error("Your cart is empty. Please add products first.");
+  }
+
+  renderCart();
+}
 
 function getSubtotal() {
   return cartItems.reduce((sum, item) => {
-    return sum + (Number(item.price) * Number(item.quantity));
+    return sum + Number(item.price || 0) * Number(item.quantity || 0);
   }, 0);
 }
-
 
 function getDeliveryCharge() {
   const city = $("customerCity").value.trim().toLowerCase();
 
-  // Default delivery fee. Change this according to your store policy.
+  // Current MS STORE delivery policy.
   if (city.includes("dhaka")) return 70;
   return 120;
 }
 
-
 function getTotal() {
   return getSubtotal() + getDeliveryCharge();
 }
-
 
 function renderCart() {
   const container = $("cartItems");
@@ -418,22 +398,29 @@ function renderCart() {
     return;
   }
 
-  container.innerHTML = cartItems.map(item => `
-    <div class="product-row">
-      <div>
-        <div class="product-name">${escapeHTML(item.name)}</div>
-        <div class="product-meta">
-          ${item.variant ? escapeHTML(item.variant) + " · " : ""}
-          Qty: ${Number(item.quantity)}
+  container.innerHTML = cartItems.map(item => {
+    const variantText = item.variantLabel
+      ? `${item.variantLabel}: ${item.variantValue}`
+      : "";
+
+    return `
+      <div class="product-row">
+        <div>
+          <div class="product-name">
+            ${escapeHTML(item.name || "Product")}
+          </div>
+          <div class="product-meta">
+            ${variantText ? escapeHTML(variantText) + " · " : ""}
+            Qty: ${Number(item.quantity)}
+          </div>
         </div>
+        <strong>${money(Number(item.price || 0) * item.quantity)}</strong>
       </div>
-      <strong>${money(item.price * item.quantity)}</strong>
-    </div>
-  `).join("");
+    `;
+  }).join("");
 
   updateTotals();
 }
-
 
 function updateTotals() {
   $("subtotal").textContent = money(getSubtotal());
@@ -441,6 +428,15 @@ function updateTotals() {
   $("grandTotal").textContent = money(getTotal());
 }
 
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
 
 $("customerCity").addEventListener("input", updateTotals);
 
@@ -466,17 +462,16 @@ function setPaymentMethod(method) {
   if (mobilePayment) {
     const setting = paymentSettings[method] || {};
 
-    const number = setting.number || setting.accountNumber || "Contact store";
+    const number = setting.number ||
+      setting.accountNumber || "Contact store";
+
     const instructions = setting.instructions ||
       `Send the payment using ${method} and enter your Transaction ID below.`;
 
     $("paymentInstructions").textContent =
       `${method} payment number: ${number}. ${instructions}`;
   }
-
-  updateTotals();
 }
-
 
 document.querySelectorAll('input[name="paymentMethod"]').forEach(input => {
   input.addEventListener("change", () => {
@@ -532,37 +527,11 @@ async function loadCustomerProfile(user) {
 }
 
 
-function loadCheckoutItems() {
-  const buyNow = getBuyNowData();
-
-  buyNowMode = Boolean(buyNow);
-
-  if (buyNowMode) {
-    const item = normalizeItem(buyNow);
-
-    if (!item.id || item.price <= 0) {
-      throw new Error("The Buy Now product information is invalid.");
-    }
-
-    cartItems = [item];
-  } else {
-    cartItems = getCart().map(normalizeItem);
-  }
-
-  if (!cartItems.length) {
-    throw new Error("Your cart is empty. Please add products first.");
-  }
-
-  renderCart();
-}
-
-
 function getSelectedPaymentMethod() {
   return document.querySelector(
     'input[name="paymentMethod"]:checked'
   )?.value || "Cash on Delivery";
 }
-
 
 function validateCheckout() {
   const name = $("customerName").value.trim();
@@ -602,19 +571,27 @@ function validateCheckout() {
     }
   }
 
-  return {
-    name,
-    phone,
-    address,
-    city,
-    method,
-    trxId
-  };
+  return { name, phone, address, city, method, trxId };
 }
 
 
 function createOrderNumber() {
   return "MS" + Date.now().toString().slice(-9);
+}
+
+function getVariant(product, variantId) {
+  if (!variantId) return null;
+
+  if (!Array.isArray(product.variants)) return null;
+
+  return product.variants.find(v => String(v.id) === String(variantId)) || null;
+}
+
+function getCurrentItemPrice(product, variant) {
+  if (variant && variant.price !== undefined && variant.price !== null) {
+    return Number(variant.price);
+  }
+  return Number(product.price);
 }
 
 
@@ -635,7 +612,7 @@ async function placeOrder() {
     }
 
     if (!currentUser.emailVerified) {
-      throw new Error("Please verify your email before placing an order.");
+      throw new Error("Please verify your email before placing your order.");
     }
 
     const customer = validateCheckout();
@@ -644,97 +621,157 @@ async function placeOrder() {
     const orderRef = doc(collection(db, "orders"));
     const trackingRef = doc(db, "orderTracking", orderNumber);
 
-    const subtotal = getSubtotal();
     const delivery = getDeliveryCharge();
-    const total = subtotal + delivery;
-
-    const paymentStatus =
-      customer.method === "Cash on Delivery"
-        ? "Pending"
-        : "Unverified";
+    const paymentStatus = customer.method === "Cash on Delivery"
+      ? "Pending"
+      : "Unverified";
 
     const transactionRef = customer.method === "Cash on Delivery"
       ? null
       : doc(db, "usedTransactionIds", customer.trxId);
 
-    const productRefs = cartItems.map(item => ({
-      item,
-      ref: doc(db, "storeProducts", item.id)
-    }));
+    // Group cart items by product so each product is read only once.
+    const grouped = new Map();
+
+    for (const item of cartItems) {
+      if (!grouped.has(item.productId)) {
+        grouped.set(item.productId, []);
+      }
+      grouped.get(item.productId).push(item);
+    }
+
+    const productRefs = new Map();
+
+    for (const productId of grouped.keys()) {
+      productRefs.set(
+        productId,
+        doc(db, "storeProducts", productId)
+      );
+    }
+
+    let verifiedSubtotal = 0;
+    let finalItems = [];
 
     await runTransaction(db, async transaction => {
+      const productSnapshots = new Map();
 
-      // Read all documents before writing.
-      const productSnapshots = [];
-
-      for (const entry of productRefs) {
-        const productSnap = await transaction.get(entry.ref);
+      // All reads happen before writes.
+      for (const [productId, productRef] of productRefs) {
+        const productSnap = await transaction.get(productRef);
 
         if (!productSnap.exists()) {
-          throw new Error(
-            `Product "${entry.item.name}" is no longer available.`
-          );
+          throw new Error("One of your products is no longer available.");
         }
 
-        productSnapshots.push({
-          entry,
-          snap: productSnap
-        });
+        productSnapshots.set(productId, productSnap.data());
       }
 
       if (transactionRef) {
         const trxSnap = await transaction.get(transactionRef);
 
         if (trxSnap.exists()) {
-          throw new Error(
-            "This Transaction ID has already been used."
-          );
+          throw new Error("This Transaction ID has already been used.");
         }
       }
 
-      const finalItems = [];
+      const stockUpdates = new Map();
+      finalItems = [];
+      verifiedSubtotal = 0;
 
-      for (const productData of productSnapshots) {
-        const item = productData.entry.item;
-        const product = productData.snap.data();
+      for (const [productId, items] of grouped) {
+        const product = productSnapshots.get(productId);
+        const productRef = productRefs.get(productId);
 
-        const stock = Number(product.stock ?? 0);
-        const quantity = Number(item.quantity);
-
-        if (stock < quantity) {
-          throw new Error(
-            `${item.name} does not have enough stock. Available: ${stock}`
-          );
+        if (product.active === false) {
+          throw new Error(`${product.name || "A product"} is unavailable.`);
         }
 
-        const currentPrice = Number(
-          product.price ?? item.price
-        );
+        let variants = Array.isArray(product.variants)
+          ? product.variants.map(v => ({ ...v }))
+          : [];
 
-        if (!Number.isFinite(currentPrice) || currentPrice <= 0) {
-          throw new Error(`${item.name} has an invalid price.`);
+        let normalStock = Number(product.stock ?? 0);
+
+        for (const item of items) {
+          const quantity = Number(item.quantity);
+
+          if (!Number.isInteger(quantity) || quantity < 1) {
+            throw new Error("Invalid product quantity.");
+          }
+
+          const variant = item.variantId
+            ? variants.find(v => String(v.id) === String(item.variantId))
+            : null;
+
+          if (item.variantId && !variant) {
+            throw new Error("A selected product variant is no longer available.");
+          }
+
+          if (variant && variant.active === false) {
+            throw new Error("A selected product variant is unavailable.");
+          }
+
+          const currentPrice = getCurrentItemPrice(product, variant);
+
+          if (!Number.isFinite(currentPrice) || currentPrice <= 0) {
+            throw new Error("A product has an invalid current price.");
+          }
+
+          if (
+            item.price !== null &&
+            Number(item.price) !== currentPrice
+          ) {
+            throw new Error(
+              `${product.name || "A product"} price has changed. Please refresh checkout.`
+            );
+          }
+
+          if (variant) {
+            const stock = Math.max(0, Number(variant.stock ?? 0));
+
+            if (stock < quantity) {
+              throw new Error(
+                `${product.name || "Product"} has insufficient variant stock.`
+              );
+            }
+
+            variant.stock = stock - quantity;
+          } else {
+            if (normalStock < quantity) {
+              throw new Error(
+                `${product.name || "Product"} has insufficient stock. Available: ${normalStock}`
+              );
+            }
+
+            normalStock -= quantity;
+          }
+
+          verifiedSubtotal += currentPrice * quantity;
+
+          finalItems.push({
+            id: productId,
+            productId,
+            name: product.name || item.name || "Product",
+            price: currentPrice,
+            quantity,
+            variantId: item.variantId || "",
+            variantLabel: item.variantLabel || "",
+            variantValue: item.variantValue || "",
+            variant: item.variantLabel
+              ? `${item.variantLabel}: ${item.variantValue}`
+              : "",
+            image: product.imageUrl || product.image || item.image || ""
+          });
         }
 
-        if (currentPrice !== Number(item.price)) {
-          throw new Error(
-            `${item.name} price has changed. Please refresh checkout.`
-          );
-        }
-
-        finalItems.push({
-          id: item.id,
-          name: product.name || item.name,
-          price: currentPrice,
-          quantity,
-          variant: item.variant || "",
-          image: product.image || item.image || ""
+        stockUpdates.set(productId, {
+          ref: productRef,
+          normalStock,
+          variants,
+          hadVariants: Array.isArray(product.variants),
+          normalStockChanged: items.some(item => !item.variantId)
         });
       }
-
-      const verifiedSubtotal = finalItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
 
       const verifiedTotal = verifiedSubtotal + delivery;
 
@@ -782,22 +819,28 @@ async function placeOrder() {
         });
       }
 
-      for (const productData of productSnapshots) {
-        const item = productData.entry.item;
-        const product = productData.snap.data();
-
-        transaction.update(productData.entry.ref, {
-          stock: Number(product.stock ?? 0) - Number(item.quantity),
+      for (const update of stockUpdates.values()) {
+        const data = {
           updatedAt: serverTimestamp()
-        });
+        };
+
+        if (update.normalStockChanged) {
+          data.stock = update.normalStock;
+        }
+
+        if (update.hadVariants) {
+          data.variants = update.variants;
+        }
+
+        transaction.update(update.ref, data);
       }
     });
 
-
+    // Restore the customer's previous cart after a successful Buy Now.
     if (buyNowMode) {
-      clearBuyNowData();
+      restoreOriginalCart();
     } else {
-      saveCart([]);
+      clearNormalCart();
     }
 
     cartItems = [];
@@ -832,7 +875,6 @@ async function placeOrder() {
   }
 }
 
-
 $("placeOrderButton").addEventListener("click", placeOrder);
 
 
@@ -862,15 +904,9 @@ async function startCheckout() {
     }
 
     await loadCustomerProfile(user);
-
     loadCheckoutItems();
 
-    checkoutReady = true;
-
-    const requested = localStorage.getItem("msCheckoutRequested");
-    if (requested) {
-      localStorage.removeItem("msCheckoutRequested");
-    }
+    localStorage.removeItem("msCheckoutRequested");
 
     setPaymentMethod("Cash on Delivery");
 
