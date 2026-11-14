@@ -146,6 +146,9 @@ getFirestore,collection,getDocs,doc,getDoc,
 runTransaction,serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
 
+import {send as sendEmail}
+from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm';
+
 
 /* FIREBASE */
 
@@ -986,12 +989,11 @@ renderCart();
 /* EMAIL */
 
 let emailSent=false;
+let emailError='';
 
 try{
 
-const emailjs=await import('https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm');
-
-await emailjs.default.send(
+const response=await sendEmail(
 EMAILJS_SERVICE_ID,
 EMAILJS_TEMPLATE_ID,
 {
@@ -1008,10 +1010,14 @@ tracking_link:'https://mylifeshorts070-tech.github.io/ms-store/my-account.html'
 EMAILJS_PUBLIC_KEY
 );
 
+console.log('EmailJS Success:',response);
 emailSent=true;
 
 }catch(e){
-console.error('EmailJS:',e);
+
+console.error('EmailJS Failed:',e);
+emailError=e?.text||e?.message||String(e);
+
 }
 
 
@@ -1023,7 +1029,9 @@ Order ID: <b>${esc(result.orderId)}</b><br>
 পণ্যের Stock আপডেট হয়েছে।<br>
 Delivery Charge: <b>${money(result.delivery)}</b><br>
 Total: <b>${money(result.total)}</b><br>
-${emailSent?'Confirmation Email পাঠানো হয়েছে।':'Confirmation Email পাঠানো যায়নি।'}
+${emailSent
+?'Confirmation Email পাঠানো হয়েছে।'
+:'Confirmation Email পাঠানো যায়নি। Error: '+esc(emailError)}
 <br><br>
 <a href="my-account.html">আমার অর্ডার দেখুন</a>
 `;
