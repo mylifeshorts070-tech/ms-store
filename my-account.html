@@ -262,6 +262,66 @@ button:disabled{
   padding:20px;
   font-size:13px;
 }
+
+/* Product image and review styles */
+.order-product{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+.order-product:last-child{border-bottom:0}
+.order-product img{
+  width:65px;
+  height:65px;
+  object-fit:contain;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:#fff;
+  flex-shrink:0;
+}
+.order-product-info{
+  flex:1;
+  min-width:0;
+}
+.order-product-info p{
+  margin:4px 0;
+}
+.product-buttons{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+.review-btn{
+  background:#ede9fe;
+  color:#5b21b6;
+}
+.reorder-btn{
+  background:#fff7ed;
+  color:#c2410c;
+}
+.review-form{
+  margin-top:10px;
+  padding:12px;
+  background:#faf8ff;
+  border:1px solid var(--border);
+  border-radius:9px;
+}
+.review-form select,
+.review-form textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid #ddd5eb;
+  border-radius:8px;
+  margin:6px 0 10px;
+  font:inherit;
+}
+.review-form textarea{
+  min-height:75px;
+  resize:vertical;
+}
 footer{
   text-align:center;
   padding:20px;
@@ -273,6 +333,7 @@ footer{
   .card{padding:17px}
   header{padding:15px}
   .logo{font-size:19px}
+  .order-product img{width:58px;height:58px}
 }
 </style>
 </head>
@@ -286,133 +347,133 @@ footer{
 
 <main class="container">
 
-  <section id="authSection" class="card">
-    <h2>My Account</h2>
-    <p class="subtitle">Login or create your MS STORE account.</p>
+<section id="authSection" class="card">
+  <h2>My Account</h2>
+  <p class="subtitle">Login or create your MS STORE account.</p>
 
-    <div id="authMessage" class="message"></div>
+  <div id="authMessage" class="message"></div>
 
-    <div class="tabs">
-      <button type="button" class="tab active" id="loginTab">Login</button>
-      <button type="button" class="tab" id="registerTab">Register</button>
+  <div class="tabs">
+    <button type="button" class="tab active" id="loginTab">Login</button>
+    <button type="button" class="tab" id="registerTab">Register</button>
+  </div>
+
+  <form id="loginForm">
+    <div class="field">
+      <label>Email Address</label>
+      <input id="loginEmail" type="email" required autocomplete="email">
     </div>
 
-    <form id="loginForm">
-      <div class="field">
-        <label>Email Address</label>
-        <input id="loginEmail" type="email" required autocomplete="email">
-      </div>
-
-      <div class="field">
-        <label>Password</label>
-        <input id="loginPassword" type="password" required autocomplete="current-password">
-      </div>
-
-      <button class="primary" id="loginButton" type="submit">Login</button>
-
-      <button class="link-btn" id="forgotPasswordButton" type="button">
-        Forgot Password?
-      </button>
-    </form>
-
-    <form id="registerForm" class="hidden">
-      <div class="field">
-        <label>Full Name</label>
-        <input id="registerName" type="text" required maxlength="80" autocomplete="name">
-      </div>
-
-      <div class="field">
-        <label>Phone Number</label>
-        <input id="registerPhone" type="tel" required maxlength="20" autocomplete="tel">
-      </div>
-
-      <div class="field">
-        <label>Email Address</label>
-        <input id="registerEmail" type="email" required autocomplete="email">
-      </div>
-
-      <div class="field">
-        <label>Password</label>
-        <input id="registerPassword" type="password" required minlength="6" autocomplete="new-password">
-      </div>
-
-      <div class="field">
-        <label>Confirm Password</label>
-        <input id="confirmPassword" type="password" required minlength="6" autocomplete="new-password">
-      </div>
-
-      <button class="primary" id="registerButton" type="submit">
-        Create Account
-      </button>
-    </form>
-  </section>
-
-  <section id="verificationSection" class="card hidden">
-    <h2>Verify Your Email</h2>
-    <div id="verificationMessage" class="message info">
-      Please verify your email address before using your account.
+    <div class="field">
+      <label>Password</label>
+      <input id="loginPassword" type="password" required autocomplete="current-password">
     </div>
 
-    <p class="subtitle">
-      A verification email has been sent to your email address.
-      Open that email and click the verification link.
-    </p>
+    <button class="primary" id="loginButton" type="submit">Login</button>
 
-    <button class="primary" id="checkVerificationButton" type="button">
-      I Have Verified My Email
+    <button class="link-btn" id="forgotPasswordButton" type="button">
+      Forgot Password?
     </button>
+  </form>
 
-    <button class="secondary" id="resendVerificationButton"
-      type="button" style="width:100%;margin-top:10px">
-      Resend Verification Email
+  <form id="registerForm" class="hidden">
+    <div class="field">
+      <label>Full Name</label>
+      <input id="registerName" type="text" required maxlength="80" autocomplete="name">
+    </div>
+
+    <div class="field">
+      <label>Phone Number</label>
+      <input id="registerPhone" type="tel" required maxlength="20" autocomplete="tel">
+    </div>
+
+    <div class="field">
+      <label>Email Address</label>
+      <input id="registerEmail" type="email" required autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <input id="registerPassword" type="password" required minlength="6" autocomplete="new-password">
+    </div>
+
+    <div class="field">
+      <label>Confirm Password</label>
+      <input id="confirmPassword" type="password" required minlength="6" autocomplete="new-password">
+    </div>
+
+    <button class="primary" id="registerButton" type="submit">
+      Create Account
     </button>
+  </form>
+</section>
 
-    <button class="link-btn" id="verificationLogoutButton" type="button">
-      Logout
-    </button>
-  </section>
+<section id="verificationSection" class="card hidden">
+  <h2>Verify Your Email</h2>
+  <div id="verificationMessage" class="message info">
+    Please verify your email address before using your account.
+  </div>
 
-  <section id="accountSection" class="hidden">
+  <p class="subtitle">
+    A verification email has been sent to your email address.
+    Open that email and click the verification link.
+  </p>
 
-    <div class="card">
-      <div class="profile-top">
-        <div class="profile-info">
-          <div class="profile-avatar" id="profileAvatar">M</div>
-          <div>
-            <h2 id="profileName" style="margin:0">My Account</h2>
-            <p id="profileEmail"></p>
-          </div>
+  <button class="primary" id="checkVerificationButton" type="button">
+    I Have Verified My Email
+  </button>
+
+  <button class="secondary" id="resendVerificationButton"
+    type="button" style="width:100%;margin-top:10px">
+    Resend Verification Email
+  </button>
+
+  <button class="link-btn" id="verificationLogoutButton" type="button">
+    Logout
+  </button>
+</section>
+
+<section id="accountSection" class="hidden">
+
+  <div class="card">
+    <div class="profile-top">
+      <div class="profile-info">
+        <div class="profile-avatar" id="profileAvatar">M</div>
+        <div>
+          <h2 id="profileName" style="margin:0">My Account</h2>
+          <p id="profileEmail"></p>
         </div>
-
-        <button class="danger small-btn" id="logoutButton" type="button">
-          Logout
-        </button>
       </div>
 
-      <hr style="border:0;border-top:1px solid var(--border);margin:18px 0">
-
-      <h3>Account Information</h3>
-      <p style="font-size:13px;color:var(--muted)">
-        Name: <strong id="profileNameDetails"></strong>
-      </p>
-      <p style="font-size:13px;color:var(--muted)">
-        Phone: <strong id="profilePhone"></strong>
-      </p>
-      <p style="font-size:13px;color:var(--muted)">
-        Email: <strong id="profileEmailDetails"></strong>
-      </p>
+      <button class="danger small-btn" id="logoutButton" type="button">
+        Logout
+      </button>
     </div>
 
-    <div class="card">
-      <h2>My Orders</h2>
-      <p class="subtitle">View your order history and current delivery status.</p>
+    <hr style="border:0;border-top:1px solid var(--border);margin:18px 0">
 
-      <div id="ordersContainer">
-        <div class="loading">Loading your orders...</div>
-      </div>
+    <h3>Account Information</h3>
+    <p style="font-size:13px;color:var(--muted)">
+      Name: <strong id="profileNameDetails"></strong>
+    </p>
+    <p style="font-size:13px;color:var(--muted)">
+      Phone: <strong id="profilePhone"></strong>
+    </p>
+    <p style="font-size:13px;color:var(--muted)">
+      Email: <strong id="profileEmailDetails"></strong>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>My Orders</h2>
+    <p class="subtitle">View your order history and current delivery status.</p>
+
+    <div id="ordersContainer">
+      <div class="loading">Loading your orders...</div>
     </div>
+  </div>
 
-  </section>
+</section>
 
 </main>
 
@@ -422,7 +483,7 @@ footer{
 
 <script type="module">
 import { initializeApp } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth,
@@ -436,7 +497,7 @@ import {
   sendPasswordResetEmail,
   reload
 } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
   getFirestore,
@@ -450,11 +511,10 @@ import {
   updateDoc,
   serverTimestamp
 } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+  apiKey: "AIzaSyAXWNG3D4FYzJYOFAksTmzYFYBEsL9-gk",
   authDomain: "ms-store-admin-26416.firebaseapp.com",
   projectId: "ms-store-admin-26416",
   storageBucket: "ms-store-admin-26416.firebasestorage.app",
@@ -473,7 +533,6 @@ let persistenceReady = false;
 let accountLoadToken = 0;
 let isSubmitting = false;
 
-
 function showMessage(element, message, type = "info") {
   element.textContent = message;
   element.className = "message " + type;
@@ -487,6 +546,16 @@ function clearMessage(element) {
 function setButtonLoading(button, loading, loadingText, normalText) {
   button.disabled = loading;
   button.textContent = loading ? loadingText : normalText;
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
 }
 
 function friendlyError(error) {
@@ -508,7 +577,6 @@ function friendlyError(error) {
   return messages[code] || error?.message || "Something went wrong. Please try again.";
 }
 
-
 function showAuth() {
   $("authSection").classList.remove("hidden");
   $("verificationSection").classList.add("hidden");
@@ -527,7 +595,6 @@ function showAccount() {
   $("accountSection").classList.remove("hidden");
 }
 
-
 function switchTab(tab) {
   const login = tab === "login";
 
@@ -543,14 +610,12 @@ function switchTab(tab) {
 $("loginTab").addEventListener("click", () => switchTab("login"));
 $("registerTab").addEventListener("click", () => switchTab("register"));
 
-
 async function ensurePersistence() {
   if (persistenceReady) return;
 
   await setPersistence(auth, browserLocalPersistence);
   persistenceReady = true;
 }
-
 
 async function getCustomerProfile(user) {
   const profileRef = doc(db, "customerProfiles", user.uid);
@@ -565,8 +630,6 @@ async function getCustomerProfile(user) {
   return profileSnap.data();
 }
 
-
-/* ORDER TOTAL FIX */
 function getOrderTotal(order) {
   const possibleTotals = [
     order.totalPrice,
@@ -601,8 +664,6 @@ function getOrderTotal(order) {
   return 0;
 }
 
-
-/* SUPPORT BOTH products AND items */
 function getOrderItems(order) {
   if (Array.isArray(order.products) && order.products.length) {
     return order.products;
@@ -615,13 +676,12 @@ function getOrderItems(order) {
   return [];
 }
 
+/* ACCOUNT */
 
 async function loadAccount(user) {
   const token = ++accountLoadToken;
 
   try {
-    await reload(user);
-
     if (auth.currentUser?.uid !== user.uid) return;
 
     if (!user.emailVerified) {
@@ -661,24 +721,21 @@ async function loadAccount(user) {
 
     console.error("Account loading error:", error);
 
-    showAuth();
+    /* Do not show login screen for temporary Firestore errors */
+    if (auth.currentUser?.uid === user.uid) {
+      showAccount();
 
-    const errorText = String(error?.message || "");
-
-    if (
-      errorText.includes("Your customer profile could not be found")
-    ) {
-      clearMessage($("authMessage"));
-    } else {
-      showMessage(
-        $("authMessage"),
-        friendlyError(error),
-        "error"
-      );
+      $("ordersContainer").innerHTML = `
+        <div class="message error">
+          Unable to load account information.
+          ${escapeHTML(friendlyError(error))}
+        </div>
+      `;
     }
   }
 }
 
+/* ORDERS */
 
 async function loadOrders(user) {
   const container = $("ordersContainer");
@@ -735,6 +792,7 @@ async function loadOrders(user) {
   }
 }
 
+/* ORDER CARD */
 
 function createOrderElement(order) {
   const element = document.createElement("div");
@@ -751,22 +809,86 @@ function createOrderElement(order) {
 
   const total = getOrderTotal(order);
   const orderItems = getOrderItems(order);
+  const canCancel = ["New", "Pending"].includes(status);
 
-  const itemsText = orderItems.map(item => {
-    const name = escapeHTML(
-      item.productName || item.name || item.title || "Product"
-    );
+  const itemsHTML = orderItems.map((item, index) => {
+    const name = item.productName || item.name || item.title || "Product";
+    const image =
+      item.productImage ||
+      item.imageUrl ||
+      item.image ||
+      item.imageURL ||
+      "";
 
-    const quantity = Number(item.quantity || 1);
+    const quantity = Math.max(1, Number(item.quantity || 1));
+    const price = Number(item.price || 0);
 
     const variant = item.variantLabel
-      ? ` (${escapeHTML(item.variantLabel)}: ${escapeHTML(item.variantValue || "")})`
+      ? `${item.variantLabel}: ${item.variantValue || ""}`
       : "";
 
-    return `${name}${variant} × ${quantity}`;
-  }).join("<br>");
+    return `
+      <div class="order-product">
+        <img
+          src="${escapeHTML(image || "https://placehold.co/120x120?text=Product")}"
+          alt="${escapeHTML(name)}"
+          onerror="this.onerror=null;this.src='https://placehold.co/120x120?text=Product'"
+        >
 
-  const canCancel = ["New", "Pending"].includes(status);
+        <div class="order-product-info">
+          <strong>${escapeHTML(name)}</strong>
+
+          ${variant ? `<p>${escapeHTML(variant)}</p>` : ""}
+
+          <p>Price: ৳${price.toLocaleString("en-BD")}</p>
+          <p>Quantity: × ${quantity}</p>
+
+          <div class="product-buttons">
+            <button
+              type="button"
+              class="small-btn reorder-btn"
+              data-index="${index}">
+              Reorder
+            </button>
+
+            ${status === "Delivered" &&
+              (item.productId || item.id || item.product_id) ? `
+              <button
+                type="button"
+                class="small-btn review-btn"
+                data-index="${index}">
+                Review
+              </button>
+            ` : ""}
+          </div>
+
+          <div class="review-form hidden" id="review-${index}">
+            <label>Rating</label>
+            <select class="review-rating">
+              <option value="5">5 - Excellent</option>
+              <option value="4">4 - Very Good</option>
+              <option value="3">3 - Good</option>
+              <option value="2">2 - Fair</option>
+              <option value="1">1 - Poor</option>
+            </select>
+
+            <label>Your Review</label>
+            <textarea
+              class="review-comment"
+              maxlength="1000"
+              placeholder="Write your product review..."></textarea>
+
+            <button
+              type="button"
+              class="small-btn primary submit-review"
+              data-index="${index}">
+              Submit Review
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
 
   element.innerHTML = `
     <div class="order-head">
@@ -779,7 +901,8 @@ function createOrderElement(order) {
     <p><strong>Payment Method:</strong> ${escapeHTML(paymentMethod)}</p>
     <p><strong>Payment Status:</strong> ${escapeHTML(paymentStatus)}</p>
 
-    ${itemsText ? `<p><strong>Items:</strong><br>${itemsText}</p>` : ""}
+    <p><strong>Items:</strong></p>
+    ${itemsHTML || "<p>No product details available.</p>"}
 
     ${canCancel ? `
       <div class="order-actions">
@@ -799,9 +922,227 @@ function createOrderElement(order) {
     });
   }
 
+  element.querySelectorAll(".reorder-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      reorderProduct(
+        orderItems[Number(button.dataset.index)],
+        button
+      );
+    });
+  });
+
+  element.querySelectorAll(".review-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      const form = element.querySelector(
+        `#review-${button.dataset.index}`
+      );
+      form.classList.toggle("hidden");
+    });
+  });
+
+  element.querySelectorAll(".submit-review").forEach(button => {
+    button.addEventListener("click", () => {
+      submitProductReview(
+        orderItems[Number(button.dataset.index)],
+        formForReview(element, button.dataset.index),
+        button
+      );
+    });
+  });
+
   return element;
 }
 
+function formForReview(element, index) {
+  return element.querySelector(`#review-${index}`);
+}
+
+/* REORDER PRODUCT */
+
+async function reorderProduct(item, button) {
+  if (!currentUser || auth.currentUser?.uid !== currentUser.uid) {
+    alert("Please login again.");
+    return;
+  }
+
+  const productId = item.productId || item.id || item.product_id;
+
+  if (!productId) {
+    alert("Product information is unavailable.");
+    return;
+  }
+
+  const oldText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Adding...";
+
+  try {
+    const productRef = doc(db, "storeProducts", productId);
+    const productSnap = await getDoc(productRef);
+
+    if (!productSnap.exists()) {
+      throw new Error("This product is no longer available.");
+    }
+
+    const product = productSnap.data();
+
+    if (product.active === false) {
+      throw new Error("This product is currently unavailable.");
+    }
+
+    const quantity = Math.max(1, Number(item.quantity || 1));
+    const variantId = item.variantId || "";
+
+    let price = Number(product.price ?? item.price ?? 0);
+    let variantLabel = item.variantLabel || "";
+    let variantValue = item.variantValue || "";
+    let availableStock = Number(product.stock);
+
+    if (variantId) {
+      const variants = Array.isArray(product.variants)
+        ? product.variants
+        : [];
+
+      const variant = variants.find(v =>
+        String(v.id || v.variantId) === String(variantId)
+      );
+
+      if (!variant || variant.active === false) {
+        throw new Error("This product option is no longer available.");
+      }
+
+      price = Number(variant.price ?? price);
+      variantLabel = variant.label || variant.name || variantLabel;
+      variantValue = variant.value || variantValue;
+
+      availableStock = Number(variant.stock);
+    }
+
+    if (Number.isFinite(availableStock) && availableStock < 0) {
+      throw new Error("This product is currently out of stock.");
+    }
+
+    const cart = JSON.parse(localStorage.getItem("msCart") || "{}");
+
+    const key = variantId
+      ? `${productId}__${variantId}`
+      : productId;
+
+    const existing = cart[key];
+
+    const oldQuantity = typeof existing === "object" && existing !== null
+      ? Number(existing.quantity || 0)
+      : Number(existing || 0);
+
+    const newQuantity = oldQuantity + quantity;
+
+    if (
+      Number.isFinite(availableStock) &&
+      newQuantity > availableStock
+    ) {
+      throw new Error("Your cart quantity would exceed available stock.");
+    }
+
+    if (variantId) {
+      cart[key] = {
+        productId,
+        variantId,
+        variantLabel,
+        variantValue,
+        price,
+        quantity: newQuantity
+      };
+    } else if (typeof existing === "object" && existing !== null) {
+      cart[key] = {
+        ...existing,
+        productId,
+        price,
+        quantity: newQuantity
+      };
+    } else {
+      cart[key] = newQuantity;
+    }
+
+    localStorage.setItem("msCart", JSON.stringify(cart));
+
+    alert("Product added to your cart!");
+    location.href = "index.html#cart";
+
+  } catch (error) {
+    console.error("Reorder error:", error);
+    alert(friendlyError(error));
+
+  } finally {
+    button.disabled = false;
+    button.textContent = oldText;
+  }
+}
+
+/* SUBMIT PRODUCT REVIEW */
+
+async function submitProductReview(item, form, button) {
+  if (!currentUser || auth.currentUser?.uid !== currentUser.uid) {
+    alert("Please login again.");
+    return;
+  }
+
+  const productId = item.productId || item.id || item.product_id;
+
+  if (!productId) {
+    alert("Product information is unavailable.");
+    return;
+  }
+
+  const rating = Number(form.querySelector(".review-rating").value);
+  const comment = form.querySelector(".review-comment").value.trim();
+
+  if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+    alert("Please select a valid rating.");
+    return;
+  }
+
+  if (!comment) {
+    alert("Please write your review.");
+    return;
+  }
+
+  const oldText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Submitting...";
+
+  try {
+    const profile = await getCustomerProfile(currentUser);
+
+    const reviewRef = doc(
+      db,
+      "storeProducts",
+      productId,
+      "reviews",
+      currentUser.uid
+    );
+
+    await setDoc(reviewRef, {
+      uid: currentUser.uid,
+      name: profile.name || "Customer",
+      rating,
+      comment,
+      createdAt: serverTimestamp()
+    });
+
+    alert("Thank you! Your review has been submitted.");
+    form.classList.add("hidden");
+
+  } catch (error) {
+    console.error("Review error:", error);
+    alert(friendlyError(error));
+
+  } finally {
+    button.disabled = false;
+    button.textContent = oldText;
+  }
+}
+
+/* CANCEL ORDER */
 
 async function cancelOrder(order, button) {
   if (!currentUser || auth.currentUser?.uid !== currentUser.uid) {
@@ -865,18 +1206,6 @@ async function cancelOrder(order, button) {
   }
 }
 
-
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  })[char]);
-}
-
-
 /* LOGIN */
 
 $("loginForm").addEventListener("submit", async event => {
@@ -904,7 +1233,9 @@ $("loginForm").addEventListener("submit", async event => {
     await reload(result.user);
 
     if (!result.user.emailVerified) {
+      currentUser = result.user;
       showVerification();
+
       showMessage(
         $("verificationMessage"),
         "Please verify your email before continuing.",
@@ -931,7 +1262,6 @@ $("loginForm").addEventListener("submit", async event => {
     setButtonLoading(button, false, "", "Login");
   }
 });
-
 
 /* REGISTRATION */
 
@@ -1011,7 +1341,6 @@ $("registerForm").addEventListener("submit", async event => {
   }
 });
 
-
 /* FORGOT PASSWORD */
 
 $("forgotPasswordButton").addEventListener("click", async () => {
@@ -1045,7 +1374,6 @@ $("forgotPasswordButton").addEventListener("click", async () => {
     );
   }
 });
-
 
 /* EMAIL VERIFICATION */
 
@@ -1097,7 +1425,6 @@ $("checkVerificationButton").addEventListener("click", async () => {
   }
 });
 
-
 $("resendVerificationButton").addEventListener("click", async () => {
   const user = auth.currentUser;
 
@@ -1146,7 +1473,6 @@ $("resendVerificationButton").addEventListener("click", async () => {
   }
 });
 
-
 /* LOGOUT */
 
 async function logoutUser() {
@@ -1166,7 +1492,6 @@ async function logoutUser() {
 $("logoutButton").addEventListener("click", logoutUser);
 $("verificationLogoutButton").addEventListener("click", logoutUser);
 
-
 /* AUTH STATE */
 
 async function startApp() {
@@ -1183,37 +1508,12 @@ async function startApp() {
         return;
       }
 
-      try {
-        await reload(user);
-
-        if (auth.currentUser?.uid !== user.uid) return;
-
-        if (!user.emailVerified) {
-          showVerification();
-          return;
-        }
-
-        await loadAccount(user);
-
-      } catch (error) {
-        console.error("Authentication state error:", error);
-
-        showAuth();
-
-        const errorText = String(error?.message || "");
-
-        if (
-          errorText.includes("Your customer profile could not be found")
-        ) {
-          clearMessage($("authMessage"));
-        } else {
-          showMessage(
-            $("authMessage"),
-            friendlyError(error),
-            "error"
-          );
-        }
+      if (!user.emailVerified) {
+        showVerification();
+        return;
       }
+
+      await loadAccount(user);
     });
 
   } catch (error) {
