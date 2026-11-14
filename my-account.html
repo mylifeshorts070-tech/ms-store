@@ -1,1218 +1,434 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#6d28d9">
-<title>MS STORE | My Account</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6816a8">
+<title>My Account | MS STORE</title>
 <style>
 :root{
-  --purple:#6d28d9;
-  --purple-dark:#4c1d95;
-  --orange:#f97316;
-  --bg:#f5f3ff;
-  --text:#211936;
-  --muted:#77718a;
-  --white:#fff;
-  --border:#e9e2f5;
-  --green:#15803d;
-  --red:#dc2626;
+ --purple:#6816a8;--orange:#ff8b22;
+ --bg:#f7f4fb;--dark:#25172e;
+ --muted:#777080;--border:#e9e2ef;
+ --green:#159957;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,sans-serif;
+ margin:0;background:var(--bg);color:var(--dark);
+ font-family:Arial,"Noto Sans Bengali",sans-serif;
 }
+button{font:inherit;cursor:pointer}
 header{
-  background:linear-gradient(120deg,var(--purple-dark),var(--purple));
-  color:white;
-  padding:18px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  box-shadow:0 4px 15px #4c1d9525;
+ background:linear-gradient(120deg,#511080,#7924b5);
+ color:white;padding:14px 16px;
 }
-.logo{
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:.5px;
+.header-inner{
+ max-width:1000px;margin:auto;
+ display:flex;align-items:center;
+ justify-content:space-between;gap:10px;
 }
-.logo span{color:#fb923c}
-.header-link{
-  color:white;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:bold;
+.logo{font-size:22px;font-weight:900;color:white;text-decoration:none}
+.logo span{color:#ffae53}
+.header-inner a:last-child{
+ color:white;text-decoration:none;
+ border:1px solid #ffffff55;
+ padding:9px 13px;border-radius:20px;font-size:13px;
 }
-.container{
-  max-width:850px;
-  margin:25px auto;
-  padding:0 14px 40px;
+main{max-width:1000px;margin:auto;padding:15px}
+.page-title{font-size:23px;margin:10px 0 17px}
+.panel{
+ background:white;border:1px solid var(--border);
+ border-radius:14px;padding:16px;margin-bottom:15px;
 }
-.card{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:22px;
-  margin-bottom:18px;
-  box-shadow:0 5px 20px #3b076408;
+.panel h2{font-size:17px;margin:0 0 14px}
+.profile-top{display:flex;align-items:center;gap:13px}
+.avatar{
+ width:55px;height:55px;border-radius:50%;
+ background:#f0e5fa;color:var(--purple);
+ display:grid;place-items:center;
+ font-size:25px;font-weight:bold;
 }
-h2{
-  margin:0 0 18px;
-  font-size:21px;
+.profile-info{min-width:0}
+.profile-info strong{font-size:16px;display:block}
+.profile-info small{color:var(--muted);font-size:12px;word-break:break-word}
+.status{
+ display:inline-block;padding:5px 9px;border-radius:20px;
+ background:#e9fff2;color:#167642;font-size:11px;
+ margin-top:7px;
 }
-h3{
-  margin:0 0 12px;
-  font-size:17px;
+.stats{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:8px;margin-top:17px;
 }
-.subtitle{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.6;
-  margin-top:-9px;
-  margin-bottom:18px;
+.stat{
+ background:#faf7fc;border:1px solid var(--border);
+ border-radius:10px;text-align:center;padding:12px 5px;
 }
-.tabs{
-  display:flex;
-  gap:8px;
-  margin-bottom:20px;
-}
-.tab{
-  flex:1;
-  padding:12px 8px;
-  border:1px solid var(--border);
-  background:#faf8ff;
-  border-radius:9px;
-  color:var(--purple-dark);
-  font-weight:bold;
-  cursor:pointer;
-}
-.tab.active{
-  color:white;
-  background:var(--purple);
-  border-color:var(--purple);
-}
-.field{margin-bottom:14px}
-label{
-  display:block;
-  font-size:13px;
-  font-weight:bold;
-  margin-bottom:7px;
-}
-input{
-  width:100%;
-  padding:13px;
-  border:1px solid #ddd5eb;
-  border-radius:9px;
-  outline:none;
-  font-size:14px;
-  background:white;
-}
-input:focus{
-  border-color:var(--purple);
-  box-shadow:0 0 0 3px #6d28d91a;
-}
-button{
-  border:0;
-  border-radius:9px;
-  padding:13px 16px;
-  font-size:14px;
-  font-weight:bold;
-  cursor:pointer;
-}
-button:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-.primary{
-  width:100%;
-  background:linear-gradient(110deg,var(--purple),var(--purple-dark));
-  color:white;
-}
-.secondary{
-  background:#fff7ed;
-  color:#c2410c;
-  border:1px solid #fed7aa;
-}
-.danger{
-  background:#fee2e2;
-  color:#b91c1c;
-}
-.small-btn{
-  padding:9px 12px;
-  font-size:12px;
-}
-.link-btn{
-  padding:0;
-  background:none;
-  color:var(--purple);
-  font-size:13px;
-  margin-top:14px;
-}
-.message{
-  display:none;
-  padding:12px;
-  border-radius:9px;
-  margin-bottom:15px;
-  font-size:13px;
-  line-height:1.5;
-}
-.message.success{
-  display:block;
-  background:#dcfce7;
-  color:#166534;
-}
-.message.error{
-  display:block;
-  background:#fee2e2;
-  color:#991b1b;
-}
-.message.info{
-  display:block;
-  background:#ede9fe;
-  color:#5b21b6;
-}
-.hidden{display:none!important}
-.profile-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.profile-avatar{
-  width:55px;
-  height:55px;
-  border-radius:50%;
-  background:#ede9fe;
-  color:var(--purple);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  font-weight:bold;
-}
-.profile-info{
-  display:flex;
-  align-items:center;
-  gap:13px;
-}
-.profile-info p{
-  margin:5px 0;
-  color:var(--muted);
-  font-size:13px;
-  word-break:break-word;
-}
-.order{
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:15px;
-  margin-top:12px;
+.stat strong{display:block;color:var(--purple);font-size:20px}
+.stat small{font-size:11px;color:var(--muted)}
+.order-card{
+ border:1px solid var(--border);
+ border-radius:12px;padding:13px;margin:12px 0;
+ background:#fff;
 }
 .order-head{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:10px;
+ display:flex;justify-content:space-between;
+ align-items:center;gap:8px;flex-wrap:wrap;
 }
-.order-id{
-  font-size:13px;
-  font-weight:bold;
-  color:var(--purple-dark);
+.order-id{font-weight:bold;color:var(--purple);font-size:13px}
+.badge{
+ display:inline-block;border-radius:20px;
+ padding:5px 9px;font-size:11px;font-weight:bold;
+ background:#fff3df;color:#945300;
 }
-.status{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  font-size:11px;
-  font-weight:bold;
-  background:#ede9fe;
-  color:#5b21b6;
+.badge.green{background:#e8fff1;color:#167642}
+.badge.red{background:#ffeded;color:#b32626}
+.order-meta{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:9px;margin:13px 0;font-size:12px;
 }
-.status.Delivered{background:#dcfce7;color:#166534}
-.status.Cancelled{background:#fee2e2;color:#991b1b}
-.status.Shipped{background:#dbeafe;color:#1d4ed8}
-.status.Processing{background:#ffedd5;color:#c2410c}
-.order p{
-  font-size:13px;
-  color:#625b70;
-  margin:7px 0;
-  overflow-wrap:anywhere;
+.order-meta span{color:var(--muted)}
+.order-meta strong{display:block;margin-top:4px}
+.order-products{
+ background:#faf8fc;padding:10px;border-radius:8px;
+ font-size:12px;line-height:1.7;
 }
-.order strong{color:var(--text)}
-.order-actions{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
+.order-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{
+ border:0;border-radius:8px;padding:9px 13px;
+ font-size:12px;font-weight:bold;
 }
+.btn-purple{background:var(--purple);color:white}
+.btn-orange{background:var(--orange);color:white}
+.btn-red{background:#ffeded;color:#b32626}
+.btn-light{background:#f0e8f7;color:var(--purple)}
+.field{margin:12px 0}
+.field label{display:block;font-size:12px;font-weight:bold;margin-bottom:6px}
+.field input{
+ width:100%;padding:12px;border:1px solid var(--border);
+ border-radius:9px;outline:none;
+}
+.field input:focus{border-color:var(--purple)}
+.primary{
+ width:100%;padding:12px;border:0;border-radius:9px;
+ background:var(--purple);color:white;font-weight:bold;
+}
+.message{font-size:12px;line-height:1.6;margin-top:10px}
+.error{color:#c62828}
+.success{color:var(--green)}
 .empty{
-  text-align:center;
-  padding:25px 10px;
-  color:var(--muted);
-  font-size:14px;
+ background:#faf8fc;border-radius:10px;
+ padding:25px 12px;text-align:center;
+ color:var(--muted);font-size:13px;line-height:1.7;
 }
-.loading{
-  text-align:center;
-  color:var(--muted);
-  padding:20px;
-  font-size:13px;
+.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px}
+.tab{
+ flex:0 0 auto;border:1px solid var(--border);
+ border-radius:20px;padding:9px 14px;
+ background:white;color:#66566e;font-size:12px;
 }
-footer{
-  text-align:center;
-  padding:20px;
-  color:var(--muted);
-  font-size:12px;
-}
-@media(max-width:480px){
-  .container{margin:15px auto}
-  .card{padding:17px}
-  header{padding:15px}
-  .logo{font-size:19px}
+.tab.active{background:var(--purple);color:white;border-color:var(--purple)}
+.hidden{display:none!important}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
+@media(min-width:700px){
+ main{padding:24px}
+ .page-title{font-size:26px}
+ .profile-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:15px;align-items:start}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">MS <span>STORE</span></div>
-  <a class="header-link" href="index.html">Continue Shopping</a>
+ <div class="header-inner">
+  <a class="logo" href="index.html">MS <span>STORE</span></a>
+  <a href="index.html">← Shopping</a>
+ </div>
 </header>
 
-<main class="container">
+<main>
+ <h1 class="page-title">My Account</h1>
 
-  <section id="authSection" class="card">
-    <h2>My Account</h2>
-    <p class="subtitle">Login or create your MS STORE account.</p>
+ <div id="loginBox" class="panel hidden">
+  <h2>Login Required</h2>
+  <p style="font-size:13px;line-height:1.7">
+   আপনার Account ও Order দেখতে প্রথমে Login করুন।
+  </p>
+  <a href="index.html" style="color:#6816a8;font-weight:bold">Go to Login →</a>
+ </div>
 
-    <div id="authMessage" class="message"></div>
-
-    <div class="tabs">
-      <button type="button" class="tab active" id="loginTab">Login</button>
-      <button type="button" class="tab" id="registerTab">Register</button>
+ <div id="accountArea" class="hidden">
+  <div class="profile-layout">
+   <section class="panel">
+    <h2>👤 My Profile</h2>
+    <div class="profile-top">
+     <div class="avatar" id="avatar">M</div>
+     <div class="profile-info">
+      <strong id="profileName">Customer</strong>
+      <small id="profileEmail"></small>
+      <div class="status" id="emailStatus">Checking...</div>
+     </div>
     </div>
 
-    <form id="loginForm">
-      <div class="field">
-        <label>Email Address</label>
-        <input id="loginEmail" type="email" required autocomplete="email">
-      </div>
-
-      <div class="field">
-        <label>Password</label>
-        <input id="loginPassword" type="password" required autocomplete="current-password">
-      </div>
-
-      <button class="primary" id="loginButton" type="submit">Login</button>
-
-      <button class="link-btn" id="forgotPasswordButton" type="button">
-        Forgot Password?
-      </button>
-    </form>
-
-    <form id="registerForm" class="hidden">
-      <div class="field">
-        <label>Full Name</label>
-        <input id="registerName" type="text" required maxlength="80" autocomplete="name">
-      </div>
-
-      <div class="field">
-        <label>Phone Number</label>
-        <input id="registerPhone" type="tel" required maxlength="20" autocomplete="tel">
-      </div>
-
-      <div class="field">
-        <label>Email Address</label>
-        <input id="registerEmail" type="email" required autocomplete="email">
-      </div>
-
-      <div class="field">
-        <label>Password</label>
-        <input id="registerPassword" type="password" required minlength="6" autocomplete="new-password">
-      </div>
-
-      <div class="field">
-        <label>Confirm Password</label>
-        <input id="confirmPassword" type="password" required minlength="6" autocomplete="new-password">
-      </div>
-
-      <button class="primary" id="registerButton" type="submit">
-        Create Account
-      </button>
-    </form>
-  </section>
-
-  <section id="verificationSection" class="card hidden">
-    <h2>Verify Your Email</h2>
-    <div id="verificationMessage" class="message info">
-      Please verify your email address before using your account.
+    <div class="stats">
+     <div class="stat"><strong id="totalOrders">0</strong><small>Total Orders</small></div>
+     <div class="stat"><strong id="pendingOrders">0</strong><small>Pending</small></div>
+     <div class="stat"><strong id="deliveredOrders">0</strong><small>Delivered</small></div>
     </div>
 
-    <p class="subtitle">
-      A verification email has been sent to your email address.
-      Open that email and click the verification link.
+    <hr style="border:0;border-top:1px solid #e9e2ef;margin:18px 0">
+
+    <h2>Profile Information</h2>
+    <div class="field">
+     <label>Name</label>
+     <input id="editName" type="text" readonly>
+    </div>
+    <div class="field">
+     <label>Mobile Number</label>
+     <input id="editPhone" type="tel" readonly>
+    </div>
+    <div class="field">
+     <label>Email</label>
+     <input id="editEmail" type="email" readonly>
+    </div>
+    <p style="font-size:11px;color:#777;line-height:1.6">
+     Profile পরিবর্তনের জন্য Support-এর সঙ্গে যোগাযোগ করুন।
     </p>
+    <button class="btn btn-red" style="width:100%" onclick="logout()">Logout</button>
+   </section>
 
-    <button class="primary" id="checkVerificationButton" type="button">
-      I Have Verified My Email
-    </button>
-
-    <button class="secondary" id="resendVerificationButton"
-      type="button" style="width:100%;margin-top:10px">
-      Resend Verification Email
-    </button>
-
-    <button class="link-btn" id="verificationLogoutButton" type="button">
-      Logout
-    </button>
-  </section>
-
-  <section id="accountSection" class="hidden">
-
-    <div class="card">
-      <div class="profile-top">
-        <div class="profile-info">
-          <div class="profile-avatar" id="profileAvatar">M</div>
-          <div>
-            <h2 id="profileName" style="margin:0">My Account</h2>
-            <p id="profileEmail"></p>
-          </div>
-        </div>
-
-        <button class="danger small-btn" id="logoutButton" type="button">
-          Logout
-        </button>
-      </div>
-
-      <hr style="border:0;border-top:1px solid var(--border);margin:18px 0">
-
-      <h3>Account Information</h3>
-      <p style="font-size:13px;color:var(--muted)">
-        Name: <strong id="profileNameDetails"></strong>
-      </p>
-      <p style="font-size:13px;color:var(--muted)">
-        Phone: <strong id="profilePhone"></strong>
-      </p>
-      <p style="font-size:13px;color:var(--muted)">
-        Email: <strong id="profileEmailDetails"></strong>
-      </p>
+   <section class="panel">
+    <h2>📦 My Orders</h2>
+    <div class="tabs">
+     <button class="tab active" onclick="filterOrders('all',this)">All</button>
+     <button class="tab" onclick="filterOrders('Pending',this)">Pending</button>
+     <button class="tab" onclick="filterOrders('Confirmed',this)">Confirmed</button>
+     <button class="tab" onclick="filterOrders('Shipped',this)">Shipped</button>
+     <button class="tab" onclick="filterOrders('Delivered',this)">Delivered</button>
+     <button class="tab" onclick="filterOrders('Cancelled',this)">Cancelled</button>
     </div>
-
-    <div class="card">
-      <h2>My Orders</h2>
-      <p class="subtitle">View your order history and current delivery status.</p>
-
-      <div id="ordersContainer">
-        <div class="loading">Loading your orders...</div>
-      </div>
+    <div id="ordersList">
+     <div class="empty">Orders লোড হচ্ছে...</div>
     </div>
-
-  </section>
-
+   </section>
+  </div>
+ </div>
 </main>
 
-<footer>
-  © MS STORE. All rights reserved.
-</footer>
+<footer>© <span id="year"></span> MS STORE</footer>
 
 <script type="module">
-import { initializeApp } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+import {initializeApp} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import {
-  getAuth,
-  setPersistence,
-  browserLocalPersistence,
-  onAuthStateChanged,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  sendEmailVerification,
-  sendPasswordResetEmail,
-  reload
-} from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
+ getFirestore,doc,getDoc,collection,getDocs,
+ query,where,updateDoc,serverTimestamp,limit
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  collection,
-  getDocs,
-  query,
-  where,
-  updateDoc,
-  serverTimestamp
-} from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+ getAuth,onAuthStateChanged,signOut
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
 
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
-  authDomain: "ms-store-admin-26416.firebaseapp.com",
-  projectId: "ms-store-admin-26416",
-  storageBucket: "ms-store-admin-26416.firebasestorage.app",
-  messagingSenderId: "968008425065",
-  appId: "1:968008425065:web:1e0904dcab96d4d003ccf8"
+const firebaseConfig={
+ apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+ authDomain:"ms-store-admin-26416.firebaseapp.com",
+ projectId:"ms-store-admin-26416",
+ storageBucket:"ms-store-admin-26416.firebasestorage.app",
+ messagingSenderId:"968008425065",
+ appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
 
-const $ = id => document.getElementById(id);
+let currentUser=null;
+let allOrders=[];
+let activeFilter="all";
 
-let currentUser = null;
-let persistenceReady = false;
-let accountLoadToken = 0;
-let isSubmitting = false;
+const money=n=>"৳"+Number(n||0).toLocaleString("en-US");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
 
-
-function showMessage(element, message, type = "info") {
-  element.textContent = message;
-  element.className = "message " + type;
+function statusClass(status){
+ if(status==="Delivered")return "green";
+ if(status==="Cancelled")return "red";
+ return "";
 }
 
-function clearMessage(element) {
-  element.textContent = "";
-  element.className = "message";
+function formatDate(value){
+ if(!value)return "Date unavailable";
+ const date=value.toDate?value.toDate():new Date(value);
+ if(isNaN(date.getTime()))return "Date unavailable";
+ return date.toLocaleDateString("en-GB",{
+  day:"2-digit",month:"short",year:"numeric"
+ });
 }
 
-function setButtonLoading(button, loading, loadingText, normalText) {
-  button.disabled = loading;
-  button.textContent = loading ? loadingText : normalText;
-}
+onAuthStateChanged(auth,async user=>{
+ currentUser=user;
+ if(!user){
+  document.getElementById("loginBox").classList.remove("hidden");
+  document.getElementById("accountArea").classList.add("hidden");
+  return;
+ }
+ document.getElementById("loginBox").classList.add("hidden");
+ document.getElementById("accountArea").classList.remove("hidden");
+ await loadProfile();
+ await loadOrders();
+});
 
-function friendlyError(error) {
-  const code = error?.code || "";
+async function loadProfile(){
+ const email=currentUser.email||"";
+ document.getElementById("profileEmail").textContent=email;
+ document.getElementById("editEmail").value=email;
+ document.getElementById("emailStatus").textContent=
+  currentUser.emailVerified?"Email Verified":"Email Not Verified";
+ document.getElementById("emailStatus").style.background=
+  currentUser.emailVerified?"#e9fff2":"#fff3df";
+ document.getElementById("emailStatus").style.color=
+  currentUser.emailVerified?"#167642":"#945300";
 
-  const messages = {
-    "auth/invalid-email": "Please enter a valid email address.",
-    "auth/user-not-found": "No account found with this email.",
-    "auth/wrong-password": "Incorrect password.",
-    "auth/invalid-credential": "Incorrect email or password.",
-    "auth/email-already-in-use": "This email is already registered.",
-    "auth/weak-password": "Password must contain at least 6 characters.",
-    "auth/too-many-requests": "Too many attempts. Please try again later.",
-    "auth/network-request-failed": "Network error. Check your internet connection.",
-    "auth/user-disabled": "This account has been disabled.",
-    "permission-denied": "Permission denied. Please try again or contact support."
-  };
-
-  return messages[code] || error?.message || "Something went wrong. Please try again.";
-}
-
-
-function showAuth() {
-  $("authSection").classList.remove("hidden");
-  $("verificationSection").classList.add("hidden");
-  $("accountSection").classList.add("hidden");
-}
-
-function showVerification() {
-  $("authSection").classList.add("hidden");
-  $("verificationSection").classList.remove("hidden");
-  $("accountSection").classList.add("hidden");
-}
-
-function showAccount() {
-  $("authSection").classList.add("hidden");
-  $("verificationSection").classList.add("hidden");
-  $("accountSection").classList.remove("hidden");
-}
-
-
-function switchTab(tab) {
-  const login = tab === "login";
-
-  $("loginForm").classList.toggle("hidden", !login);
-  $("registerForm").classList.toggle("hidden", login);
-
-  $("loginTab").classList.toggle("active", login);
-  $("registerTab").classList.toggle("active", !login);
-
-  clearMessage($("authMessage"));
-}
-
-$("loginTab").addEventListener("click", () => switchTab("login"));
-$("registerTab").addEventListener("click", () => switchTab("register"));
-
-
-async function ensurePersistence() {
-  if (persistenceReady) return;
-
-  await setPersistence(auth, browserLocalPersistence);
-  persistenceReady = true;
-}
-
-
-async function getCustomerProfile(user) {
-  const profileRef = doc(db, "customerProfiles", user.uid);
-  const profileSnap = await getDoc(profileRef);
-
-  if (!profileSnap.exists()) {
-    throw new Error(
-      "Your customer profile could not be found. Please contact MS STORE support."
-    );
+ try{
+  const snap=await getDoc(doc(db,"customerProfiles",currentUser.uid));
+  if(snap.exists()){
+   const p=snap.data();
+   const name=p.name||"Customer";
+   document.getElementById("profileName").textContent=name;
+   document.getElementById("avatar").textContent=name.charAt(0).toUpperCase();
+   document.getElementById("editName").value=name;
+   document.getElementById("editPhone").value=p.phone||"";
+  }else{
+   document.getElementById("profileName").textContent="Customer";
+   document.getElementById("avatar").textContent="M";
   }
-
-  return profileSnap.data();
+ }catch(e){
+  console.error("Profile error",e);
+ }
 }
 
+async function loadOrders(){
+ const box=document.getElementById("ordersList");
+ box.innerHTML='<div class="empty">Orders লোড হচ্ছে...</div>';
 
-/* ORDER TOTAL FIX */
-function getOrderTotal(order) {
-  const possibleTotals = [
-    order.totalPrice,
-    order.total,
-    order.grandTotal,
-    order.amount,
-    order.finalAmount
-  ];
+ if(!currentUser)return;
 
-  for (const value of possibleTotals) {
-    if (
-      value !== undefined &&
-      value !== null &&
-      value !== "" &&
-      Number.isFinite(Number(value))
-    ) {
-      return Number(value);
-    }
-  }
-
-  const subtotal = Number(order.subtotal);
-  const deliveryCharge = Number(order.deliveryCharge);
-
-  if (
-    Number.isFinite(subtotal) &&
-    Number.isFinite(deliveryCharge) &&
-    (order.subtotal !== undefined || order.deliveryCharge !== undefined)
-  ) {
-    return subtotal + deliveryCharge;
-  }
-
-  return 0;
-}
-
-
-/* SUPPORT BOTH products AND items */
-function getOrderItems(order) {
-  if (Array.isArray(order.products) && order.products.length) {
-    return order.products;
-  }
-
-  if (Array.isArray(order.items) && order.items.length) {
-    return order.items;
-  }
-
-  return [];
-}
-
-
-async function loadAccount(user) {
-  const token = ++accountLoadToken;
-
-  try {
-    await reload(user);
-
-    if (auth.currentUser?.uid !== user.uid) return;
-
-    if (!user.emailVerified) {
-      showVerification();
-      return;
-    }
-
-    const profile = await getCustomerProfile(user);
-
-    if (token !== accountLoadToken) return;
-    if (auth.currentUser?.uid !== user.uid) return;
-
-    if (profile.banned === true) {
-      showAuth();
-      showMessage(
-        $("authMessage"),
-        "This account is currently restricted. Please contact MS STORE support.",
-        "error"
-      );
-      return;
-    }
-
-    $("profileName").textContent = profile.name || "Customer";
-    $("profileAvatar").textContent =
-      (profile.name || "M").trim().charAt(0).toUpperCase();
-
-    $("profileEmail").textContent = user.email || "";
-    $("profileNameDetails").textContent = profile.name || "Not provided";
-    $("profilePhone").textContent = profile.phone || "Not provided";
-    $("profileEmailDetails").textContent = user.email || "";
-
-    showAccount();
-    await loadOrders(user);
-
-  } catch (error) {
-    if (token !== accountLoadToken) return;
-
-    console.error("Account loading error:", error);
-
-    showAuth();
-    showMessage(
-      $("authMessage"),
-      friendlyError(error),
-      "error"
-    );
-  }
-}
-
-
-async function loadOrders(user) {
-  const container = $("ordersContainer");
-  container.innerHTML = '<div class="loading">Loading your orders...</div>';
-
-  try {
-    const ordersQuery = query(
-      collection(db, "orders"),
-      where("uid", "==", user.uid)
-    );
-
-    const snapshot = await getDocs(ordersQuery);
-
-    if (auth.currentUser?.uid !== user.uid) return;
-
-    if (snapshot.empty) {
-      container.innerHTML = `
-        <div class="empty">
-          <p>You have not placed any orders yet.</p>
-          <a href="index.html"
-             style="color:#6d28d9;font-weight:bold;text-decoration:none">
-            Start Shopping
-          </a>
-        </div>
-      `;
-      return;
-    }
-
-    const orders = snapshot.docs.map(item => ({
-      id: item.id,
-      ...item.data()
-    }));
-
-    orders.sort((a, b) => {
-      const aTime = a.createdAt?.toMillis?.() || 0;
-      const bTime = b.createdAt?.toMillis?.() || 0;
-      return bTime - aTime;
-    });
-
-    container.innerHTML = "";
-
-    orders.forEach(order => {
-      container.appendChild(createOrderElement(order));
-    });
-
-  } catch (error) {
-    console.error("Order loading error:", error);
-
-    container.innerHTML = `
-      <div class="message error">
-        Unable to load orders. ${escapeHTML(friendlyError(error))}
-      </div>
-    `;
-  }
-}
-
-
-function createOrderElement(order) {
-  const element = document.createElement("div");
-  element.className = "order";
-
-  const orderNumber = order.orderId || order.id;
-  const status = order.status || "Pending";
-  const paymentStatus = order.paymentStatus || "Pending";
-  const paymentMethod = order.paymentMethod || "Not specified";
-
-  const createdAt = order.createdAt?.toDate
-    ? order.createdAt.toDate().toLocaleString()
-    : "Date unavailable";
-
-  /* FIX: Read the actual amount saved by checkout/admin */
-  const total = getOrderTotal(order);
-
-  /* FIX: Admin order data uses products, not only items */
-  const orderItems = getOrderItems(order);
-
-  const itemsText = orderItems.map(item => {
-    const name = escapeHTML(
-      item.productName || item.name || item.title || "Product"
-    );
-
-    const quantity = Number(item.quantity || 1);
-
-    const variant = item.variantLabel
-      ? ` (${escapeHTML(item.variantLabel)}: ${escapeHTML(item.variantValue || "")})`
-      : "";
-
-    return `${name}${variant} × ${quantity}`;
-  }).join("<br>");
-
-  const canCancel = ["New", "Pending"].includes(status);
-
-  element.innerHTML = `
-    <div class="order-head">
-      <span class="order-id">Order #${escapeHTML(String(orderNumber))}</span>
-      <span class="status ${escapeHTML(status)}">${escapeHTML(status)}</span>
-    </div>
-
-    <p><strong>Date:</strong> ${escapeHTML(createdAt)}</p>
-    <p><strong>Total:</strong> ৳${total.toLocaleString("en-BD")}</p>
-    <p><strong>Payment Method:</strong> ${escapeHTML(paymentMethod)}</p>
-    <p><strong>Payment Status:</strong> ${escapeHTML(paymentStatus)}</p>
-
-    ${itemsText ? `<p><strong>Items:</strong><br>${itemsText}</p>` : ""}
-
-    ${canCancel ? `
-      <div class="order-actions">
-        <button type="button"
-          class="danger small-btn cancel-order-button">
-          Cancel Order
-        </button>
-      </div>
-    ` : ""}
-  `;
-
-  const cancelButton = element.querySelector(".cancel-order-button");
-
-  if (cancelButton) {
-    cancelButton.addEventListener("click", () => {
-      cancelOrder(order, cancelButton);
-    });
-  }
-
-  return element;
-}
-
-
-async function cancelOrder(order, button) {
-  if (!currentUser || auth.currentUser?.uid !== currentUser.uid) {
-    alert("Please login again.");
-    return;
-  }
-
-  const confirmed = confirm(
-    "Are you sure you want to cancel this order?"
+ try{
+  const q=query(
+   collection(db,"orders"),
+   where("uid","==",currentUser.uid),
+   limit(100)
   );
+  const snap=await getDocs(q);
+  allOrders=snap.docs.map(d=>({id:d.id,...d.data()}));
+  allOrders.sort((a,b)=>{
+   const aa=a.createdAt?.seconds||0;
+   const bb=b.createdAt?.seconds||0;
+   return bb-aa;
+  });
 
-  if (!confirmed) return;
+  document.getElementById("totalOrders").textContent=allOrders.length;
+  document.getElementById("pendingOrders").textContent=
+   allOrders.filter(o=>["New","Pending"].includes(o.status)).length;
+  document.getElementById("deliveredOrders").textContent=
+   allOrders.filter(o=>o.status==="Delivered").length;
 
-  const reason = prompt("Reason for cancellation (optional):") || "";
-
-  const orderRef = doc(db, "orders", order.id);
-  const trackingId = order.orderId || order.id;
-  const trackingRef = doc(db, "orderTracking", trackingId);
-
-  const originalText = button.textContent;
-  button.disabled = true;
-  button.textContent = "Cancelling...";
-
-  try {
-    const latestOrder = await getDoc(orderRef);
-
-    if (!latestOrder.exists()) {
-      throw new Error("Order not found.");
-    }
-
-    const latestData = latestOrder.data();
-
-    if (latestData.uid !== currentUser.uid) {
-      throw new Error("You cannot cancel this order.");
-    }
-
-    if (!["New", "Pending"].includes(latestData.status)) {
-      throw new Error("This order can no longer be cancelled.");
-    }
-
-    await updateDoc(orderRef, {
-      status: "Cancelled",
-      cancellationReason: reason.slice(0, 300),
-      cancelledAt: serverTimestamp()
-    });
-
-    await setDoc(trackingRef, {
-      orderId: trackingId,
-      status: "Cancelled",
-      updatedAt: serverTimestamp()
-    }, { merge: true });
-
-    alert("Your order has been cancelled.");
-    await loadOrders(currentUser);
-
-  } catch (error) {
-    console.error("Cancel order error:", error);
-    alert(friendlyError(error));
-    button.disabled = false;
-    button.textContent = originalText;
-  }
+  renderOrders();
+ }catch(e){
+  console.error(e);
+  box.innerHTML='<div class="empty">Orders লোড করা যায়নি। Email Verify করা আছে কি না পরীক্ষা করুন।</div>';
+ }
 }
 
+function renderOrders(){
+ const box=document.getElementById("ordersList");
+ const list=activeFilter==="all"
+  ?allOrders
+  :allOrders.filter(o=>o.status===activeFilter);
 
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;"
-  })[char]);
+ if(!list.length){
+  box.innerHTML='<div class="empty">এই ক্যাটাগরিতে কোনো Order নেই।</div>';
+  return;
+ }
+
+ box.innerHTML=list.map(o=>{
+  const items=o.items||o.products||[];
+  const productsText=Array.isArray(items)
+   ?items.map(p=>(p.name||p.productName||"Product")+" × "+(p.quantity||1)).join("<br>")
+   :"Order details unavailable";
+  const total=o.total??o.totalPrice??0;
+  const canCancel=["New","Pending"].includes(o.status);
+
+  return `
+   <article class="order-card">
+    <div class="order-head">
+     <span class="order-id">${esc(o.orderId||o.id)}</span>
+     <span class="badge ${statusClass(o.status)}">${esc(o.status||"Pending")}</span>
+    </div>
+    <div class="order-meta">
+     <div><span>Order Date</span><strong>${formatDate(o.createdAt)}</strong></div>
+     <div><span>Grand Total</span><strong>${money(total)}</strong></div>
+     <div><span>Payment Method</span><strong>${esc(o.paymentMethod||"")}</strong></div>
+     <div><span>Payment Status</span><strong>${esc(o.paymentStatus||"Pending")}</strong></div>
+    </div>
+    <div class="order-products">${productsText}</div>
+    <div class="order-actions">
+     <button class="btn btn-light" onclick="trackThisOrder('${o.id}')">Track Order</button>
+     ${canCancel?`<button class="btn btn-red" onclick="cancelOrder('${o.id}')">Cancel Order</button>`:""}
+    </div>
+   </article>`;
+ }).join("");
 }
 
-
-/* LOGIN */
-
-$("loginForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if (isSubmitting) return;
-  isSubmitting = true;
-
-  const button = $("loginButton");
-  setButtonLoading(button, true, "Logging in...", "Login");
-  clearMessage($("authMessage"));
-
-  try {
-    await ensurePersistence();
-
-    const email = $("loginEmail").value.trim();
-    const password = $("loginPassword").value;
-
-    const result = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    await reload(result.user);
-
-    if (!result.user.emailVerified) {
-      showVerification();
-      showMessage(
-        $("verificationMessage"),
-        "Please verify your email before continuing.",
-        "info"
-      );
-      return;
-    }
-
-    currentUser = result.user;
-    await loadAccount(result.user);
-
-  } catch (error) {
-    console.error("Login error:", error);
-
-    showAuth();
-    showMessage(
-      $("authMessage"),
-      friendlyError(error),
-      "error"
-    );
-
-  } finally {
-    isSubmitting = false;
-    setButtonLoading(button, false, "", "Login");
-  }
-});
-
-
-/* REGISTRATION */
-
-$("registerForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if (isSubmitting) return;
-  isSubmitting = true;
-
-  const button = $("registerButton");
-  setButtonLoading(button, true, "Creating account...", "Create Account");
-  clearMessage($("authMessage"));
-
-  try {
-    await ensurePersistence();
-
-    const name = $("registerName").value.trim();
-    const phone = $("registerPhone").value.trim();
-    const email = $("registerEmail").value.trim();
-    const password = $("registerPassword").value;
-    const confirmPassword = $("confirmPassword").value;
-
-    if (name.length < 2) {
-      throw new Error("Please enter your full name.");
-    }
-
-    if (phone.length < 6) {
-      throw new Error("Please enter a valid phone number.");
-    }
-
-    if (password !== confirmPassword) {
-      throw new Error("Passwords do not match.");
-    }
-
-    const result = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-
-    await setDoc(
-      doc(db, "customerProfiles", result.user.uid),
-      {
-        uid: result.user.uid,
-        name,
-        phone,
-        email,
-        banned: false,
-        createdAt: serverTimestamp()
-      }
-    );
-
-    await sendEmailVerification(result.user);
-
-    currentUser = result.user;
-    showVerification();
-
-    showMessage(
-      $("verificationMessage"),
-      "Your account has been created. Please verify your email before logging in.",
-      "success"
-    );
-
-  } catch (error) {
-    console.error("Registration error:", error);
-
-    showAuth();
-    showMessage(
-      $("authMessage"),
-      friendlyError(error),
-      "error"
-    );
-
-  } finally {
-    isSubmitting = false;
-    setButtonLoading(button, false, "", "Create Account");
-  }
-});
-
-
-/* FORGOT PASSWORD */
-
-$("forgotPasswordButton").addEventListener("click", async () => {
-  const email = $("loginEmail").value.trim();
-
-  if (!email) {
-    showMessage(
-      $("authMessage"),
-      "Enter your email address first.",
-      "error"
-    );
-    $("loginEmail").focus();
-    return;
-  }
-
-  try {
-    await ensurePersistence();
-    await sendPasswordResetEmail(auth, email);
-
-    showMessage(
-      $("authMessage"),
-      "Password reset email sent. Please check your inbox.",
-      "success"
-    );
-
-  } catch (error) {
-    showMessage(
-      $("authMessage"),
-      friendlyError(error),
-      "error"
-    );
-  }
-});
-
-
-/* EMAIL VERIFICATION */
-
-$("checkVerificationButton").addEventListener("click", async () => {
-  const user = auth.currentUser;
-
-  if (!user) {
-    showAuth();
-    return;
-  }
-
-  const button = $("checkVerificationButton");
-  setButtonLoading(button, true, "Checking...", "I Have Verified My Email");
-
-  try {
-    await reload(user);
-
-    if (auth.currentUser?.uid !== user.uid) {
-      showAuth();
-      return;
-    }
-
-    if (!user.emailVerified) {
-      showMessage(
-        $("verificationMessage"),
-        "Email is not verified yet. Please open the verification email and try again.",
-        "error"
-      );
-      return;
-    }
-
-    currentUser = user;
-    await loadAccount(user);
-
-  } catch (error) {
-    showMessage(
-      $("verificationMessage"),
-      friendlyError(error),
-      "error"
-    );
-
-  } finally {
-    setButtonLoading(
-      button,
-      false,
-      "",
-      "I Have Verified My Email"
-    );
-  }
-});
-
-
-$("resendVerificationButton").addEventListener("click", async () => {
-  const user = auth.currentUser;
-
-  if (!user) {
-    showAuth();
-    return;
-  }
-
-  const button = $("resendVerificationButton");
-  setButtonLoading(button, true, "Sending...", "Resend Verification Email");
-
-  try {
-    await reload(user);
-
-    if (user.emailVerified) {
-      showMessage(
-        $("verificationMessage"),
-        "Your email is already verified. You can continue.",
-        "success"
-      );
-      return;
-    }
-
-    await sendEmailVerification(user);
-
-    showMessage(
-      $("verificationMessage"),
-      "A new verification email has been sent.",
-      "success"
-    );
-
-  } catch (error) {
-    showMessage(
-      $("verificationMessage"),
-      friendlyError(error),
-      "error"
-    );
-
-  } finally {
-    setButtonLoading(
-      button,
-      false,
-      "",
-      "Resend Verification Email"
-    );
-  }
-});
-
-
-/* LOGOUT */
-
-async function logoutUser() {
-  accountLoadToken++;
-  currentUser = null;
-
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error("Logout error:", error);
-  }
-
-  showAuth();
-  clearMessage($("authMessage"));
-}
-
-$("logoutButton").addEventListener("click", logoutUser);
-$("verificationLogoutButton").addEventListener("click", logoutUser);
-
-
-/* AUTH STATE */
-
-async function startApp() {
-  try {
-    await ensurePersistence();
-
-    onAuthStateChanged(auth, async user => {
-      currentUser = user;
-
-      if (!user) {
-        accountLoadToken++;
-        showAuth();
-        return;
-      }
-
-      try {
-        await reload(user);
-
-        if (auth.currentUser?.uid !== user.uid) return;
-
-        if (!user.emailVerified) {
-          showVerification();
-          return;
-        }
-
-        await loadAccount(user);
-
-      } catch (error) {
-        console.error("Authentication state error:", error);
-
-        showAuth();
-        showMessage(
-          $("authMessage"),
-          friendlyError(error),
-          "error"
-        );
-      }
-    });
-
-  } catch (error) {
-    console.error("Firebase initialization error:", error);
-
-    showAuth();
-    showMessage(
-      $("authMessage"),
-      friendlyError(error),
-      "error"
-    );
-  }
-}
-
-startApp();
-
+window.filterOrders=(filter,button)=>{
+ activeFilter=filter;
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ button.classList.add("active");
+ renderOrders();
+};
+
+window.cancelOrder=async id=>{
+ const order=allOrders.find(o=>o.id===id);
+ if(!order)return;
+ if(!["New","Pending"].includes(order.status)){
+  alert("এই Order এখন Cancel করা যাবে না।");
+  return;
+ }
+ if(!confirm("আপনি কি এই Order Cancel করতে চান?"))return;
+
+ try{
+  await updateDoc(doc(db,"orders",id),{
+   status:"Cancelled",
+   cancellationReason:"Cancelled by customer",
+   cancelledAt:serverTimestamp()
+  });
+
+  alert("Order Cancel করা হয়েছে।");
+  await loadOrders();
+ }catch(e){
+  console.error(e);
+  alert("Order Cancel করা যায়নি: "+e.message);
+ }
+};
+
+window.trackThisOrder=id=>{
+ const order=allOrders.find(o=>o.id===id);
+ if(!order)return;
+ const orderId=order.orderId||id;
+ location.href="index.html?track="+encodeURIComponent(orderId);
+};
+
+window.logout=async()=>{
+ if(!confirm("আপনি কি Logout করতে চান?"))return;
+ try{
+  await signOut(auth);
+  location.href="index.html";
+ }catch(e){
+  alert("Logout করা যায়নি: "+e.message);
+ }
+};
+
+document.getElementById("year").textContent=new Date().getFullYear();
 </script>
 </body>
 </html>
