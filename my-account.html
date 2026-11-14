@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -661,11 +662,20 @@ async function loadAccount(user) {
     console.error("Account loading error:", error);
 
     showAuth();
-    showMessage(
-      $("authMessage"),
-      friendlyError(error),
-      "error"
-    );
+
+    const errorText = String(error?.message || "");
+
+    if (
+      errorText.includes("Your customer profile could not be found")
+    ) {
+      clearMessage($("authMessage"));
+    } else {
+      showMessage(
+        $("authMessage"),
+        friendlyError(error),
+        "error"
+      );
+    }
   }
 }
 
@@ -739,10 +749,7 @@ function createOrderElement(order) {
     ? order.createdAt.toDate().toLocaleString()
     : "Date unavailable";
 
-  /* FIX: Read the actual amount saved by checkout/admin */
   const total = getOrderTotal(order);
-
-  /* FIX: Admin order data uses products, not only items */
   const orderItems = getOrderItems(order);
 
   const itemsText = orderItems.map(item => {
@@ -1172,6 +1179,7 @@ async function startApp() {
       if (!user) {
         accountLoadToken++;
         showAuth();
+        clearMessage($("authMessage"));
         return;
       }
 
@@ -1191,11 +1199,20 @@ async function startApp() {
         console.error("Authentication state error:", error);
 
         showAuth();
-        showMessage(
-          $("authMessage"),
-          friendlyError(error),
-          "error"
-        );
+
+        const errorText = String(error?.message || "");
+
+        if (
+          errorText.includes("Your customer profile could not be found")
+        ) {
+          clearMessage($("authMessage"));
+        } else {
+          showMessage(
+            $("authMessage"),
+            friendlyError(error),
+            "error"
+          );
+        }
       }
     });
 
