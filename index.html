@@ -125,7 +125,7 @@ background:var(--purple);color:white;border-color:var(--purple);
 box-shadow:0 4px 12px #6d28d933;
 }
 
-/* IMPORTANT: Two product columns on mobile */
+/* Two product columns on mobile */
 .product-grid{
 display:flex!important;
 flex-wrap:wrap!important;
@@ -410,7 +410,6 @@ max-width:calc(50% - 4px);
 </nav>
 
 <script>
-/* Save referral code from shared referral links */
 try{
 const referralCode=new URLSearchParams(location.search).get('ref');
 if(referralCode){
@@ -478,8 +477,8 @@ showSlide(Number(dot.dataset.slide));
 startCarousel();
 });
 });
-startCarousel();
 
+/* Cart and Buy Now recovery */
 try{
 if(localStorage.getItem('msBuyNowMode')==='1'){
 const backup=localStorage.getItem('msCartBackup');
@@ -661,7 +660,6 @@ list=list.map(p=>({...p,_score:searchScore(p,q)}))
 $('productHeading').textContent=q?'Search Results':'Our Products';
 $('resultLabel').textContent=list.length+' Products';
 
-/* IMPORTANT FIX: join('') prevents commas becoming grid/flex items */
 $('products').innerHTML=list.length
 ?list.map(productCard).join('')
 :'<div class="empty">কোনো পণ্য পাওয়া যায়নি।</div>';
@@ -699,6 +697,7 @@ b.onclick=()=>buyNow(b.dataset.buy);
 });
 }
 
+/* Updated Buy Now */
 function buyNow(id){
 const p=products.find(x=>x.id===id);
 if(!p)return;
@@ -715,16 +714,39 @@ showToast('দুঃখিত! এই পণ্যটি স্টকে নে�
 return;
 }
 
+const price=Number(p.price);
+if(!Number.isFinite(price)||price<=0){
+showToast('এই পণ্যের মূল্য সঠিক নয়।');
+return;
+}
+
 try{
-localStorage.setItem('msCartBackup',localStorage.getItem('msCart')||'{}');
+const existingCart=localStorage.getItem('msCart')||'{}';
+
+localStorage.setItem('msCartBackup',existingCart);
+
 const entry={
-productId:id,variantId:'',variantLabel:'',variantValue:'',
-price:Number(p.price||0),quantity:1
+productId:id,
+name:p.name||'Product',
+image:p.imageUrl||'',
+variantId:'',
+variantLabel:'',
+variantValue:'',
+price:price,
+quantity:1
 };
-localStorage.setItem('msCart',JSON.stringify({[id]:entry}));
+
+localStorage.setItem(
+'msCart',
+JSON.stringify({[id]:entry})
+);
+
 localStorage.setItem('msBuyNowMode','1');
+
 location.href='checkout.html';
+
 }catch(e){
+console.error('Buy Now error:',e);
 showToast('Checkout চালু করা যাচ্ছে না।');
 }
 }
@@ -847,6 +869,7 @@ $('noticeText').textContent=texts.length
 :'Welcome to MS STORE - Online Shopping';
 });
 
+startCarousel();
 loadProducts();
 </script>
 
