@@ -1,833 +1,1218 @@
-
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6d28d9">
 <title>MS STORE | My Account</title>
 
 <style>
+:root{
+  --purple:#6d28d9;
+  --purple-dark:#4c1d95;
+  --orange:#f97316;
+  --bg:#f5f3ff;
+  --text:#211936;
+  --muted:#77718a;
+  --white:#fff;
+  --border:#e9e2f5;
+  --green:#15803d;
+  --red:#dc2626;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#f5f6fa;font-family:Arial,sans-serif;color:#202536}
-header{background:#111827;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center;gap:10px}
-header a{color:#f59e0b;text-decoration:none;font-weight:bold}
-main{max-width:850px;margin:25px auto;padding:0 14px}
-.panel{background:white;border-radius:13px;padding:19px;margin-bottom:16px}
-h2{margin-top:0;font-size:21px}
-h3{font-size:17px;margin-bottom:10px}
-input,select{width:100%;padding:12px;border:1px solid #d7dce5;border-radius:8px;margin:5px 0 10px;font-size:15px}
-button{border:0;border-radius:8px;padding:13px 15px;background:#111827;color:white;font-weight:bold;cursor:pointer;margin-top:7px;font-size:15px}
-button:disabled{opacity:.6}
-.btn{width:100%}
-.secondary{background:#64748b}
-.orange{background:#f59e0b;color:#111827}
-.red{background:#dc2626}
-.green{background:#15803d}
-.order{background:#f8fafc;border:1px solid #e5e7eb;border-radius:10px;padding:15px;margin:12px 0;line-height:1.7;overflow-wrap:anywhere}
-.order textarea{width:100%;min-height:75px;padding:10px;border:1px solid #ddd;border-radius:8px;margin:8px 0}
-.status{display:inline-block;background:#e2e8f0;padding:4px 9px;border-radius:15px;font-size:12px;font-weight:bold}
-.msg{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+header{
+  background:linear-gradient(120deg,var(--purple-dark),var(--purple));
+  color:white;
+  padding:18px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-shadow:0 4px 15px #4c1d9525;
+}
+.logo{
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+.logo span{color:#fb923c}
+.header-link{
+  color:white;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:bold;
+}
+.container{
+  max-width:850px;
+  margin:25px auto;
+  padding:0 14px 40px;
+}
+.card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:22px;
+  margin-bottom:18px;
+  box-shadow:0 5px 20px #3b076408;
+}
+h2{
+  margin:0 0 18px;
+  font-size:21px;
+}
+h3{
+  margin:0 0 12px;
+  font-size:17px;
+}
+.subtitle{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  margin-top:-9px;
+  margin-bottom:18px;
+}
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:20px;
+}
+.tab{
+  flex:1;
+  padding:12px 8px;
+  border:1px solid var(--border);
+  background:#faf8ff;
+  border-radius:9px;
+  color:var(--purple-dark);
+  font-weight:bold;
+  cursor:pointer;
+}
+.tab.active{
+  color:white;
+  background:var(--purple);
+  border-color:var(--purple);
+}
+.field{margin-bottom:14px}
+label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+input{
+  width:100%;
+  padding:13px;
+  border:1px solid #ddd5eb;
+  border-radius:9px;
+  outline:none;
+  font-size:14px;
+  background:white;
+}
+input:focus{
+  border-color:var(--purple);
+  box-shadow:0 0 0 3px #6d28d91a;
+}
+button{
+  border:0;
+  border-radius:9px;
+  padding:13px 16px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+.primary{
+  width:100%;
+  background:linear-gradient(110deg,var(--purple),var(--purple-dark));
+  color:white;
+}
+.secondary{
+  background:#fff7ed;
+  color:#c2410c;
+  border:1px solid #fed7aa;
+}
+.danger{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+.small-btn{
+  padding:9px 12px;
+  font-size:12px;
+}
+.link-btn{
+  padding:0;
+  background:none;
+  color:var(--purple);
+  font-size:13px;
+  margin-top:14px;
+}
+.message{
+  display:none;
+  padding:12px;
+  border-radius:9px;
+  margin-bottom:15px;
+  font-size:13px;
+  line-height:1.5;
+}
+.message.success{
+  display:block;
+  background:#dcfce7;
+  color:#166534;
+}
+.message.error{
+  display:block;
+  background:#fee2e2;
+  color:#991b1b;
+}
+.message.info{
+  display:block;
+  background:#ede9fe;
+  color:#5b21b6;
+}
 .hidden{display:none!important}
-#toast{position:fixed;top:15px;left:50%;transform:translateX(-50%) translateY(-120px);width:calc(100% - 30px);max-width:500px;padding:16px;border-radius:12px;background:#dcfce7;color:#166534;font-size:15px;font-weight:bold;text-align:center;box-shadow:0 5px 20px #0002;z-index:99999;transition:transform .35s ease}
-#toast.show{transform:translateX(-50%) translateY(0)}
-.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px;margin:10px 0}
-@media(max-width:520px){.panel{padding:17px}}
+.profile-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.profile-avatar{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:#ede9fe;
+  color:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:bold;
+}
+.profile-info{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+.profile-info p{
+  margin:5px 0;
+  color:var(--muted);
+  font-size:13px;
+  word-break:break-word;
+}
+.order{
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:15px;
+  margin-top:12px;
+}
+.order-head{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+.order-id{
+  font-size:13px;
+  font-weight:bold;
+  color:var(--purple-dark);
+}
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+  background:#ede9fe;
+  color:#5b21b6;
+}
+.status.Delivered{background:#dcfce7;color:#166534}
+.status.Cancelled{background:#fee2e2;color:#991b1b}
+.status.Shipped{background:#dbeafe;color:#1d4ed8}
+.status.Processing{background:#ffedd5;color:#c2410c}
+.order p{
+  font-size:13px;
+  color:#625b70;
+  margin:7px 0;
+  overflow-wrap:anywhere;
+}
+.order strong{color:var(--text)}
+.order-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+.empty{
+  text-align:center;
+  padding:25px 10px;
+  color:var(--muted);
+  font-size:14px;
+}
+.loading{
+  text-align:center;
+  color:var(--muted);
+  padding:20px;
+  font-size:13px;
+}
+footer{
+  text-align:center;
+  padding:20px;
+  color:var(--muted);
+  font-size:12px;
+}
+@media(max-width:480px){
+  .container{margin:15px auto}
+  .card{padding:17px}
+  header{padding:15px}
+  .logo{font-size:19px}
+}
 </style>
 </head>
 
 <body>
 
-<div id="toast"></div>
-
 <header>
- <b style="font-size:22px">MS STORE</b>
- <a href="index.html">← SHOPPING</a>
+  <div class="logo">MS <span>STORE</span></div>
+  <a class="header-link" href="index.html">Continue Shopping</a>
 </header>
 
-<main>
+<main class="container">
 
-<section class="panel">
- <h2>My Account / আমার অ্যাকাউন্ট</h2>
+  <section id="authSection" class="card">
+    <h2>My Account</h2>
+    <p class="subtitle">Login or create your MS STORE account.</p>
 
- <div id="authBox">
-  <p id="authStatus" class="msg">Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।</p>
+    <div id="authMessage" class="message"></div>
 
-  <div id="registerFields" class="hidden">
-   <input id="regName" placeholder="আপনার নাম">
-   <input id="regPhone" type="tel" placeholder="মোবাইল নম্বর">
-  </div>
+    <div class="tabs">
+      <button type="button" class="tab active" id="loginTab">Login</button>
+      <button type="button" class="tab" id="registerTab">Register</button>
+    </div>
 
-  <input id="email" type="email" placeholder="Gmail / Email" autocomplete="email">
-  <input id="password" type="password" placeholder="Password (কমপক্ষে ৬ অক্ষর)" autocomplete="current-password">
+    <form id="loginForm">
+      <div class="field">
+        <label>Email Address</label>
+        <input id="loginEmail" type="email" required autocomplete="email">
+      </div>
 
-  <button id="authSubmit" class="btn">Login</button>
-  <button id="toggle" class="btn secondary">নতুন অ্যাকাউন্ট তৈরি করুন</button>
-  <button id="forgot" class="btn secondary">Forgot Password</button>
- </div>
+      <div class="field">
+        <label>Password</label>
+        <input id="loginPassword" type="password" required autocomplete="current-password">
+      </div>
 
- <div id="profile" class="msg hidden"></div>
- <button id="logout" class="red hidden">Logout</button>
- <p id="authMsg" class="msg"></p>
-</section>
+      <button class="primary" id="loginButton" type="submit">Login</button>
 
+      <button class="link-btn" id="forgotPasswordButton" type="button">
+        Forgot Password?
+      </button>
+    </form>
 
-<!-- EMAIL VERIFICATION -->
+    <form id="registerForm" class="hidden">
+      <div class="field">
+        <label>Full Name</label>
+        <input id="registerName" type="text" required maxlength="80" autocomplete="name">
+      </div>
 
-<section class="panel hidden" id="verifyPanel">
- <h3>Email Verification</h3>
+      <div class="field">
+        <label>Phone Number</label>
+        <input id="registerPhone" type="tel" required maxlength="20" autocomplete="tel">
+      </div>
 
- <div class="info-box">
-  <b>Email Verify করুন</b>
-  <p class="msg">
-   Gmail-এর Inbox অথবা Spam Folder থেকে Verification Link খুলুন।
-   Verify সম্পন্ন হলে নিচের বাটনে চাপ দিন।
-  </p>
- </div>
+      <div class="field">
+        <label>Email Address</label>
+        <input id="registerEmail" type="email" required autocomplete="email">
+      </div>
 
- <p id="verifyEmail" class="msg"></p>
+      <div class="field">
+        <label>Password</label>
+        <input id="registerPassword" type="password" required minlength="6" autocomplete="new-password">
+      </div>
 
- <button id="resendVerify" class="orange btn">
-  Verification Email আবার পাঠান
- </button>
+      <div class="field">
+        <label>Confirm Password</label>
+        <input id="confirmPassword" type="password" required minlength="6" autocomplete="new-password">
+      </div>
 
- <button id="checkVerify" class="btn secondary">
-  আমি Email Verify করেছি
- </button>
-</section>
+      <button class="primary" id="registerButton" type="submit">
+        Create Account
+      </button>
+    </form>
+  </section>
 
+  <section id="verificationSection" class="card hidden">
+    <h2>Verify Your Email</h2>
+    <div id="verificationMessage" class="message info">
+      Please verify your email address before using your account.
+    </div>
 
-<!-- ORDERS -->
+    <p class="subtitle">
+      A verification email has been sent to your email address.
+      Open that email and click the verification link.
+    </p>
 
-<section class="panel">
- <h2>My Orders / আমার অর্ডার</h2>
- <div id="orders">অর্ডার দেখতে Login করুন।</div>
-</section>
+    <button class="primary" id="checkVerificationButton" type="button">
+      I Have Verified My Email
+    </button>
+
+    <button class="secondary" id="resendVerificationButton"
+      type="button" style="width:100%;margin-top:10px">
+      Resend Verification Email
+    </button>
+
+    <button class="link-btn" id="verificationLogoutButton" type="button">
+      Logout
+    </button>
+  </section>
+
+  <section id="accountSection" class="hidden">
+
+    <div class="card">
+      <div class="profile-top">
+        <div class="profile-info">
+          <div class="profile-avatar" id="profileAvatar">M</div>
+          <div>
+            <h2 id="profileName" style="margin:0">My Account</h2>
+            <p id="profileEmail"></p>
+          </div>
+        </div>
+
+        <button class="danger small-btn" id="logoutButton" type="button">
+          Logout
+        </button>
+      </div>
+
+      <hr style="border:0;border-top:1px solid var(--border);margin:18px 0">
+
+      <h3>Account Information</h3>
+      <p style="font-size:13px;color:var(--muted)">
+        Name: <strong id="profileNameDetails"></strong>
+      </p>
+      <p style="font-size:13px;color:var(--muted)">
+        Phone: <strong id="profilePhone"></strong>
+      </p>
+      <p style="font-size:13px;color:var(--muted)">
+        Email: <strong id="profileEmailDetails"></strong>
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>My Orders</h2>
+      <p class="subtitle">View your order history and current delivery status.</p>
+
+      <div id="ordersContainer">
+        <div class="loading">Loading your orders...</div>
+      </div>
+    </div>
+
+  </section>
 
 </main>
 
+<footer>
+  © MS STORE. All rights reserved.
+</footer>
 
 <script type="module">
+import { initializeApp } from
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
- initializeApp
-} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js';
+  getAuth,
+  setPersistence,
+  browserLocalPersistence,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  reload
+} from
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
- getAuth,
- onAuthStateChanged,
- createUserWithEmailAndPassword,
- signInWithEmailAndPassword,
- signOut,
- sendEmailVerification,
- sendPasswordResetEmail,
- setPersistence,
- browserLocalPersistence,
- reload
-} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js';
-
-import {
- getFirestore,
- doc,
- getDoc,
- collection,
- getDocs,
- query,
- where,
- updateDoc,
- setDoc,
- serverTimestamp
-} from 'https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js';
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  updateDoc,
+  serverTimestamp
+} from
+  "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-/* FIREBASE CONFIG */
-
-const firebaseConfig={
- apiKey:"AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
- authDomain:"ms-store-admin-26416.firebaseapp.com",
- projectId:"ms-store-admin-26416",
- storageBucket:"ms-store-admin-26416.firebasestorage.app",
- messagingSenderId:"968008425065",
- appId:"1:968008425065:web:1e0904dcab96d4d003ccf8"
+const firebaseConfig = {
+  apiKey: "AIzaSyAXWNG3D4FYzJYOFAgksTmzYFYBEsL9-gk",
+  authDomain: "ms-store-admin-26416.firebaseapp.com",
+  projectId: "ms-store-admin-26416",
+  storageBucket: "ms-store-admin-26416.firebasestorage.app",
+  messagingSenderId: "968008425065",
+  appId: "1:968008425065:web:1e0904dcab96d4d003ccf8"
 };
 
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-const db=getFirestore(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = id => document.getElementById(id);
+
+let currentUser = null;
+let persistenceReady = false;
+let accountLoadToken = 0;
+let isSubmitting = false;
 
 
-/* COMMON */
+function showMessage(element, message, type = "info") {
+  element.textContent = message;
+  element.className = "message " + type;
+}
 
-const $=id=>document.getElementById(id);
+function clearMessage(element) {
+  element.textContent = "";
+  element.className = "message";
+}
 
-const money=n=>'৳'+Number(n||0).toLocaleString('en-BD');
+function setButtonLoading(button, loading, loadingText, normalText) {
+  button.disabled = loading;
+  button.textContent = loading ? loadingText : normalText;
+}
 
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
- '&':'&amp;',
- '<':'&lt;',
- '>':'&gt;',
- '"':'&quot;',
- "'":'&#39;'
-}[c]));
+function friendlyError(error) {
+  const code = error?.code || "";
 
-let currentUser=null;
-let isRegister=false;
-let toastTimer=null;
-let returnHandled=false;
+  const messages = {
+    "auth/invalid-email": "Please enter a valid email address.",
+    "auth/user-not-found": "No account found with this email.",
+    "auth/wrong-password": "Incorrect password.",
+    "auth/invalid-credential": "Incorrect email or password.",
+    "auth/email-already-in-use": "This email is already registered.",
+    "auth/weak-password": "Password must contain at least 6 characters.",
+    "auth/too-many-requests": "Too many attempts. Please try again later.",
+    "auth/network-request-failed": "Network error. Check your internet connection.",
+    "auth/user-disabled": "This account has been disabled.",
+    "permission-denied": "Permission denied. Please try again or contact support."
+  };
 
-
-/* CHECKOUT RETURN */
-
-const urlParams=new URLSearchParams(location.search);
-
-const returnToCheckout=urlParams.get('return')==='checkout';
-
-function goToCheckout(){
-
-if(!returnToCheckout||returnHandled)return;
-
-if(!auth.currentUser||!auth.currentUser.emailVerified)return;
-
-returnHandled=true;
-
-showToast('Login ও Email Verification সফল। Checkout-এ নেওয়া হচ্ছে।');
-
-setTimeout(()=>{
-
-window.location.replace('checkout.html');
-
-},900);
-
+  return messages[code] || error?.message || "Something went wrong. Please try again.";
 }
 
 
-/* TOAST */
+function showAuth() {
+  $("authSection").classList.remove("hidden");
+  $("verificationSection").classList.add("hidden");
+  $("accountSection").classList.add("hidden");
+}
 
-function showToast(message){
+function showVerification() {
+  $("authSection").classList.add("hidden");
+  $("verificationSection").classList.remove("hidden");
+  $("accountSection").classList.add("hidden");
+}
 
-const toast=$('toast');
-
-toast.textContent=message;
-toast.classList.add('show');
-
-clearTimeout(toastTimer);
-
-toastTimer=setTimeout(()=>{
-toast.classList.remove('show');
-},3500);
-
+function showAccount() {
+  $("authSection").classList.add("hidden");
+  $("verificationSection").classList.add("hidden");
+  $("accountSection").classList.remove("hidden");
 }
 
 
-/* ERROR */
+function switchTab(tab) {
+  const login = tab === "login";
 
-function authError(e){
+  $("loginForm").classList.toggle("hidden", !login);
+  $("registerForm").classList.toggle("hidden", login);
 
-const m=e.code||e.message;
+  $("loginTab").classList.toggle("active", login);
+  $("registerTab").classList.toggle("active", !login);
 
-return ({
- 'auth/email-already-in-use':'এই Email দিয়ে আগে অ্যাকাউন্ট খোলা হয়েছে।',
- 'auth/invalid-email':'Email ঠিক নয়।',
- 'auth/weak-password':'Password কমপক্ষে ৬ অক্ষরের হতে হবে।',
- 'auth/invalid-credential':'Email অথবা Password ভুল।',
- 'auth/user-not-found':'এই Email দিয়ে অ্যাকাউন্ট পাওয়া যায়নি।',
- 'auth/wrong-password':'Password ভুল হয়েছে।',
- 'auth/too-many-requests':'কিছুক্ষণ পরে আবার চেষ্টা করুন।',
- 'auth/network-request-failed':'Internet Connection পরীক্ষা করুন।',
- 'auth/invalid-api-key':'Firebase API Key সঠিক নয়।'
-})[m]||e.message||m;
+  clearMessage($("authMessage"));
+}
 
+$("loginTab").addEventListener("click", () => switchTab("login"));
+$("registerTab").addEventListener("click", () => switchTab("register"));
+
+
+async function ensurePersistence() {
+  if (persistenceReady) return;
+
+  await setPersistence(auth, browserLocalPersistence);
+  persistenceReady = true;
 }
 
 
-function dateText(timestamp){
+async function getCustomerProfile(user) {
+  const profileRef = doc(db, "customerProfiles", user.uid);
+  const profileSnap = await getDoc(profileRef);
 
-if(!timestamp?.toDate)return 'তারিখ পাওয়া যায়নি';
+  if (!profileSnap.exists()) {
+    throw new Error(
+      "Your customer profile could not be found. Please contact MS STORE support."
+    );
+  }
 
-return timestamp.toDate().toLocaleString('bn-BD',{
- dateStyle:'medium',
- timeStyle:'short'
+  return profileSnap.data();
+}
+
+
+/* ORDER TOTAL FIX */
+function getOrderTotal(order) {
+  const possibleTotals = [
+    order.totalPrice,
+    order.total,
+    order.grandTotal,
+    order.amount,
+    order.finalAmount
+  ];
+
+  for (const value of possibleTotals) {
+    if (
+      value !== undefined &&
+      value !== null &&
+      value !== "" &&
+      Number.isFinite(Number(value))
+    ) {
+      return Number(value);
+    }
+  }
+
+  const subtotal = Number(order.subtotal);
+  const deliveryCharge = Number(order.deliveryCharge);
+
+  if (
+    Number.isFinite(subtotal) &&
+    Number.isFinite(deliveryCharge) &&
+    (order.subtotal !== undefined || order.deliveryCharge !== undefined)
+  ) {
+    return subtotal + deliveryCharge;
+  }
+
+  return 0;
+}
+
+
+/* SUPPORT BOTH products AND items */
+function getOrderItems(order) {
+  if (Array.isArray(order.products) && order.products.length) {
+    return order.products;
+  }
+
+  if (Array.isArray(order.items) && order.items.length) {
+    return order.items;
+  }
+
+  return [];
+}
+
+
+async function loadAccount(user) {
+  const token = ++accountLoadToken;
+
+  try {
+    await reload(user);
+
+    if (auth.currentUser?.uid !== user.uid) return;
+
+    if (!user.emailVerified) {
+      showVerification();
+      return;
+    }
+
+    const profile = await getCustomerProfile(user);
+
+    if (token !== accountLoadToken) return;
+    if (auth.currentUser?.uid !== user.uid) return;
+
+    if (profile.banned === true) {
+      showAuth();
+      showMessage(
+        $("authMessage"),
+        "This account is currently restricted. Please contact MS STORE support.",
+        "error"
+      );
+      return;
+    }
+
+    $("profileName").textContent = profile.name || "Customer";
+    $("profileAvatar").textContent =
+      (profile.name || "M").trim().charAt(0).toUpperCase();
+
+    $("profileEmail").textContent = user.email || "";
+    $("profileNameDetails").textContent = profile.name || "Not provided";
+    $("profilePhone").textContent = profile.phone || "Not provided";
+    $("profileEmailDetails").textContent = user.email || "";
+
+    showAccount();
+    await loadOrders(user);
+
+  } catch (error) {
+    if (token !== accountLoadToken) return;
+
+    console.error("Account loading error:", error);
+
+    showAuth();
+    showMessage(
+      $("authMessage"),
+      friendlyError(error),
+      "error"
+    );
+  }
+}
+
+
+async function loadOrders(user) {
+  const container = $("ordersContainer");
+  container.innerHTML = '<div class="loading">Loading your orders...</div>';
+
+  try {
+    const ordersQuery = query(
+      collection(db, "orders"),
+      where("uid", "==", user.uid)
+    );
+
+    const snapshot = await getDocs(ordersQuery);
+
+    if (auth.currentUser?.uid !== user.uid) return;
+
+    if (snapshot.empty) {
+      container.innerHTML = `
+        <div class="empty">
+          <p>You have not placed any orders yet.</p>
+          <a href="index.html"
+             style="color:#6d28d9;font-weight:bold;text-decoration:none">
+            Start Shopping
+          </a>
+        </div>
+      `;
+      return;
+    }
+
+    const orders = snapshot.docs.map(item => ({
+      id: item.id,
+      ...item.data()
+    }));
+
+    orders.sort((a, b) => {
+      const aTime = a.createdAt?.toMillis?.() || 0;
+      const bTime = b.createdAt?.toMillis?.() || 0;
+      return bTime - aTime;
+    });
+
+    container.innerHTML = "";
+
+    orders.forEach(order => {
+      container.appendChild(createOrderElement(order));
+    });
+
+  } catch (error) {
+    console.error("Order loading error:", error);
+
+    container.innerHTML = `
+      <div class="message error">
+        Unable to load orders. ${escapeHTML(friendlyError(error))}
+      </div>
+    `;
+  }
+}
+
+
+function createOrderElement(order) {
+  const element = document.createElement("div");
+  element.className = "order";
+
+  const orderNumber = order.orderId || order.id;
+  const status = order.status || "Pending";
+  const paymentStatus = order.paymentStatus || "Pending";
+  const paymentMethod = order.paymentMethod || "Not specified";
+
+  const createdAt = order.createdAt?.toDate
+    ? order.createdAt.toDate().toLocaleString()
+    : "Date unavailable";
+
+  /* FIX: Read the actual amount saved by checkout/admin */
+  const total = getOrderTotal(order);
+
+  /* FIX: Admin order data uses products, not only items */
+  const orderItems = getOrderItems(order);
+
+  const itemsText = orderItems.map(item => {
+    const name = escapeHTML(
+      item.productName || item.name || item.title || "Product"
+    );
+
+    const quantity = Number(item.quantity || 1);
+
+    const variant = item.variantLabel
+      ? ` (${escapeHTML(item.variantLabel)}: ${escapeHTML(item.variantValue || "")})`
+      : "";
+
+    return `${name}${variant} × ${quantity}`;
+  }).join("<br>");
+
+  const canCancel = ["New", "Pending"].includes(status);
+
+  element.innerHTML = `
+    <div class="order-head">
+      <span class="order-id">Order #${escapeHTML(String(orderNumber))}</span>
+      <span class="status ${escapeHTML(status)}">${escapeHTML(status)}</span>
+    </div>
+
+    <p><strong>Date:</strong> ${escapeHTML(createdAt)}</p>
+    <p><strong>Total:</strong> ৳${total.toLocaleString("en-BD")}</p>
+    <p><strong>Payment Method:</strong> ${escapeHTML(paymentMethod)}</p>
+    <p><strong>Payment Status:</strong> ${escapeHTML(paymentStatus)}</p>
+
+    ${itemsText ? `<p><strong>Items:</strong><br>${itemsText}</p>` : ""}
+
+    ${canCancel ? `
+      <div class="order-actions">
+        <button type="button"
+          class="danger small-btn cancel-order-button">
+          Cancel Order
+        </button>
+      </div>
+    ` : ""}
+  `;
+
+  const cancelButton = element.querySelector(".cancel-order-button");
+
+  if (cancelButton) {
+    cancelButton.addEventListener("click", () => {
+      cancelOrder(order, cancelButton);
+    });
+  }
+
+  return element;
+}
+
+
+async function cancelOrder(order, button) {
+  if (!currentUser || auth.currentUser?.uid !== currentUser.uid) {
+    alert("Please login again.");
+    return;
+  }
+
+  const confirmed = confirm(
+    "Are you sure you want to cancel this order?"
+  );
+
+  if (!confirmed) return;
+
+  const reason = prompt("Reason for cancellation (optional):") || "";
+
+  const orderRef = doc(db, "orders", order.id);
+  const trackingId = order.orderId || order.id;
+  const trackingRef = doc(db, "orderTracking", trackingId);
+
+  const originalText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Cancelling...";
+
+  try {
+    const latestOrder = await getDoc(orderRef);
+
+    if (!latestOrder.exists()) {
+      throw new Error("Order not found.");
+    }
+
+    const latestData = latestOrder.data();
+
+    if (latestData.uid !== currentUser.uid) {
+      throw new Error("You cannot cancel this order.");
+    }
+
+    if (!["New", "Pending"].includes(latestData.status)) {
+      throw new Error("This order can no longer be cancelled.");
+    }
+
+    await updateDoc(orderRef, {
+      status: "Cancelled",
+      cancellationReason: reason.slice(0, 300),
+      cancelledAt: serverTimestamp()
+    });
+
+    await setDoc(trackingRef, {
+      orderId: trackingId,
+      status: "Cancelled",
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+
+    alert("Your order has been cancelled.");
+    await loadOrders(currentUser);
+
+  } catch (error) {
+    console.error("Cancel order error:", error);
+    alert(friendlyError(error));
+    button.disabled = false;
+    button.textContent = originalText;
+  }
+}
+
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  })[char]);
+}
+
+
+/* LOGIN */
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (isSubmitting) return;
+  isSubmitting = true;
+
+  const button = $("loginButton");
+  setButtonLoading(button, true, "Logging in...", "Login");
+  clearMessage($("authMessage"));
+
+  try {
+    await ensurePersistence();
+
+    const email = $("loginEmail").value.trim();
+    const password = $("loginPassword").value;
+
+    const result = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    await reload(result.user);
+
+    if (!result.user.emailVerified) {
+      showVerification();
+      showMessage(
+        $("verificationMessage"),
+        "Please verify your email before continuing.",
+        "info"
+      );
+      return;
+    }
+
+    currentUser = result.user;
+    await loadAccount(result.user);
+
+  } catch (error) {
+    console.error("Login error:", error);
+
+    showAuth();
+    showMessage(
+      $("authMessage"),
+      friendlyError(error),
+      "error"
+    );
+
+  } finally {
+    isSubmitting = false;
+    setButtonLoading(button, false, "", "Login");
+  }
 });
 
-}
 
+/* REGISTRATION */
 
-/* SESSION */
+$("registerForm").addEventListener("submit", async event => {
+  event.preventDefault();
 
-async function startApp(){
+  if (isSubmitting) return;
+  isSubmitting = true;
 
-try{
+  const button = $("registerButton");
+  setButtonLoading(button, true, "Creating account...", "Create Account");
+  clearMessage($("authMessage"));
 
-await setPersistence(auth,browserLocalPersistence);
+  try {
+    await ensurePersistence();
 
-onAuthStateChanged(auth,async user=>{
+    const name = $("registerName").value.trim();
+    const phone = $("registerPhone").value.trim();
+    const email = $("registerEmail").value.trim();
+    const password = $("registerPassword").value;
+    const confirmPassword = $("confirmPassword").value;
 
-currentUser=user;
+    if (name.length < 2) {
+      throw new Error("Please enter your full name.");
+    }
 
-if(!user){
+    if (phone.length < 6) {
+      throw new Error("Please enter a valid phone number.");
+    }
 
-$('authBox').classList.remove('hidden');
-$('profile').classList.add('hidden');
-$('logout').classList.add('hidden');
-$('verifyPanel').classList.add('hidden');
+    if (password !== confirmPassword) {
+      throw new Error("Passwords do not match.");
+    }
 
-$('orders').textContent='অর্ডার দেখতে Login করুন।';
+    const result = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
-if(returnToCheckout){
+    await setDoc(
+      doc(db, "customerProfiles", result.user.uid),
+      {
+        uid: result.user.uid,
+        name,
+        phone,
+        email,
+        banned: false,
+        createdAt: serverTimestamp()
+      }
+    );
 
-$('authStatus').textContent=
-'Checkout করতে Login করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।';
+    await sendEmailVerification(result.user);
 
-}
+    currentUser = result.user;
+    showVerification();
 
-return;
+    showMessage(
+      $("verificationMessage"),
+      "Your account has been created. Please verify your email before logging in.",
+      "success"
+    );
 
-}
+  } catch (error) {
+    console.error("Registration error:", error);
 
-await loadAccount(user);
+    showAuth();
+    showMessage(
+      $("authMessage"),
+      friendlyError(error),
+      "error"
+    );
 
+  } finally {
+    isSubmitting = false;
+    setButtonLoading(button, false, "", "Create Account");
+  }
 });
-
-}catch(e){
-
-console.error(e);
-
-$('authMsg').textContent='Authentication চালু হয়নি: '+authError(e);
-
-}
-
-}
-
-
-/* REGISTER TOGGLE */
-
-$('toggle').onclick=()=>{
-
-isRegister=!isRegister;
-
-$('registerFields').classList.toggle('hidden',!isRegister);
-
-$('authSubmit').textContent=isRegister?'Register':'Login';
-
-$('toggle').textContent=isRegister?
- 'আগে থেকেই অ্যাকাউন্ট আছে? Login':
- 'নতুন অ্যাকাউন্ট তৈরি করুন';
-
-$('forgot').classList.toggle('hidden',isRegister);
-
-$('authMsg').textContent='';
-
-};
-
-
-/* LOGIN / REGISTER */
-
-$('authSubmit').onclick=async()=>{
-
-const email=$('email').value.trim().toLowerCase();
-
-const password=$('password').value;
-
-$('authMsg').textContent='';
-
-if(!email||!password){
-
-$('authMsg').textContent='Email ও Password লিখুন।';
-
-return;
-
-}
-
-if(password.length<6){
-
-$('authMsg').textContent='Password কমপক্ষে ৬ অক্ষরের হতে হবে।';
-
-return;
-
-}
-
-$('authSubmit').disabled=true;
-
-try{
-
-if(isRegister){
-
-const name=$('regName').value.trim();
-
-const phone=$('regPhone').value.trim();
-
-if(!name||!phone){
-
-throw Error('নাম ও মোবাইল নম্বর লিখুন।');
-
-}
-
-const result=await createUserWithEmailAndPassword(
- auth,
- email,
- password
-);
-
-await setDoc(doc(db,'customerProfiles',result.user.uid),{
-
-uid:result.user.uid,
-name,
-phone,
-email:result.user.email,
-banned:false,
-createdAt:serverTimestamp()
-
-});
-
-await sendEmailVerification(result.user);
-
-isRegister=false;
-
-$('registerFields').classList.add('hidden');
-
-$('authSubmit').textContent='Login';
-
-$('toggle').textContent='নতুন অ্যাকাউন্ট তৈরি করুন';
-
-$('forgot').classList.remove('hidden');
-
-$('authMsg').textContent=
-'অ্যাকাউন্ট তৈরি হয়েছে। Gmail-এর Inbox/Spam থেকে Email Verify করুন।';
-
-showToast('Verification Email পাঠানো হয়েছে।');
-
-}else{
-
-const result=await signInWithEmailAndPassword(
- auth,
- email,
- password
-);
-
-await reload(result.user);
-
-if(!result.user.emailVerified){
-
-$('authMsg').textContent=
-'Login হয়েছে। Checkout করার আগে Email Verify করুন।';
-
-showToast('আপনার Email Verify করা প্রয়োজন।');
-
-}else{
-
-showToast('Login সফল হয়েছে।');
-
-}
-
-}
-
-}catch(e){
-
-console.error(e);
-
-$('authMsg').textContent=authError(e);
-
-}finally{
-
-$('authSubmit').disabled=false;
-
-}
-
-};
 
 
 /* FORGOT PASSWORD */
 
-$('forgot').onclick=async()=>{
+$("forgotPasswordButton").addEventListener("click", async () => {
+  const email = $("loginEmail").value.trim();
 
-const email=$('email').value.trim().toLowerCase();
+  if (!email) {
+    showMessage(
+      $("authMessage"),
+      "Enter your email address first.",
+      "error"
+    );
+    $("loginEmail").focus();
+    return;
+  }
 
-$('authMsg').textContent='';
+  try {
+    await ensurePersistence();
+    await sendPasswordResetEmail(auth, email);
 
-if(!email){
+    showMessage(
+      $("authMessage"),
+      "Password reset email sent. Please check your inbox.",
+      "success"
+    );
 
-$('authMsg').textContent='আগে Email লিখুন।';
-
-return;
-
-}
-
-$('forgot').disabled=true;
-
-try{
-
-await sendPasswordResetEmail(auth,email);
-
-$('authMsg').textContent='Password reset email পাঠানো হয়েছে।';
-
-showToast('Password reset email পাঠানো হয়েছে।');
-
-}catch(e){
-
-$('authMsg').textContent=authError(e);
-
-}finally{
-
-$('forgot').disabled=false;
-
-}
-
-};
-
-
-/* LOGOUT */
-
-$('logout').onclick=async()=>{
-
-try{
-
-await signOut(auth);
-
-showToast('আপনি সফলভাবে Logout করেছেন।');
-
-}catch(e){
-
-$('authMsg').textContent=authError(e);
-
-}
-
-};
+  } catch (error) {
+    showMessage(
+      $("authMessage"),
+      friendlyError(error),
+      "error"
+    );
+  }
+});
 
 
 /* EMAIL VERIFICATION */
 
-$('resendVerify').onclick=async()=>{
-
-if(!currentUser)return;
-
-$('resendVerify').disabled=true;
-
-try{
-
-await sendEmailVerification(currentUser);
-
-showToast('Verification Email পাঠানো হয়েছে।');
-
-$('authMsg').textContent=
-'Gmail-এর Inbox অথবা Spam Folder দেখুন।';
-
-}catch(e){
-
-$('authMsg').textContent=authError(e);
-
-}finally{
-
-$('resendVerify').disabled=false;
-
-}
-
-};
-
-
-$('checkVerify').onclick=async()=>{
-
-if(!currentUser)return;
-
-$('checkVerify').disabled=true;
-
-$('authMsg').textContent='Email Verification পরীক্ষা করা হচ্ছে...';
-
-try{
-
-await reload(currentUser);
-
-currentUser=auth.currentUser;
-
-await currentUser.getIdToken(true);
-
-if(!auth.currentUser.emailVerified){
-
-$('authMsg').textContent=
-'এখনো Email Verify হয়নি। Gmail-এর Verification Link খুলুন।';
-
-return;
-
-}
-
-showToast('Email Verification সফল হয়েছে।');
-
-await loadAccount(auth.currentUser);
-
-}catch(e){
-
-$('authMsg').textContent=authError(e);
-
-}finally{
-
-$('checkVerify').disabled=false;
-
-}
-
-};
-
-
-/* ACCOUNT DETAILS */
-
-async function loadAccount(user){
-
-currentUser=user;
-
-try{
-
-await reload(user);
-
-currentUser=auth.currentUser;
-
-if(!currentUser)return;
-
-const p=await getDoc(
- doc(db,'customerProfiles',currentUser.uid)
-);
-
-if(p.exists()&&p.data().banned===true){
-
-$('profile').textContent='এই অ্যাকাউন্টটি বন্ধ করা হয়েছে।';
-
-await signOut(auth);
-
-return;
-
-}
-
-if(!p.exists()){
-
-throw Error('Customer Profile পাওয়া যায়নি। Support-এর সঙ্গে যোগাযোগ করুন।');
-
-}
-
-const data=p.data();
-
-$('authBox').classList.add('hidden');
-
-$('profile').classList.remove('hidden');
-
-$('profile').innerHTML=`
-
-<p><b>নাম:</b> ${esc(data.name||'—')}</p>
-
-<p><b>Email:</b> ${esc(currentUser.email)}</p>
-
-<p><b>মোবাইল:</b> ${esc(data.phone||'—')}</p>
-
-<p><b>Account Created:</b> ${dateText(data.createdAt)}</p>
-
-<p><b>Email Verification:</b>
-${currentUser.emailVerified?'Verified ✓':'Not Verified'}
-</p>
-
-`;
-
-$('logout').classList.remove('hidden');
-
-$('verifyEmail').textContent=
-'Verification Email: '+currentUser.email;
-
-if(!currentUser.emailVerified){
-
-$('verifyPanel').classList.remove('hidden');
-
-}else{
-
-$('verifyPanel').classList.add('hidden');
-
-}
-
-
-/* LOAD ORDERS */
-
-await loadOrders();
-
-
-/* RETURN TO CHECKOUT ONLY AFTER VERIFICATION */
-
-if(currentUser.emailVerified){
-
-goToCheckout();
-
-}
-
-}catch(e){
-
-console.error(e);
-
-$('profile').classList.remove('hidden');
-
-$('profile').textContent=
-'অ্যাকাউন্ট লোড হয়নি: '+authError(e);
-
-}
-
-}
-
-
-/* LOAD ORDERS */
-
-async function loadOrders(){
-
-if(!currentUser)return;
-
-$('orders').textContent='অর্ডার লোড হচ্ছে...';
-
-try{
-
-const s=await getDocs(query(
- collection(db,'orders'),
- where('uid','==',currentUser.uid)
-));
-
-const list=s.docs.map(d=>({
-
-id:d.id,
-...d.data()
-
-})).sort((a,b)=>
- (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)
-);
-
-if(!list.length){
-
-$('orders').textContent='এখনো কোনো অর্ডার করেননি।';
-
-return;
-
-}
-
-$('orders').innerHTML=list.map(o=>`
-
-<div class="order">
-
-<b>Order ID:</b> ${esc(o.orderId||o.id)}<br>
-
-<b>তারিখ:</b> ${dateText(o.createdAt)}<br>
-
-<b>পণ্য:</b> ${esc(o.productName||'—')}<br>
-
-<b>মোট পরিমাণ:</b> ${Number(o.quantity||0)}<br>
-
-<b>Subtotal:</b> ${money(o.subtotal)}<br>
-
-<b>Delivery:</b> ${money(o.deliveryCharge)}<br>
-
-<b>Total:</b> ${money(o.totalPrice)}<br>
-
-<b>Payment:</b> ${esc(o.paymentMethod||'—')}<br>
-
-<b>Payment Status:</b> ${esc(o.paymentStatus||'—')}<br>
-
-<b>Order Status:</b>
-
-<span class="status">${esc(o.status||'Pending')}</span>
-
-${o.status==='Pending'?`
-
-<textarea id="reason-${esc(o.id)}"
-placeholder="অর্ডার বাতিলের কারণ লিখুন"></textarea>
-
-<button class="red" data-cancel="${esc(o.id)}">
-CONFIRM CANCELLATION
-</button>
-
-`:''}
-
-${o.status==='Cancelled'&&o.cancellationReason?`
-
-<p><b>বাতিলের কারণ:</b>
-${esc(o.cancellationReason)}</p>
-
-`:''}
-
-</div>
-
-`).join('');
-
-$('orders').querySelectorAll('[data-cancel]').forEach(b=>{
-
-b.onclick=()=>cancelOrder(b.dataset.cancel);
-
+$("checkVerificationButton").addEventListener("click", async () => {
+  const user = auth.currentUser;
+
+  if (!user) {
+    showAuth();
+    return;
+  }
+
+  const button = $("checkVerificationButton");
+  setButtonLoading(button, true, "Checking...", "I Have Verified My Email");
+
+  try {
+    await reload(user);
+
+    if (auth.currentUser?.uid !== user.uid) {
+      showAuth();
+      return;
+    }
+
+    if (!user.emailVerified) {
+      showMessage(
+        $("verificationMessage"),
+        "Email is not verified yet. Please open the verification email and try again.",
+        "error"
+      );
+      return;
+    }
+
+    currentUser = user;
+    await loadAccount(user);
+
+  } catch (error) {
+    showMessage(
+      $("verificationMessage"),
+      friendlyError(error),
+      "error"
+    );
+
+  } finally {
+    setButtonLoading(
+      button,
+      false,
+      "",
+      "I Have Verified My Email"
+    );
+  }
 });
 
-}catch(e){
 
-console.error(e);
+$("resendVerificationButton").addEventListener("click", async () => {
+  const user = auth.currentUser;
 
-$('orders').textContent='অর্ডার লোড হয়নি: '+authError(e);
+  if (!user) {
+    showAuth();
+    return;
+  }
 
-}
+  const button = $("resendVerificationButton");
+  setButtonLoading(button, true, "Sending...", "Resend Verification Email");
 
-}
+  try {
+    await reload(user);
 
+    if (user.emailVerified) {
+      showMessage(
+        $("verificationMessage"),
+        "Your email is already verified. You can continue.",
+        "success"
+      );
+      return;
+    }
 
-/* CANCEL ORDER */
+    await sendEmailVerification(user);
 
-async function cancelOrder(id){
+    showMessage(
+      $("verificationMessage"),
+      "A new verification email has been sent.",
+      "success"
+    );
 
-const reason=$('reason-'+id)?.value.trim();
+  } catch (error) {
+    showMessage(
+      $("verificationMessage"),
+      friendlyError(error),
+      "error"
+    );
 
-if(!reason){
-
-alert('অর্ডার বাতিলের কারণ লিখুন।');
-
-return;
-
-}
-
-if(!confirm('আপনি কি এই Pending অর্ডারটি বাতিল করতে চান?')){
-
-return;
-
-}
-
-try{
-
-const ref=doc(db,'orders',id);
-
-const s=await getDoc(ref);
-
-if(
- !s.exists()||
- s.data().uid!==currentUser.uid||
- s.data().status!=='Pending'
-){
-
-throw Error('শুধু নিজের Pending অর্ডার বাতিল করা যাবে।');
-
-}
-
-await updateDoc(ref,{
-
-status:'Cancelled',
-cancellationReason:reason,
-cancelledAt:serverTimestamp()
-
+  } finally {
+    setButtonLoading(
+      button,
+      false,
+      "",
+      "Resend Verification Email"
+    );
+  }
 });
 
-await updateDoc(
- doc(db,'orderTracking',s.data().orderId||id),
- {status:'Cancelled'}
-);
 
-showToast('আপনার অর্ডার বাতিল হয়েছে।');
+/* LOGOUT */
 
-await loadOrders();
+async function logoutUser() {
+  accountLoadToken++;
+  currentUser = null;
 
-}catch(e){
+  try {
+    await signOut(auth);
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
 
-alert('অর্ডার বাতিল করা যায়নি: '+e.message);
-
+  showAuth();
+  clearMessage($("authMessage"));
 }
 
+$("logoutButton").addEventListener("click", logoutUser);
+$("verificationLogoutButton").addEventListener("click", logoutUser);
+
+
+/* AUTH STATE */
+
+async function startApp() {
+  try {
+    await ensurePersistence();
+
+    onAuthStateChanged(auth, async user => {
+      currentUser = user;
+
+      if (!user) {
+        accountLoadToken++;
+        showAuth();
+        return;
+      }
+
+      try {
+        await reload(user);
+
+        if (auth.currentUser?.uid !== user.uid) return;
+
+        if (!user.emailVerified) {
+          showVerification();
+          return;
+        }
+
+        await loadAccount(user);
+
+      } catch (error) {
+        console.error("Authentication state error:", error);
+
+        showAuth();
+        showMessage(
+          $("authMessage"),
+          friendlyError(error),
+          "error"
+        );
+      }
+    });
+
+  } catch (error) {
+    console.error("Firebase initialization error:", error);
+
+    showAuth();
+    showMessage(
+      $("authMessage"),
+      friendlyError(error),
+      "error"
+    );
+  }
 }
-
-
-/* START APPLICATION */
 
 startApp();
 
 </script>
-
 </body>
 </html>
