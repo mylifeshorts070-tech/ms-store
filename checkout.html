@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -81,7 +82,6 @@ PROCEED TO CHECKOUT
 <p id="gateMessage" class="msg"></p>
 </section>
 
-
 <section class="panel hidden" id="deliveryPanel">
 
 <h2>📦 Delivery Information</h2>
@@ -142,7 +142,6 @@ Logout
 
 </main>
 
-
 <script type="module">
 
 import {
@@ -190,7 +189,7 @@ const db=getFirestore(app);
 
 const EMAILJS_SERVICE_ID='service_9ck9kob';
 const EMAILJS_TEMPLATE_ID='template_rbe08jk';
-const EMAILJS_PUBLIC_KEY='4gQjk5EWAQ7tk-stZ';
+const EMAILJS_PUBLIC_KEY='4gQjk5EWAQ7tk-st';
 
 const $=id=>document.getElementById(id);
 
@@ -223,6 +222,9 @@ let orderSubmitting=false;
 let authReady=false;
 let profileReady=false;
 let checkoutRequested=false;
+
+/* BUY NOW MODE */
+const buyNowMode=localStorage.getItem('msBuyNowMode')==='1';
 
 
 /* TOAST */
@@ -1190,8 +1192,6 @@ p.productName+
 
 products:lines,
 
-/* REVIEW SYSTEM: ORDER-এ থাকা PRODUCT ID-গুলো */
-
 productIds:[...new Set(lines.map(p=>p.productId))],
 
 stockChanges,
@@ -1482,7 +1482,15 @@ await authPromise;
 
 await loadData();
 
+if(!cartLoaded){
+
+$('proceedBtn').disabled=true;
+
+}else{
+
 $('proceedBtn').disabled=false;
+
+}
 
 if(currentUser){
 
@@ -1517,6 +1525,39 @@ $('gateMessage').textContent=authError(e);
 }else{
 
 $('gateMessage').textContent='অর্ডার করতে Proceed চাপুন। Login না থাকলে My Account-এ নিয়ে যাওয়া হবে।';
+
+}
+
+
+/* AUTO CHECKOUT: BUY NOW */
+
+if(buyNowMode){
+
+const data=renderCart();
+
+if(!cartLoaded){
+
+$('gateMessage').textContent='পণ্যের তথ্য লোড হয়নি। Internet Connection পরীক্ষা করুন।';
+
+}else if(!data.entries.length){
+
+$('gateMessage').textContent='Buy Now-এর পণ্য পাওয়া যায়নি। আবার Product নির্বাচন করুন।';
+
+showToast('Cart খালি।');
+
+}else if(data.invalid){
+
+$('gateMessage').textContent='পণ্যের Stock বা Variant সমস্যা রয়েছে।';
+
+showToast('পণ্যের তথ্য পরীক্ষা করুন।');
+
+}else{
+
+checkoutRequested=true;
+
+await checkCheckoutAccess();
+
+}
 
 }
 
