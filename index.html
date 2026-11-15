@@ -52,6 +52,10 @@ main{width:94%;max-width:1280px;margin:auto;min-width:0}
 .how-video-title{font-size:13px;font-weight:bold;color:#4c1d95;margin-top:10px}
 .how-video-section.hidden{display:none}
 
+/* VIDEO DEBUG MESSAGE */
+.how-video-debug{display:none;background:#fee2e2;color:#991b1b;border:1px solid #fecaca;border-radius:10px;padding:12px;margin:12px 0;font-size:13px;line-height:1.7;overflow-wrap:anywhere}
+.how-video-debug.show{display:block}
+
 .section-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 13px}
 .section-heading h2{margin:0;font-size:19px;color:var(--purple-dark)}
 .section-heading small{color:var(--muted);font-size:12px}
@@ -166,7 +170,9 @@ main{width:95%}.product-grid{gap:8px}
 <input id="search" type="search" placeholder="🔍 পণ্যের নাম লিখে খুঁজুন...">
 </div>
 
-<!-- HOW TO ORDER VIDEO: Search bar-এর ঠিক নিচে -->
+<!-- HOW TO ORDER VIDEO -->
+<div id="howVideoDebug" class="how-video-debug"></div>
+
 <section class="how-video-section hidden" id="howVideoSection">
 <div class="how-video-heading">
 <div class="how-video-icon">▶</div>
@@ -250,43 +256,130 @@ $('toast').textContent=t;$('toast').classList.add('show');
 clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3000);
 }
 
-/* Facebook How to Order video */
+/* FACEBOOK VIDEO DEBUG SYSTEM */
+function showVideoDebug(message){
+const box=$('howVideoDebug');
+box.textContent='⚠️ Video Debug: '+message;
+box.classList.add('show');
+console.error('MS STORE VIDEO DEBUG:',message);
+}
+
+function hideVideoDebug(){
+const box=$('howVideoDebug');
+box.textContent='';
+box.classList.remove('show');
+}
+
 function getFacebookEmbedUrl(value){
 const raw=String(value||'').trim();
 if(!raw)return'';
+
 try{
 const u=new URL(raw);
 const host=u.hostname.toLowerCase();
-if(!['facebook.com','www.facebook.com','m.facebook.com','web.facebook.com','fb.watch'].includes(host)&&!host.endsWith('.facebook.com'))return'';
-return'https://www.facebook.com/plugins/video.php?href='+encodeURIComponent(raw)+'&show_text=false&width=560&t=0';
-}catch(e){return''}
+
+if(
+!['facebook.com','www.facebook.com','m.facebook.com','web.facebook.com','fb.watch'].includes(host)&&
+!host.endsWith('.facebook.com')
+)return'';
+
+return'https://www.facebook.com/plugins/video.php?href='+
+encodeURIComponent(raw)+
+'&show_text=false&width=560&t=0';
+
+}catch(e){
+return'';
+}
 }
 
 function loadHowToOrderVideo(){
-onSnapshot(doc(db,'storeSettings','howToOrderVideo'),snap=>{
-const data=snap.exists()?snap.data():null;
-if(!data||data.active===false||!data.videoUrl){
+
+console.log('MS STORE: Loading Facebook video settings...');
+
+onSnapshot(
+doc(db,'storeSettings','howToOrderVideo'),
+
+snap=>{
+
+console.log('MS STORE: Firestore video snapshot received');
+
+if(!snap.exists()){
 $('howVideoSection').classList.add('hidden');
 $('howVideoFrame').innerHTML='';
+showVideoDebug('Firestore-এ storeSettings/howToOrderVideo ডকুমেন্ট পাওয়া যায়নি।');
 return;
 }
+
+const data=snap.data();
+
+console.log('MS STORE VIDEO DATA:',data);
+
+if(data.active===false){
+$('howVideoSection').classList.add('hidden');
+$('howVideoFrame').innerHTML='';
+showVideoDebug('Admin Panel-এ Home Page-এ ভিডিও দেখান অপশন OFF আছে।');
+return;
+}
+
+if(!data.videoUrl){
+$('howVideoSection').classList.add('hidden');
+$('howVideoFrame').innerHTML='';
+showVideoDebug('Firestore ডকুমেন্টে videoUrl পাওয়া যায়নি।');
+return;
+}
+
 const embed=getFacebookEmbedUrl(data.videoUrl);
+
 if(!embed){
 $('howVideoSection').classList.add('hidden');
 $('howVideoFrame').innerHTML='';
+showVideoDebug('Facebook URL সঠিক নয়: '+data.videoUrl);
 return;
 }
+
+hideVideoDebug();
+
 $('howVideoSection').classList.remove('hidden');
 $('howVideoTitle').textContent=data.title||'MS STORE থেকে কীভাবে অর্ডার করবেন';
 $('howVideoFrame').innerHTML='';
+
 const iframe=document.createElement('iframe');
+
 iframe.src=embed;
 iframe.title='MS STORE How to Order Video';
 iframe.allow='autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share';
 iframe.allowFullscreen=true;
-iframe.loading='lazy';
+iframe.loading='eager';
+iframe.referrerPolicy='strict-origin-when-cross-origin';
+
+iframe.addEventListener('load',()=>{
+console.log('MS STORE: Facebook iframe load event fired');
+});
+
+iframe.addEventListener('error',()=>{
+showVideoDebug('Facebook iframe load error হয়েছে। Facebook Embed বা ভিডিও Permission পরীক্ষা করুন।');
+});
+
 $('howVideoFrame').appendChild(iframe);
-},e=>console.error('How to Order video load error:',e));
+
+console.log('MS STORE: Facebook iframe added successfully');
+
+},
+
+error=>{
+
+$('howVideoSection').classList.add('hidden');
+$('howVideoFrame').innerHTML='';
+
+showVideoDebug(
+'Firestore থেকে ভিডিও পড়া যাচ্ছে না। Error: '+
+error.message+
+' | Code: '+
+(error.code||'unknown')
+);
+
+}
+);
 }
 
 /* Banner carousel */
